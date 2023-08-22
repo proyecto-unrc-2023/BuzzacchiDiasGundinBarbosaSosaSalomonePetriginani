@@ -10,7 +10,6 @@ def step_impl(context):
     assert context.page
     assert context.page.status_code == 200
 
-
 @then("we see the Hello World regard")
 def step_impl(context):
     print(context.page.text)
