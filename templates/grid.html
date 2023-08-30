@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grid Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css') }}">
+</head>
+<body>
+    <h1>Grid Page</h1>
+    <div class="grid">
+        {% for row in range(50) %}
+        <div class="grid-row">
+            {% for col in range(50) %}
+            <div class="grid-cell"></div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
