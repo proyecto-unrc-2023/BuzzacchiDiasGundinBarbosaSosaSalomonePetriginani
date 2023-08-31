@@ -1,0 +1,27 @@
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(50, 30px);
+    grid-gap: 1px;
+    margin: 0 auto;
+    width: 1550px;
+}
+
+.grid-cell {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid black;
+}
