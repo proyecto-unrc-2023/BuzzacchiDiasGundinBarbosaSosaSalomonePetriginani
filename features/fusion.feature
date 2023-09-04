@@ -26,25 +26,21 @@ Feature: Fusion of Cells
     When I attempt to move the cell at (3, 3) to (3, 4)
     Then the cells cannot merge and both coexist in (3,4)
 
-  #Ver
   Scenario: Attempt to merge three level 1 cells
     Given I have a level 1 cell at position (3, 3)
     And another level 1 cell at position (3, 4)
     And a third level 1 cell at position (3, 5)
     When I move the cell at (3, 3) to (3, 4)
-    And I attempt to move the remaining cell at (3, 3) to (3, 5)
+    And I attempt to move the remaining cell at (3, 5) to (3, 4)
     Then the two cells with the highest life points merge, creating a new level 2 cell
     And the new level 2 cell coexists with the other level 1 cell
-    #Opcion 2: Then all three cells cannot merge, and they coexist in their respective positions
 
-  #Ver
   Scenario: Merge four level 1 cells into two level 2 cells
     Given I have a level 1 cell at position (3, 3)
     And another level 1 cell at position (3, 4)
     And a third level 1 cell at position (3, 5)
-    And a fourth level 1 cell at position (3, 6)
+    And a fourth level 1 cell at position (2,4)
     When I move the cell at (3, 3) to (3, 4)
     And I move the cell at (3, 5) to (3, 4)
-    And I move the cell at (3, 6) to (3, 4)
+    And I move the cell at (2,4) to (3, 4)
     Then two new level 2 cells coexist in the same cell at position (3, 4)
-    #Opcion 2:  Then all four level 1 cells die
