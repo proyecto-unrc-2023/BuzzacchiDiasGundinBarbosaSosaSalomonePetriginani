@@ -3,6 +3,7 @@ import Cell from './Cell';
 
 const Grid = () => {
     // Genera una cuadrícula de 50x50 celdas
+  // hola
     const rows = Array.from({ length: 50 }, () => (
       <div className="grid-row">
         {Array.from({ length: 50 }, (_, index) => (
