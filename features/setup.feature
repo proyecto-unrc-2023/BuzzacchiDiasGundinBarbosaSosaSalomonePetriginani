@@ -14,10 +14,10 @@ Feature: Setup
     Then I should see the game's start screen
 
   Scenario: Team Selection
-    Given that I am on the game's start screen
+    Given that I am on the game start screen
     And I have already typed the username "player2"
     When I choose the team "Water Team"
-    And I click the "Start Match" button
+    And I click the "Start Game" button
     Then I should see the game screen with the "Water Team"
 
   Scenario: Starting a Game with an Empty Username

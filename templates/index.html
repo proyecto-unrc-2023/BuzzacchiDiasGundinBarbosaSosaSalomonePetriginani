@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Start</title>
+</head>
+<body>
+    <h1>Welcome to the Game</h1>
+    <form action="/start_game" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="team">Select Your Team:</label>
+        <select id="team" name="team" required>
+            <option value="Water Team">Water Team</option>
+            <option value="Fire Team">Fire Team</option>
+        </select>
+        <br>
+        <button type="submit">Start Game</button>
+    </form>
+</body>
+</html>

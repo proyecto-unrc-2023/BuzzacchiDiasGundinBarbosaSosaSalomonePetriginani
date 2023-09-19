@@ -1,7 +1,7 @@
 from enum import Enum
 
-from logic.board import Board
 
+from logic.board import Board
 
 class GameMode(Enum):
     NOT_STARTED = 1
@@ -15,10 +15,14 @@ class GameState:
         self.board = None
         self.columns = None
         self.rows = None
+        self.user_team = None
+        self.username = None
 
-    def new_game(self, rows, columns):
+    def new_game(self, rows, columns, username = None, team = None):
         self.rows = rows
         self.columns = columns
         self.board = Board(rows, columns)
         self.mode = GameMode.SPAWN_PLACEMENT
+        self.username = username
+        self.team = team
 
