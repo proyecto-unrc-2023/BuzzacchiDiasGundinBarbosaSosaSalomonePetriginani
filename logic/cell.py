@@ -37,7 +37,7 @@ class Cell:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                if((self.__str__() == 'F' and board.get_cell(new_row, new_col) != 'FS') or (self.__str__() == 'I' and board.get_cell(new_row, new_col) != 'IS') ):
+                if((self.__str__() == 'F' and board.get_cell(new_row, new_col).__str__() != 'FS') or (self.__str__() == 'I' and board.get_cell(new_row, new_col).__str__() != 'IS') ):
                     adjacentList.append(board[new_row][new_col])
         return adjacentList
 
