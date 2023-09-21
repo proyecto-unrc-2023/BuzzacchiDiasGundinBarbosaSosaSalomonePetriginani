@@ -43,6 +43,12 @@ class Board:
 
     def put_cell(self, row, column, cell):
         self.board[row][column] = cell
+    
+    def get_pos(self, cell):
+        for i in self.board:
+            for j in range(len(self.board)):
+                if(self.board[i][j] == cell):
+                    return (i, j)
 
     def put_fire_cell(self, row, column):
         if self.get_cell(row, column).__eq__(DeadCell()):

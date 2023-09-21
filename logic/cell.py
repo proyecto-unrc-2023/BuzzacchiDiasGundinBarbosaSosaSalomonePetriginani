@@ -1,6 +1,6 @@
-
+import board
 from abc import ABC, abstractmethod
-
+from random import random
 
 class Cell:
 
@@ -23,7 +23,23 @@ class Cell:
     def __str__(self):
         raise NotImplementedError
 
-
+    def avanzar(self):
+        tuplePos = board.get_pos(self)
+        positionsList = self.get_adjacents(self, tuplePos)
+        posRandom = random.random(positionsList)
+        return positionsList[random]
+        
+    def get_adjacents(self, posXY):
+        row, col = posXY
+        length = len(board)
+        adjacentList = []
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            if 0 <= new_row < length and 0 <= new_col < length:
+                if((self.__str__() == 'F' and board.get_cell(new_row, new_col) != 'FS') or (self.__str__() == 'I' and board.get_cell(new_row, new_col) != 'IS') ):
+                    adjacentList.append(board[new_row][new_col])
+        return adjacentList
 
 class DeadCell(Cell):
 
