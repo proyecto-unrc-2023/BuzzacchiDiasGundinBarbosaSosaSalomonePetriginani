@@ -1,4 +1,4 @@
-import board
+#import board
 from abc import ABC, abstractmethod
 from random import random
 
@@ -28,7 +28,7 @@ class Cell:
         positionsList = self.get_adjacents(self, tuplePos)
         posRandom = random.random(positionsList)
         return positionsList[random]
-        
+
     def get_adjacents(self, posXY):
         row, col = posXY
         length = len(board)
@@ -40,7 +40,6 @@ class Cell:
                 if((self.__str__() == 'F' and board.get_cell(new_row, new_col).__str__() != 'FS') or (self.__str__() == 'I' and board.get_cell(new_row, new_col).__str__() != 'IS') ):
                     adjacentList.append(board[new_row][new_col])
         return adjacentList
-
 class DeadCell(Cell):
 
     def __str__(self):

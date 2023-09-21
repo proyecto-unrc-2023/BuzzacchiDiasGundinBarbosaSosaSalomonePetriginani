@@ -3,6 +3,7 @@
 from logic.game_state import GameMode
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import time
 
 
 ###Scenario: Start a new game
@@ -28,7 +29,7 @@ def step_impl(context):
 @given(u'that I am on the game start screen')
 def step_impl(context):
     context.driver = webdriver.Chrome()
-    context.driver.get('http://localhost:5000/')
+    context.driver.get('http://localhost:3000/')
 
 @given(u'I have already typed the username "{username}"')
 def step_impl(context, username):
@@ -44,6 +45,7 @@ def step_impl(context, team):
 def step_impl(context):
     start_button = context.driver.find_element(By.XPATH, '//button[@type="submit"]')
     start_button.click()
+    time.sleep(0.1)
 
 @then(u'I should see the game screen with the "{team}"')
 def step_impl(context, team):
