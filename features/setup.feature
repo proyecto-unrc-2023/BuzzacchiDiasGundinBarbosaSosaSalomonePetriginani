@@ -1,22 +1,28 @@
 Feature: Setup
 
-  Escenario: Elección de tamaño de grilla y nombre de usuario
-    Dado que estoy en la página de inicio del juego
-    Cuando elijo el tamaño de grilla "50x50"
-    Y ingreso el nombre de usuario "jugador1"
-    Y hago clic en el botón "Comenzar partida"
-    Entonces debería ver la pantalla de inicio de la partida
+  Scenario: Start a new game
+    Given the game is not started
+    When we create a new game with an 50x50 board
+    Then the game should be in spawn placement mode
+    And the state of the board should be a 50x50 empty board
 
-  Escenario: Elección de equipo
-    Dado que estoy en la pantalla de inicio de la partida
-    Y ya he ingresado el nombre de usuario "jugador2"
-    Cuando elijo el equipo "Equipo del Agua"
-    Y hago clic en el botón "Comenzar partida"
-    Entonces debería ver la pantalla de juego con el equipo "Equipo del Agua"
+  Scenario: Team Selection
+    Given that I am on the game start screen
+    And I have already typed the username "player2"
+    When I choose the team "Water Team"
+    And I click the "Start Game" button
+    Then I should see the game screen with the "Water Team"
 
-  Escenario: Inicio de partida con nombre de usuario vacío
-    Dado que estoy en la página de inicio del juego
-    Cuando dejo el campo de nombre de usuario vacío
-    Y elijo el tamaño de grilla "75x75"
-    Y hago clic en el botón "Comenzar partida"
-    Entonces debería ver un mensaje de error indicando que el nombre de usuario es requerido
+  # Scenario: Grid Size Selection and Username Entry
+  #   Given that I am on the game's homepage
+  #   When I select the grid size "50x50"
+  #   And I type the username "player1"
+  #   And I click the "Start Game" button
+  #   Then I should see the game's start screen
+
+  # Scenario: Starting a Game with an Empty Username
+  #   Given that I am on the game's homepage
+  #   When I leave the username field empty
+  #   And I select the grid size "75x75"
+  #   And I click the "Start Game" button
+  #   Then I should see an error message indicating that the username is required

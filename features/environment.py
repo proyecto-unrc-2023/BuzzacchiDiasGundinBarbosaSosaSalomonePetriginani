@@ -1,6 +1,9 @@
 from behave import fixture, use_fixture
 
 from app import create_app
+from logic.cell import DeadCell, FireCell, IceCell
+from logic.game_state import GameState
+
 
 @fixture
 def empire_client(context, *args, **kwargs):
@@ -15,3 +18,29 @@ def empire_client(context, *args, **kwargs):
 def before_feature(context, feature):
     # -- HINT: Recreate a new flaskr client before each feature is executed.
     use_fixture(empire_client, context)
+
+def table_from_string(table):
+    rows_list = []
+    for row in table.rows:
+        curr_row = []
+        for elem in row:
+            if elem == ' ':
+                curr_row.append(str(DeadCell()))
+            elif elem == 'F':
+                curr_row.append(str(FireCell()))
+            elif elem == 'I':
+                curr_row.append(str(IceCell()))
+            else:
+                raise ValueError(f'Unknown cell value: {elem}')
+        rows_list.append('|'.join(curr_row))
+    return '\n'.join(rows_list)
+
+@fixture
+def state(context):
+    #, *args, **kwargs):
+    context.state = GameState()
+    # crear objeto
+    yield context.state
+
+def before_feature(context, feature):
+    use_fixture(state, context)
