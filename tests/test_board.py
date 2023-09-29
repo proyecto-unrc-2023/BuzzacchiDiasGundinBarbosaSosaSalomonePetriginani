@@ -1,56 +1,51 @@
 import pytest
 
 from logic.board import Board
-from logic.cell import IceCell, FireCell, DeadCell, Cell
+from logic.cell import IceCell, FireCell, Cell
 
 @pytest.fixture
 def board():
     return Board(2, 2)
 
-def test_initial_board(board):
-    assert board.rows == 2
-    assert board.columns == 2
-    assert board.get_cell(0, 0).__eq__(DeadCell())
-    assert board.get_cell(0, 1).__eq__(DeadCell())
-    assert board.get_cell(1, 0).__eq__(DeadCell())
-    assert board.get_cell(1, 1).__eq__(DeadCell())
+def test_add_cell(board):
+    cell = FireCell()
+    board.add_cell(1, 0, cell)
+    assert cell in board.get_cells(1, 0)
 
-def test_put_one_fire_cell(board):
-    board.put_cell(1, 0, FireCell())
-    assert board.get_cell(0, 0).__eq__(DeadCell())
-    assert board.get_cell(0, 1).__eq__(DeadCell())
-    assert board.get_cell(1, 0).__eq__(FireCell())
-    assert board.get_cell(1, 1).__eq__(DeadCell())
+def test_add_cell_by_tuple(board):
+    cell = FireCell()
+    position = (1, 0)
+    board.add_cell_by_tuple(position, cell)
+    assert cell in board.get_cells(*position)
 
-def test_put_one_ice_cell(board):
-    board.put_cell(1, 0, IceCell())
-    assert board.get_cell(0, 0).__eq__(DeadCell())
-    assert board.get_cell(0, 1).__eq__(DeadCell())
-    assert board.get_cell(1, 0).__eq__(IceCell())
-    assert board.get_cell(1, 1).__eq__(DeadCell())
+def test_remove_cell(board):
+    cell = FireCell()
+    board.add_cell(1, 0, cell)
+    assert cell in board.get_cells(1, 0)
+    board.remove_cell(1, 0, cell)
+    assert cell not in board.get_cells(1, 0)
 
-def test_put_fire_cell_fails(board):
-    board.put_fire_cell(1, 0)
-    with pytest.raises(ValueError):
-        board.put_fire_cell(1, 0)
+def test_get_cells(board):
+    cell1 = FireCell()
+    cell2 = IceCell()
+    board.add_cell(1, 0, cell1)
+    board.add_cell(1, 0, cell2)
+    cells = board.get_cells(1, 0)
+    assert len(cells) == 2
+    assert cell1 in cells
+    assert cell2 in cells
 
-def test_put_ice_cell_fails(board):
-    board.put_ice_cell(1, 0)
-    with pytest.raises(ValueError):
-        board.put_ice_cell(1, 0)
+def test_get_pos(board):
+    cell1 = FireCell()
+    cell2 = IceCell()
+    board.add_cell(0, 0, cell1)
+    board.add_cell(1, 1, cell2)
 
-def test_empty_board_to_string(board):
-    res = board.__str__()
-    expected = ' | \n' \
-               ' | '
-    assert expected == res
+    assert board.get_pos(cell1) == (0, 0)
+    assert board.get_pos(cell2) == (1, 1)
 
-def test_board_with_two_cells_to_string(board):
-    board.put_fire_cell(1, 1)
-    board.put_ice_cell(0, 0)
-    res = board.__str__()
-    expected = 'I| \n' \
-               ' |F'
-    assert expected == res
+    cell3 = FireCell()
+    assert board.get_pos(cell3) is None
+
 
 
