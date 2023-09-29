@@ -23,7 +23,6 @@ def test_create_dead_cell_from_str():
     res = Cell.from_string(' ')
     assert isinstance(res, DeadCell)
 
-
 def test_create_ice_cell_from_str():
     res = Cell.from_string('I')
     assert isinstance(res, IceCell)
