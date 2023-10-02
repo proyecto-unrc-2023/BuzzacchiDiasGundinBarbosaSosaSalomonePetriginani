@@ -1,6 +1,6 @@
 import pytest
 
-from logic.cell import Cell, IceCell, FireCell, DeadCell
+from logic.cell import Cell, IceCell, FireCell, DeadCell, Level
 from logic.board import Board
 
 @pytest.fixture
@@ -13,11 +13,11 @@ def cell(board):
 
 @pytest.fixture
 def fire_cell(board):
-    return FireCell(board=board, level=1, life=2, position=(1,1))
+    return FireCell(board=board, level=Level.LEVEL_1, life=2, position=(1,1))
 
 @pytest.fixture
 def ice_cell(board):
-    return IceCell(board=board, level=1, life=2, position=(1,1))
+    return IceCell(board=board, level=Level.LEVEL_1, life=2, position=(1,1))
 
 def test_create_dead_cell_from_str():
     res = Cell.from_string(' ')
@@ -76,3 +76,49 @@ def test_advance_method(cell, board):
         example_board[2][0], example_board[2][1], example_board[2][2]
     ]
 
+
+###########   Tests for fight   ###########
+def test_fight_same_position_different_types(board, fire_cell, ice_cell):
+    # Asegúrate de que las celdas estén en la misma posición
+    fire_cell.position = ice_cell.position = (1, 1)
+    
+    fire_cell.life = 5
+    board.board[1][1].append(fire_cell)
+    board.board[1][1].append(ice_cell)
+    
+    fire_cell.fight(ice_cell)
+    
+    assert fire_cell in board.board[1][1]
+    assert ice_cell not in board.board[1][1]
+
+def test_fight_same_position_same_type_higher_level(board, fire_cell):
+    higher_level_ice_cell = IceCell(board=board, level=Level.LEVEL_2, life=21, position=(1,1))
+    
+    board.board[1][1].append(fire_cell)
+    board.board[1][1].append(higher_level_ice_cell)
+    
+    fire_cell.fight(higher_level_ice_cell)
+
+    assert fire_cell not in board.board[1][1]
+    assert higher_level_ice_cell in board.board[1][1]
+
+def test_fight_same_position_same_type_same_level_higher_life(board, ice_cell):
+    higher_life_fire_cell = FireCell(board=board, level=Level.LEVEL_1, life=8, position=(1,1))
+    
+    board.board[1][1].append(ice_cell)
+    board.board[1][1].append(higher_life_fire_cell)
+    
+    ice_cell.fight(higher_life_fire_cell)
+    
+    assert ice_cell not in board.board[1][1]
+    assert higher_life_fire_cell in board.board[1][1]
+
+def test_fight_same_position_same_type_same_level_same_life(board, fire_cell, ice_cell):    
+    board.board[1][1].append(fire_cell)
+    board.board[1][1].append(ice_cell)
+    
+    fire_cell.fight(ice_cell)
+    
+    cells_expected = board.get_cells(fire_cell.position[0], fire_cell.position[1])
+    assert len(cells_expected) == 1
+    assert isinstance(cells_expected[0], DeadCell)

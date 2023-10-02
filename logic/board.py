@@ -66,4 +66,15 @@ class Board:
                     return (i, j)
         return None
 
+    def convert_position_to_dead_cell(self, row, column):
+        if 0 <= row < self.rows and 0 <= column < self.columns:
+            # Get a copy of cells in given position
+            cells_in_position = list(self.get_cells(row, column))
 
+            for cell in cells_in_position:
+                self.remove_cell(row, column, cell)
+
+            dead_cell = DeadCell(position=(row,column), board=self)
+            self.add_cell(row, column, dead_cell)
+        else:
+            raise ValueError("Invalid row or column")

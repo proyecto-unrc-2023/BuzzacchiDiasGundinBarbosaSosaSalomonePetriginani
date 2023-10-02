@@ -1,7 +1,7 @@
 import pytest
 
 from logic.board import Board
-from logic.cell import IceCell, FireCell, Cell
+from logic.cell import IceCell, FireCell, DeadCell, Level
 
 @pytest.fixture
 def board():
@@ -48,4 +48,25 @@ def test_get_pos(board):
     assert board.get_pos(cell3) is None
 
 
+###Tests for convert_position_to_deadcell:
 
+def test_convert_position_to_dead_cell(board):
+    row, column = 0, 0
+    board.add_cell(row, column, FireCell())  
+    board.convert_position_to_dead_cell(row, column)  
+    assert len(board.get_cells(row, column)) == 1
+    assert isinstance(board.get_cells(row, column)[0], DeadCell)
+
+def test_convert_position_to_dead_cell_invalid_position(board):
+    row, column = 3, 3  
+    with pytest.raises(ValueError):
+        board.convert_position_to_dead_cell(row, column)
+
+def test_convert_multiple_cells_to_dead_cell(board):
+    row, column = 0, 0
+    board.add_cell(row, column, FireCell())
+    board.add_cell(row, column, IceCell())
+    board.add_cell(row, column, FireCell())
+    board.convert_position_to_dead_cell(row, column)
+    assert len(board.get_cells(row, column)) == 1
+    assert isinstance(board.get_cells(row, column)[0], DeadCell)

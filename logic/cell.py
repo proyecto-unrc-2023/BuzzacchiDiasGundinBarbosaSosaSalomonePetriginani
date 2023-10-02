@@ -1,12 +1,18 @@
 #from logic.board import Board
 from abc import ABC, abstractmethod
 from random import random
+from enum import IntEnum
+
+class Level(IntEnum):
+    LEVEL_1 = 1
+    LEVEL_2 = 2
+    LEVEL_3 = 3
 
 class Cell:
 
-    def __init__(self, level=None, life=None, position=None, board=None):
-        self.level = level
-        self.life = life
+    def __init__(self, level=Level.LEVEL_1, life=20, position=None, board=None):
+        self.set_level(level)
+        self.set_life(life)        
         self.position = position
         self.board = board
 
@@ -24,8 +30,35 @@ class Cell:
     def __str__(self):
         raise NotImplementedError
 
+    ####  Getters  ####
     def set_position(self, position):
         self.position = position
+    
+    def set_life(self, life):
+        if self.level == Level.LEVEL_3 and (life <= 40 or life > 60):
+            raise ValueError("Life for level 3 must be in the range (40,60]")
+        elif self.level == Level.LEVEL_2 and (life <= 20 or life > 40):
+            raise ValueError("Life for level 2 must be in the range (20,40]")
+        elif self.level == Level.LEVEL_1 and (life < 0 or life > 20):
+            raise ValueError("Life for level 1 must be in the range [0,20]")
+        self.life = life
+
+    def set_level(self, level):
+        if level is None:
+            raise ValueError("Level cant be none")
+        if level not in Level:
+            raise ValueError("Level must be in [1,2,3]")
+        self.level = level
+        
+    ####  Getters  ####
+    def get_level(self):
+        return self.level
+    
+    def get_life(self):
+        return self.life
+    
+    def get_position(self):
+        return self.position
 
     #Move the cell to one of its adjacent positions if possible
     #return adjacent cell selected
@@ -54,6 +87,33 @@ class Cell:
                 ):
                     adjacentList.append(cell)
         return adjacentList
+
+    def fight(self, other_cell):
+        if self.position == other_cell.position:
+            if type(self) != type(other_cell):
+                position = self.position
+                # Compare cell levels
+                if self.level > other_cell.level:
+                    # Remove the other cell from the position
+                    self.board.remove_cell(position[0], position[1], other_cell)
+                    self.life -= 4
+                elif self.level < other_cell.level:
+                    # Remove self from the position
+                    self.board.remove_cell(position[0], position[1], self)
+                    other_cell.life -= 4
+                else:
+                    # If levels are equal, compare cell life
+                    if self.life > other_cell.life:
+                        # Remove the other cell from the position
+                        self.board.remove_cell(position[0], position[1], other_cell)
+                        self.life -= 4
+                    elif self.life < other_cell.life:
+                        # Remove self from the position
+                        self.board.remove_cell(position[0], position[1], self)
+                        other_cell.life -= 4
+                    else:
+                        # If both levels and life are equal, convert both cells to dead
+                        self.board.convert_position_to_dead_cell(position[0], position[1])
 
 class DeadCell(Cell):
 

@@ -1,7 +1,7 @@
 import pytest
 
 from logic.board import Board
-from logic.cell import FireCell, IceCell, Cell, DeadCell
+from logic.cell import FireCell, IceCell, Cell, DeadCell, Level
 
 empty_board_params = [
     (2,2, ' | \n'\
