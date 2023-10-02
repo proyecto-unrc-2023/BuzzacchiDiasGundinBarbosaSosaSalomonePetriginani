@@ -114,7 +114,16 @@ class Cell:
                     else:
                         # If both levels and life are equal, convert both cells to dead
                         self.board.convert_position_to_dead_cell(position[0], position[1])
-
+                        
+    def fusion_cell(self, cell2):
+        if(self.__str__() != '' and self.level == cell2.level and self.__str__() == cell2.__str__() ):
+            if(self.level == Level.LEVEL_1):
+                self.set_level(Level.LEVEL_2)
+                self.set_life(40)
+            elif(self.level == Level.LEVEL_2):
+                self.set_level(Level.LEVEL_3)
+                self.set_life(60)
+            self.board.remove_cell(self.position[0], self.position[1], cell2)
 class DeadCell(Cell):
 
     def __str__(self):

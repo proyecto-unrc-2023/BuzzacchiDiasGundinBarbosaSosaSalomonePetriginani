@@ -1,6 +1,7 @@
 from logic.cell import IceCell, FireCell, DeadCell, Cell, Level
 from logic.board import Board
 
+
 ##########Scenario: Two level 1 cells fights
 @given(u'there are two cells, one IceCell with 8 life points and one FireCell with 5 life points level 1 in position ({row:d},{column:d})')
 def step_impl(context, row, column):

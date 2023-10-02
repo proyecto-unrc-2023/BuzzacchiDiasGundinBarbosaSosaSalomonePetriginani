@@ -1,11 +1,10 @@
 # Feature: Fusion of Cells
 
-#   Scenario: Merge two level 1 cells
-#     Given I have a level 1 cell at position (3, 3)
-#     And another level 1 cell at position (3, 4)
-#     When I move the cell at (3, 3) to (3, 4)
-#     Then a level 2 cell is created at position (3, 4) with 20 health points
-#     And the cell at (3, 3) disappears from the battlefield
+    Scenario: Fusion Two Level 1 Ice Cells
+        Given I have a level 1 ice cell at position (3, 3) with 5 health points
+        And another level 1 ice cell at position (3, 3) with 10 health points
+        When fusion start
+        Then a level 2 ice cell is created at position (3, 3) with 40 health points and the level 1 ice cells at (3, 3) disappears from the battlefield
 
 #   Scenario: Merge two level 2 cells
 #     Given I have a level 2 cell at position (4, 4)
