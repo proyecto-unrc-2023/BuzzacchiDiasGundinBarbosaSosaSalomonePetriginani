@@ -120,10 +120,12 @@ class Cell:
             if(self.level == Level.LEVEL_1):
                 self.set_level(Level.LEVEL_2)
                 self.set_life(40)
+                self.board.remove_cell(self.position[0], self.position[1], cell2)
             elif(self.level == Level.LEVEL_2):
                 self.set_level(Level.LEVEL_3)
                 self.set_life(60)
-            self.board.remove_cell(self.position[0], self.position[1], cell2)
+                self.board.remove_cell(self.position[0], self.position[1], cell2)
+            
 
 class DeadCell(Cell):
 

@@ -6,24 +6,23 @@
         When fusion start at position (3,3)
         Then a level 2 ice cell is created at position (3, 3) with 40 health points and the level 1 ice cells at (3, 3) disappears from the battlefield
 
-#   Scenario: Merge two level 2 cells
-#     Given I have a level 2 cell at position (4, 4)
-#     And another level 2 cell at position (4, 5)
-#     When I move the cell at (4, 4) to (4, 5)
-#     Then a level 3 cell is created at position (4, 5) with 30 health points
-#     And the cell at (4, 4) disappears from the battlefield
+  Scenario: Fusion Two Level 2 Fire Cells
+    Given I have a level 2 fire cell at position (4, 4) with 37 health points
+    And another level 2 fire cell at position (4, 4) with 28 health points
+    When fusion start at position (4,4)
+    Then a level 3 fire cell is created at position (4, 4) with 60 health points and the level 2 fire cells at (4, 4) disappears from the battlefield
 
-#   Scenario: Attempt to merge two level 3 cells
-#     Given I have a level 3 cell at position (5, 5)
-#     And another level 3 cell at position (5, 6)
-#     When I move the cell at (5, 5) to (5, 6)
-#     Then the cells cannot merge, and both coexist at position (5, 6)
+  Scenario: Attempt to merge two level 3 ice cells
+    Given I have a level 3 ice cell at position (5, 5)
+    And another level 3 ice cell at position (5, 5)
+    When fusion start at position (5,5)
+    Then the cells cannot merge, and both coexist at position (5, 5)
 
-#   Scenario: Attempt to merge a level 2 cell with a level 3 cell of the same team
-#     Given I have a level 2 cell at position (3, 3)
-#     And a level 3 cell at position (3, 4)
-#     When I attempt to move the cell at (3, 3) to (3, 4)
-#     Then the cells cannot merge and both coexist in (3,4)
+  Scenario: Attempt to merge a level 2 fire cell with a level 3 fire cell
+    Given I have a level 2 fire cell at position (3, 3)
+    And a level 3 fire cell at position (3, 3)
+    When fusion start at position (3,3)
+    Then the cells cannot merge and both coexist in (3,3)
 
 #   Scenario: Attempt to merge three level 1 cells
 #     Given I have a level 1 cell at position (3, 3)
