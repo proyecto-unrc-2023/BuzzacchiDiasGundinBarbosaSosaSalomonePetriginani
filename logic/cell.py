@@ -124,6 +124,7 @@ class Cell:
                 self.set_level(Level.LEVEL_3)
                 self.set_life(60)
             self.board.remove_cell(self.position[0], self.position[1], cell2)
+
 class DeadCell(Cell):
 
     def __str__(self):

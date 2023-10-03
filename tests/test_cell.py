@@ -19,6 +19,14 @@ def fire_cell(board):
 def ice_cell(board):
     return IceCell(board=board, level=Level.LEVEL_1, life=2, position=(1,1))
 
+@pytest.fixture
+def ice_cell2(board):
+    return IceCell(board=board, level=Level.LEVEL_1, life=5, position=(2,2))
+
+@pytest.fixture
+def ice_cell3(board):
+    return IceCell(board=board, level=Level.LEVEL_1, life=10, position=(2,2))
+
 def test_create_dead_cell_from_str():
     res = Cell.from_string(' ')
     assert isinstance(res, DeadCell)
@@ -122,3 +130,15 @@ def test_fight_same_position_same_type_same_level_same_life(board, fire_cell, ic
     cells_expected = board.get_cells(fire_cell.position[0], fire_cell.position[1])
     assert len(cells_expected) == 1
     assert isinstance(cells_expected[0], DeadCell)
+    
+def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
+    board.board[2][2].append(ice_cell2)
+    board.board[2][2].append(ice_cell3)
+    
+    ice_cell2.fusion_cell(ice_cell3)
+    
+    cells_expected = board.get_cells(ice_cell2.position[0], ice_cell2.position[1])
+    assert ice_cell2.level == Level.LEVEL_2
+    assert ice_cell2.life == 40
+    assert len(cells_expected) == 1
+    assert isinstance(cells_expected[0], IceCell)
