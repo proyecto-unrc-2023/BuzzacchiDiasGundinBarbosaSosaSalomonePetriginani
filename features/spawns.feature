@@ -1,9 +1,10 @@
-# Feature: Spawns of cells
-#   Scenario: First spawn
-#     Given that the setup phase has been completed
-#     And the game is waiting
-#     When the user choose the position (3,4) for the spawn
-#     Then the spawn will create in the position (3,4)
+Feature: Spawns of cells
+
+  Scenario: First spawn
+    Given that the setup phase has been completed
+    And the game is waiting
+    When the user choose the position (3, 4) for the spawn and the spawn will create in the position (3, 4)
+    Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION
 
 #   Scenario: Second spawn
 #     Given that we are playing the game

@@ -26,3 +26,6 @@ class GameState:
         self.username = username
         self.team = team
 
+    def add_spawn(self, rows, columns, spawn):
+        self.board.add_spawn(rows, columns, spawn)
+        self.mode = GameMode.SIMULATION
