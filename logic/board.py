@@ -65,12 +65,28 @@ class Board:
                 if cell in cell_list:
                     return (i, j)
         return None
-
+    def fusion(self, pos):
+        cells = self.get_cells(pos[0], pos[1])
+        Fcells, Icells = [], []
+        for cell in cells:
+            if (isinstance(cell, FireCell)):
+                Fcells.append(cell)
+            elif (isinstance(cell, IceCell)):
+                Icells.append(cell)
+        self._same_team_fusion(pos, Fcells)    
+        self._same_team_fusion(pos, Icells)    
+        
+    def _same_team_fusion(self, pos, cells):
+        cells = sorted(cells, key=lambda cell: cell.level)
+        for i in range(len(cells) - 1):
+            for j in range(i+1, len(cells)):
+                if(cells[i].fusion(cells[j])):
+                    cells.pop(j)
+            
     def convert_position_to_dead_cell(self, row, column):
         if 0 <= row < self.rows and 0 <= column < self.columns:
             # Get a copy of cells in given position
             cells_in_position = list(self.get_cells(row, column))
-
             for cell in cells_in_position:
                 self.remove_cell(row, column, cell)
 

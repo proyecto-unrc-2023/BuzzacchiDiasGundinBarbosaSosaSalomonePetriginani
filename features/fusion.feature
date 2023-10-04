@@ -24,14 +24,12 @@
     When fusion start at position (3,3)
     Then the cells cannot merge and both coexist in (3,3)
 
-#   Scenario: Attempt to merge three level 1 cells
-#     Given I have a level 1 cell at position (3, 3)
-#     And another level 1 cell at position (3, 4)
-#     And a third level 1 cell at position (3, 5)
-#     When I move the cell at (3, 3) to (3, 4)
-#     And I attempt to move the remaining cell at (3, 5) to (3, 4)
-#     Then the two cells with the highest life points merge, creating a new level 2 cell
-#     And the new level 2 cell coexists with the other level 1 cell
+   Scenario: Attempt to merge three level 1 ice cells
+     Given I have a level 1 ice cell at position (6, 5) with 6 health points
+     And another level 1 ice cell at position (6, 5) with 15 health points
+     And a third level 1 ice cell at position (6, 5) with 19 health points
+     When fusion start at position (6,5)
+     Then  a level 2 ice cell is created at position (6, 5) with 40 health points and only one level 1 ice cell at (6, 5) disappears from the battlefield
 
 #   Scenario: Merge four level 1 cells into two level 2 cells
 #     Given I have a level 1 cell at position (3, 3)
