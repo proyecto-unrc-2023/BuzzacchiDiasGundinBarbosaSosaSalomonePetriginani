@@ -66,4 +66,9 @@ class Board:
                     return (i, j)
         return None
 
-
+    def advance(self, cell):
+        row = cell.position[0]
+        column = cell.position[1]
+        self.remove_cell(row, column, cell)
+        cell.advance()
+        self.add_cell(cell.position[0], cell.position[1], cell)

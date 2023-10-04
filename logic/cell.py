@@ -34,8 +34,8 @@ class Cell:
             tuplePos = self.position
             positionsList = self.get_adjacents_for_move(tuplePos)
             if positionsList:
-                return random.choice(positionsList)
-        return None
+                self.position = random.choice(positionsList)
+
 
     #Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY):
