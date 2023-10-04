@@ -84,3 +84,17 @@ class Board:
         position = (row, column)
         spawn.position = position
         self.board[row][column].append(spawn)
+
+    def execute_fight_in_position(self, row, col):
+        cells = self.get_cells(row, col)
+        ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
+        fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
+        
+        # Order by level and life by descendent order
+        ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+        fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+
+        while ice_cells and fire_cells:
+            ice_cells[0].fight(fire_cells[0])
+            ice_cells = [cell for cell in ice_cells if cell in self.get_cells(row, col)]
+            fire_cells = [cell for cell in fire_cells if cell in self.get_cells(row, col)]

@@ -18,11 +18,8 @@ Feature: Fight of Cells
   Scenario: two fights, followed by an additional third one
     Given there are two level 2 cells in position (0,0), one FireCell with 22 life points and one IceCell with 25 life points
     And there are two cells level 1 in position (0,0), one IceCell with 12 life points and one FireCell with 15 life points
-    When the cells with same level start the fight
-    Then level 1 IceCell dies and FireCell level 1 wins now with 11 life points
-    And level 2 FireCell loses fight and level 2 IceCell wins with 21
-    And fight starts with the winning cells, FireCell with 11 life points against IceCell with 21
-    And IceCell finally wins with 17 health points and became level 1, and the FireCell dies
+    When first battle starts, level 2 cells fight ends with IceCell winning with 21 life points and second battle starts, winning cell fights with level 1 FireCell, that finishes with a win for the same cell again
+    Then we have two IceCells, level 1 cell with no fights, and the cells with 2 fights became level 1 with 17 life points
 
   Scenario: A higher-level cell fights against lower-level cells
     Given there is one FireCell with 30 life points at level 2 and two IceCells at level 1 with 15 life points each in position (0,0)
