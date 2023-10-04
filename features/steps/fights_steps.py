@@ -83,6 +83,7 @@ def step_impl(context):
     assert context.state.board.get_cells(2, 2)[0].get_level() == Level.LEVEL_1
 
 
+
 ##########Scenario #4: two fights, followed by an additional third one
 @given(u'there are two level 2 cells in position ({row:d},{column:d}), one FireCell with 22 life points and one IceCell with 25 life points')
 def step_impl(context, row, column):
@@ -99,52 +100,21 @@ def step_impl(context, row, column):
     context.state.board.add_cell(row, column, ice_cell_level1)
     context.state.board.add_cell(row, column, fire_cell_level1)
 
-@when(u'the cells with same level start the fight')
+@when(u'first battle starts, level 2 cells fight ends with IceCell winning with 21 life points and second battle starts, winning cell fights with level 1 FireCell, that finishes with a win for the same cell again')
 def step_impl(context):
     row, column = 0, 0
-    cells_in_position = context.state.board.get_cells(row, column)
-    if len(cells_in_position) == 4:
-        level2FireCell = cells_in_position[0]
-        level2IceCell = cells_in_position[1]
-        level1IceCell = cells_in_position[2]
-        level1FireCell = cells_in_position[3]
-        context.state.level1IceCell = level1IceCell
-        context.state.level2FireCell = level2FireCell
-        level2FireCell.fight(level2IceCell)
-        level1IceCell.fight(level1FireCell)
+    context.state.board.execute_fight_in_position(row,column)
 
-@then(u'level 1 IceCell dies and FireCell level 1 wins now with 11 life points')
+@then(u'we have two IceCells, level 1 cell with no fights, and the cells with 2 fights became level 1 with 17 life points')
 def step_impl(context):
     row, column = 0, 0
     cells_in_position = context.state.board.get_cells(row, column)
     assert len(cells_in_position) == 2
-    assert context.state.level1IceCell not in cells_in_position
-    assert cells_in_position[1].get_life() == 11
+    assert cells_in_position[0].get_life() == 17
     assert cells_in_position[1].get_level() == Level.LEVEL_1
-    assert isinstance(cells_in_position[1], FireCell)
+    assert cells_in_position[0].get_level() == Level.LEVEL_1
+    assert all(isinstance(cell, IceCell) for cell in cells_in_position)
 
-@then(u'level 2 FireCell loses fight and level 2 IceCell wins with 21')
-def step_impl(context):
-    row, column = 0, 0
-    cells_in_position = context.state.board.get_cells(row, column)
-    assert len(cells_in_position) == 2
-    assert isinstance(cells_in_position[0], IceCell)
-    assert cells_in_position[0].get_life() == 21
-    assert cells_in_position[0].get_level() == Level.LEVEL_2
-
-@then(u'fight starts with the winning cells, FireCell with 11 life points against IceCell with 21')
-def step_impl(context):
-    row, column = 0, 0
-    fire_cell = context.state.board.get_cells(row,column)[0]
-    ice_cell = context.state.board.get_cells(row,column)[1]
-    fire_cell.fight(ice_cell)
-
-@then(u'IceCell finally wins with 17 health points and became level 1, and the FireCell dies')
-def step_impl(context):
-    assert len(context.state.board.get_cells(0 ,0)) == 1
-    assert isinstance(context.state.board.get_cells(0 ,0)[0], IceCell)
-    assert context.state.board.get_cells(0 ,0)[0].get_life() == 17
-    assert context.state.board.get_cells(0 ,0)[0].get_level() == Level.LEVEL_1
 
 
 ##########Scenario #5: A higher-level cell fights against lower-level cells
@@ -163,13 +133,7 @@ def step_impl(context, life, ice_cell_life, row, column):
 @when(u'the fight initiates')
 def step_impl(context):
     row, column = 0, 0
-    while True:
-        cells_in_position = context.state.board.get_cells(row, column)
-        if len(cells_in_position) <= 1:
-            break
-        fire_cell = cells_in_position[0]
-        ice_cell = cells_in_position[1]
-        fire_cell.fight(ice_cell)
+    context.state.board.execute_fight_in_position(row,column)
 
 @then(u'the FireCell at level {level:d} wins, the IceCells disappear from the battlefield, and the FireCell wins with {final_life:d} life points')
 def step_impl(context, level, final_life):
