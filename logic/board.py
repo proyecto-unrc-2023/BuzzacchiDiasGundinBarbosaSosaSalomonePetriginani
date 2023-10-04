@@ -1,5 +1,6 @@
 
 from logic.cell import IceCell, FireCell, Cell, DeadCell
+from logic.spawn import Spawn, IceSpawn, FireSpawn
 
 class Board:
 
@@ -78,3 +79,8 @@ class Board:
             self.add_cell(row, column, dead_cell)
         else:
             raise ValueError("Invalid row or column")
+    
+    def add_spawn(self, row, column, spawn):
+        position = (row, column)
+        spawn.position = position
+        self.board[row][column].append(spawn)
