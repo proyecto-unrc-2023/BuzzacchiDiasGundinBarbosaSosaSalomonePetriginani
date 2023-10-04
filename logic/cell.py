@@ -37,9 +37,9 @@ class Cell:
     def set_life(self, life):
         if self.level == Level.LEVEL_3 and (life <= 40 or life > 60):
             raise ValueError("Life for level 3 must be in the range (40,60]")
-        elif self.level == Level.LEVEL_2 and (life <= 20 or life > 40):
+        elif self.level == Level.LEVEL_2 and (life < 20 or life > 40):
             raise ValueError("Life for level 2 must be in the range (20,40]")
-        elif self.level == Level.LEVEL_1 and (life < 0 or life > 20):
+        elif self.level == Level.LEVEL_1 and (life < 0 or life >= 20):
             raise ValueError("Life for level 1 must be in the range [0,20]")
         self.life = life
 
