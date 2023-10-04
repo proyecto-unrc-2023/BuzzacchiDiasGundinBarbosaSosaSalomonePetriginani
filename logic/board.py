@@ -98,3 +98,9 @@ class Board:
             ice_cells[0].fight(fire_cells[0])
             ice_cells = [cell for cell in ice_cells if cell in self.get_cells(row, col)]
             fire_cells = [cell for cell in fire_cells if cell in self.get_cells(row, col)]
+    def advance(self, cell):
+        row = cell.position[0]
+        column = cell.position[1]
+        self.remove_cell(row, column, cell)
+        cell.advance()
+        self.add_cell(cell.position[0], cell.position[1], cell)
