@@ -1,55 +1,41 @@
 Feature: Fight of Cells
 
   Scenario: Two level 1 cells fights
-     Given there are two cells, one IceCell with 8 life points and one FireCell with 5 life points level 1 in position (0,0)
-     When the fight starts
-     Then the FireCell disappears from the battlefield and the IceCell wins with 4 life points 
+    Given there are two cells, one IceCell with 8 life points and one FireCell with 5 life points level 1 in position (0,0)
+    When the fight starts
+    Then the FireCell disappears from the battlefield and the IceCell wins with 4 life points 
 
-  # Scenario: two level 3 cells fights
-  #    Given there are two level 3 cells, one IceCell with 28 life points and one FireCell with 25 life points in position (1,1)
-  #    When the fight starts
-  #    Then the FireCell disappears and the IceCell wins with 27 life points #########???
+  Scenario: two level 3 cells fights
+     Given there are two level 3 cells, one IceCell with 58 life points and one FireCell with 50 life points in position (1,1)
+     When the fight begins
+     Then the FireCell disappears and the IceCell wins with 54 life points 
 
-#   Scenario: Two level 3 cells fights
-#     Given i have two cells of the same level
-#     And one of them has more life points than the other
-#     And the cell with more life points is in the position (4,4)
-#     And the other cell in the position (4,6)
-#     When the cell with more life points moves to the position (4,5)
-#     And the other cell moves to the position (4,5)
-#     Then the cell with less life points disappears from the battlefield
-#     And the winning cell drops to level 2
+  Scenario: one level 1 IceCell against a level 2 FireCell
+    Given there is one level 1 IceCell with 9 life points and one level 2 FireCell with 22 life points in position (2,2)
+    When the fight commences
+    Then the IceCell dies and the FireCell stays in the position with 18 life points and level 1
 
-  # Scenario: one level 1 IceCell against a level 2 FireCell
-  #   Given there is one level 1 IceCell with 9 life points and one level 2 FireCell with 17 life points in position (2,2)
-  #   When the fight starts
-  #   Then the IceCell dies and the FireCell stays in the position with 16 life points
+  Scenario: two fights, followed by an additional third one
+    Given there are two level 2 cells in position (0,0), one FireCell with 22 life points and one IceCell with 25 life points
+    And there are two cells level 1 in position (0,0), one IceCell with 12 life points and one FireCell with 15 life points
+    When the cells with same level start the fight
+    Then level 1 IceCell dies and FireCell level 1 wins now with 11 life points
+    And level 2 FireCell loses fight and level 2 IceCell wins with 21
+    And fight starts with the winning cells, FireCell with 11 life points against IceCell with 21
+    And IceCell finally wins with 17 health points and became level 1, and the FireCell dies
 
-#   Scenario: fight a level 1 against a level 2
-#     Given i have two cells, one with level 1 and the other with level 2
-#     And the cell with level 2 is in the position (4,4)
-#     And the other cell is in the position (4,6)
-#     When both cells move to the position (4,5)
-#     Then the cell with less level disappears from the battlefield
-#     And the winning cell drops to level 1
+  Scenario: A higher-level cell fights against lower-level cells
+    Given there is one FireCell with 30 life points at level 2 and two IceCells at level 1 with 15 life points each in position (0,0)
+    When the fight initiates
+    Then the FireCell at level 2 wins, the IceCells disappear from the battlefield, and the FireCell wins with 22 life points
 
-  # Scenario: two fights in the same position
-  #   Given there are two level 2 cells in position (0,0), one FireCell with 22 life points and one IceCell with 25 life points
-  #   And there are two cells level 1 in position (0,0), one IceCell with 12 life points and one FireCell with 15 life points
-  #   When the cells with same level start the fight
-  #   Then level 1 FireCell dies and IceCell level 1 wins now with 24 life points
-  #   And level 2 FireCell wins fight with 14 life points now and level 2 IceCell dies 
-
+  # Este escenario necesita el metodo fusion que esta en desarrollo
   # Scenario: two IceCell in same position with same level against a same one FireCell level
   #   Given there are two level 1 cells in position (0,0), one with 4 life points and the other with 9 life points
   #   And there is a FireCell level 1 with 8 life points in the same position
   #   When the fight is going to start
   #   Then the fusion between IceCell cells starts first
-  #   And a level 2 IceCell is created with 20 life points
+  #   And a level 2 IceCell is created with 40 life points
   #   And level 2 IceCell fights against level one FireCell
-  #   And level 2 IceCells wins with 19 life points and FireCell dies
+  #   And level 2 IceCells wins with 36 life points and FireCell dies
 
-  #Rango vida lvl3: (40,60]
-  #Rango vida lvl2: (20,40]
-  #rRango vida lvl1: (0,20]
-  #si una celula gana una batalla, quedara en el campo con -4 de vida (-5 restando la de la iteracion)

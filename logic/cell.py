@@ -90,30 +90,46 @@ class Cell:
 
     def fight(self, other_cell):
         if self.position == other_cell.position:
+            position = self.position
             if type(self) != type(other_cell):
-                position = self.position
-                # Compare cell levels
-                if self.level > other_cell.level:
-                    # Remove the other cell from the position
-                    self.board.remove_cell(position[0], position[1], other_cell)
-                    self.life -= 4
-                elif self.level < other_cell.level:
-                    # Remove self from the position
-                    self.board.remove_cell(position[0], position[1], self)
-                    other_cell.life -= 4
+                # Compare Life Points 
+                if(self.get_life() < 4 or other_cell.get_life() < 4):
+                    self.board.convert_position_to_dead_cell(position[0],position[1])
                 else:
-                    # If levels are equal, compare cell life
-                    if self.life > other_cell.life:
+                    # Compare cell levels
+                    if self.get_level() > other_cell.get_level():
                         # Remove the other cell from the position
                         self.board.remove_cell(position[0], position[1], other_cell)
                         self.life -= 4
-                    elif self.life < other_cell.life:
+                    elif self.get_level() < other_cell.get_level():
                         # Remove self from the position
                         self.board.remove_cell(position[0], position[1], self)
                         other_cell.life -= 4
                     else:
-                        # If both levels and life are equal, convert both cells to dead
-                        self.board.convert_position_to_dead_cell(position[0], position[1])
+                        # If levels are equal, compare cell life
+                        if self.get_life() > other_cell.get_life():
+                            # Remove the other cell from the position
+                            self.board.remove_cell(position[0], position[1], other_cell)
+                            self.life -= 4
+                        elif self.get_life() < other_cell.get_life():
+                            # Remove self from the position
+                            self.board.remove_cell(position[0], position[1], self)
+                            other_cell.life -= 4
+                        else:
+                            # If both levels and life are equal, convert both cells to dead
+                            self.board.convert_position_to_dead_cell(position[0], position[1])
+            if self in self.board.get_cells(position[0], position[1]):
+                self.modify_cell_after_fight(self)
+            else:
+                other_cell.modify_cell_after_fight(other_cell)
+
+    #should verify if it is nedeed to modify level of winning cell
+    def modify_cell_after_fight(self, cell):
+        if (cell.get_level() == Level.LEVEL_3 and cell.get_life() < 40):
+            cell.set_level(Level.LEVEL_2)
+        if (cell.get_level() == Level.LEVEL_2 and cell.get_life() < 20):
+            cell.set_level(Level.LEVEL_1)
+
 
 class DeadCell(Cell):
 
