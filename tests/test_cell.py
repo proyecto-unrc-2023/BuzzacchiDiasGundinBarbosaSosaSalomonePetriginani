@@ -17,7 +17,15 @@ def fire_cell(board):
 
 @pytest.fixture
 def ice_cell(board):
-    return IceCell(board=board, level=Level.LEVEL_1, life=6, position=(1,1))
+    return IceCell(board=board, level=Level.LEVEL_1, life=2, position=(1,1))
+
+@pytest.fixture
+def ice_cell2(board):
+    return IceCell(board=board, level=Level.LEVEL_1, life=5, position=(2,2))
+
+@pytest.fixture
+def ice_cell3(board):
+    return IceCell(board=board, level=Level.LEVEL_1, life=10, position=(2,2))
 
 def test_create_dead_cell_from_str():
     res = Cell.from_string(' ')
@@ -123,6 +131,42 @@ def test_fight_same_position_same_type_same_level_same_life(board, fire_cell, ic
     cells_expected = board.get_cells(fire_cell.position[0], fire_cell.position[1])
     assert len(cells_expected) == 1
     assert isinstance(cells_expected[0], DeadCell)
+
+def test_fight_same_position_different_types_low_life(board, fire_cell, ice_cell):
+    fire_cell.position = ice_cell.position = (1, 1)
+    fire_cell.set_life(3)
+    ice_cell.set_life(3)
+    board.board[1][1].append(fire_cell)
+    board.board[1][1].append(ice_cell)
+    
+    fire_cell.fight(ice_cell)
+    
+    assert fire_cell not in board.get_cells(1,1)
+    assert ice_cell not in board.get_cells(1,1)
+
+def test_fight_same_position_different_types_lower_level_high_life(board):
+    lower_level_fire_cell = FireCell(board=board, level=Level.LEVEL_2, life=25, position=(1, 1))
+    higher_level_ice_cell = IceCell(board=board, level=Level.LEVEL_3, life=41, position=(1, 1))
+
+    board.board[1][1].append(lower_level_fire_cell)
+    board.board[1][1].append(higher_level_ice_cell)
+
+    lower_level_fire_cell.fight(higher_level_ice_cell)
+
+    assert lower_level_fire_cell not in board.get_cells(1, 1)
+    assert higher_level_ice_cell in board.get_cells(1, 1)
+    
+def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
+    board.board[2][2].append(ice_cell2)
+    board.board[2][2].append(ice_cell3)
+    
+    ice_cell2.fusion(ice_cell3)
+    
+    cells_expected = board.get_cells(ice_cell2.position[0], ice_cell2.position[1])
+    assert ice_cell2.level == Level.LEVEL_2
+    assert ice_cell2.life == 40
+    assert len(cells_expected) == 1
+    assert isinstance(cells_expected[0], IceCell)
 
 def test_fight_same_position_different_types_low_life(board, fire_cell, ice_cell):
     fire_cell.position = ice_cell.position = (1, 1)

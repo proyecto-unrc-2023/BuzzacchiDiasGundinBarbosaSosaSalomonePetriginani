@@ -66,12 +66,25 @@ class Board:
                 if cell in cell_list:
                     return (i, j)
         return None
-
+    
+    def fusion(self, pos):
+        merged = True
+        while merged:
+            merged = False
+            cells_aux = self.get_cells(pos[0], pos[1])
+            if (len(cells_aux) == 1) : 
+                break
+            cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.level))
+            for i in range(len(cells_aux)-1):
+                merged = cells_aux[i].fusion(cells_aux[i+1])
+                if (merged):
+                    break
+                
+            
     def convert_position_to_dead_cell(self, row, column):
         if 0 <= row < self.rows and 0 <= column < self.columns:
             # Get a copy of cells in given position
             cells_in_position = list(self.get_cells(row, column))
-
             for cell in cells_in_position:
                 self.remove_cell(row, column, cell)
 

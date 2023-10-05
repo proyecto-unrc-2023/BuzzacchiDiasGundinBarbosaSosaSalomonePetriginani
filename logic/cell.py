@@ -129,8 +129,22 @@ class Cell:
             cell.set_level(Level.LEVEL_2)
         if (cell.get_level() == Level.LEVEL_2 and cell.get_life() < 20):
             cell.set_level(Level.LEVEL_1)
-
-
+                        
+    def fusion(self, cell2):
+        if(self.level != cell2.level):
+            return False
+        if(self.level == Level.LEVEL_1):
+            self.set_level(Level.LEVEL_2)
+            self.set_life(40)
+            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            return True
+        elif(self.level == Level.LEVEL_2):
+            self.set_level(Level.LEVEL_3)
+            self.set_life(60)
+            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            return True
+        return False
+    
 class DeadCell(Cell):
 
     def __str__(self):
