@@ -48,7 +48,7 @@ def step_impl(context, x, y):
     assert len(context.state.board.get_cells(x, y)) == 1 
 
 
-###Scenario: Attempt to move level 1 ice cell to a cell occupied by another level 1 cell
+###Scenario: Attempt to move level 1 ice cell to an adjacent cell occupied by a level 3 cell
 @given(u'I have a level {level:d} ice cell with life {life:d} at position ({row:d}, {column:d})')
 def step_impl(context, row, column, level, life):
     context.state.board = Board(50,50)
@@ -58,7 +58,7 @@ def step_impl(context, row, column, level, life):
 def step_impl(context, level, life, row, column):
     context.state.board.add_cell(row, column, IceCell(level = Level(level), life = life))
 
-@when(u'I try to move the level {level:d} ice cell to position {position:d}')
+@when(u'I try to move the level {level:d} ice cell to position ({row:d}, {column:d})')
 def step_impl(context, row, column, level):
     context.state.board.add_cell(row, column, IceCell(level = Level(level)))
     context.state.board.remove_cell(row - 1, column, context.state.board.get_cells(row - 1, column)[0])
@@ -68,7 +68,7 @@ def step_impl(context, x, y):
     assert len(context.state.board.get_cells(x, y)) == 2
 
 
-###Scenario: Attempt to move level 1 fire cell to a cell occupied by another level 1 cell
+###Scenario: Attempt to move level 1 fire cell to a cell occupied by another level 3 cell
 @given(u'I have a level {level:d} fire cell with life {life:d} at position ({row:d}, {column:d})')
 def step_impl(context, row, column, level, life):
     context.state.board = Board(50,50)
@@ -89,18 +89,18 @@ def step_impl(context, x, y):
 
 
 ###Scenario: Attempt to move level 2 ice cell to an adjacent cell occupied by a level 1 ice cell
-@given(u'I have a level {level:d} ice cell at position ({row:d}, {column:d})')
-def step_impl(context, row, column, level):
+@given(u'I have a level {level:d} ice cell with life {life:d} at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level, life):
     context.state.board = Board(50,50)
-    context.state.board.add_cell(row, column, IceCell(level = Level(level), life = 29))
+    context.state.board.add_cell(row, column, IceCell(level = Level(level), life = life))
 
-@given(u'a level {level:d} ice cell at position ({row:d}, {column:d})')
-def step_impl(context, row, column, level):
-    context.state.board.add_cell(row, column, IceCell(level = Level(level), life = 15))
+@given(u'a level {level:d} ice cell with life {life:d} at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level, life):
+    context.state.board.add_cell(row, column, IceCell(level = Level(level), life = life))
 
 @when(u'I try to move the level {level:d} ice cell to position ({row:d}, {column:d})')
 def step_impl(context, row, column, level):
-    context.state.board.add_cell(row, column, IceCell(level = Level(level), life = 29))
+    context.state.board.add_cell(row, column, IceCell(level = Level(level)))
     context.state.board.remove_cell(row - 1, column, context.state.board.get_cells(row - 1, column)[0])
 
 @then(u'the cells cannot merge, and both coexist at position ({row:d}, {column:d})')
@@ -109,19 +109,19 @@ def step_impl(context, row, column):
 
 
 ###Scenario: Attempt to move level 2 fire cell to an adjacent cell occupied by a level 1 fire cell
-@given(u'I have a level {level:d} fire cell at position ({row:d}, {column:d})')
-def step_impl(context, row, column, level):
+@given(u'I have a level {level:d} fire cell with life {life:d} at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level, life):
     context.state.board = Board(50,50)
-    context.state.board.add_cell(row, column, FireCell(level = Level(level), life = 29))
+    context.state.board.add_cell(row, column, FireCell(level = Level(level), life = life))
 
-@given(u'a level {level:d} fire cell at position ({row:d}, {column:d})')
-def step_impl(context, row, column, level):
-    context.state.board.add_cell(row, column, FireCell(level = Level(level), life = 15))
+@given(u'a level {level:d} fire cell with life {life:d} at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level, life):
+    context.state.board.add_cell(row, column, FireCell(level = Level(level), life = life))
 
 @when(u'I try to move the level {level:d} fire cell to position ({row:d}, {column:d})')
 def step_impl(context, row, column, level):
-    context.state.board.add_cell(row, column, FireCell(level = Level(level), life = 29))
-    #context.state.board.remove_cell(row - 1, column, context.state.board.get_cells(row - 1, column)[0])
+    context.state.board.add_cell(row, column, FireCell(level = Level(level)))
+    context.state.board.remove_cell(row - 1, column, context.state.board.get_cells(row - 1, column)[0])
     #assert FireCell.get_level() == Level.LEVEL_2
 
 @then(u'the cells cannot merge, and both coexist at position ({row:d}, {column:d})')

@@ -13,9 +13,9 @@
     Then the fire cell moves successfully to position (4, 3)
 
 #   Scenario: Attempt to move level 1 ice cell to a cell occupied by another level 1 cell
-#     Given I have a level 1 ice cell with life 20 at position (3, 3)
+#     Given I have a level 1 ice cell with life 19 at position (3, 3)
 #     And another level 1 ice cell whit life 15 at position (4, 3)
-#     When I try to move the ice cell to position (4, 3)
+#     When I try to move the level 1 ice cell to position (4, 3)
 #     Then the cells merge, generating a new level 2 cell at position (4, 3)
 
   Scenario: Attempt to move level 1 ice cell to an adjacent cell occupied by a level 3 cell
@@ -31,14 +31,14 @@
     Then both cells coexist in cell (4, 3)
 
   Scenario: Attempt to move level 2 ice cell to an adjacent cell occupied by a level 1 ice cell
-    Given I have a level 2 ice cell at position (3, 3)
-    And a level 1 ice cell at position (4, 3)
+    Given I have a level 2 ice cell with life 26 at position (3, 3)
+    And a level 1 ice cell with life 9 at position (4, 3)
     When I try to move the level 2 ice cell to position (4, 3)
     Then the cells cannot merge, and both coexist at position (4, 3)
 
   Scenario: Attempt to move level 2 fire cell to an adjacent cell occupied by a level 1 fire cell
-    Given I have a level 2 fire cell at position (3, 3)
-    And a level 1 fire cell at position (4, 3)
+    Given I have a level 2 fire cell with life 30 at position (3, 3)
+    And a level 1 fire cell with life 2 at position (4, 3)
     When I try to move the level 2 fire cell to position (4, 3)
     Then the cells cannot merge, and both coexist at position (4, 3)
 
