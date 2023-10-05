@@ -70,3 +70,25 @@ def test_convert_multiple_cells_to_dead_cell(board):
     board.convert_position_to_dead_cell(row, column)
     assert len(board.get_cells(row, column)) == 1
     assert isinstance(board.get_cells(row, column)[0], DeadCell)
+    
+## TEST Fusion of Board
+def test_fusion_board(board):
+    pos = (1,1)
+    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_2, life=36, position=pos, board=board))
+    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_1, life=16, position=pos, board=board))
+    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_1, life=7, position=pos, board=board))
+    board.add_cell(pos[0], pos[1], IceCell(level=Level.LEVEL_1, life=2, position=pos, board=board))
+    board.add_cell(pos[0], pos[1], IceCell(level=Level.LEVEL_1, life=12, position=pos, board=board))
+    board.fusion(pos)
+    cells_in_pos = board.get_cells(pos[0], pos[1])
+    assert len(cells_in_pos) == 2
+    assert isinstance(cells_in_pos[0], FireCell)
+    assert isinstance(cells_in_pos[1], IceCell)
+    assert cells_in_pos[0].life == 60
+    assert cells_in_pos[0].level == Level.LEVEL_3
+    assert cells_in_pos[1].life == 40
+    assert cells_in_pos[1].level == Level.LEVEL_2
+
+    
+    
+    

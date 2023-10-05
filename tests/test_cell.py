@@ -135,7 +135,7 @@ def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
     board.board[2][2].append(ice_cell2)
     board.board[2][2].append(ice_cell3)
     
-    ice_cell2.fusion_cell(ice_cell3)
+    ice_cell2.fusion(ice_cell3)
     
     cells_expected = board.get_cells(ice_cell2.position[0], ice_cell2.position[1])
     assert ice_cell2.level == Level.LEVEL_2

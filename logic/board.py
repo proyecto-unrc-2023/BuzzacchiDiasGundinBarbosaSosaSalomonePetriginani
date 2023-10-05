@@ -65,23 +65,20 @@ class Board:
                 if cell in cell_list:
                     return (i, j)
         return None
+    
     def fusion(self, pos):
-        cells = self.get_cells(pos[0], pos[1])
-        Fcells, Icells = [], []
-        for cell in cells:
-            if (isinstance(cell, FireCell)):
-                Fcells.append(cell)
-            elif (isinstance(cell, IceCell)):
-                Icells.append(cell)
-        self._same_team_fusion(pos, Fcells)    
-        self._same_team_fusion(pos, Icells)    
-        
-    def _same_team_fusion(self, pos, cells):
-        cells = sorted(cells, key=lambda cell: cell.level)
-        for i in range(len(cells) - 1):
-            for j in range(i+1, len(cells)):
-                if(cells[i].fusion(cells[j])):
-                    cells.pop(j)
+        merged = True
+        while merged:
+            merged = False
+            cells_aux = self.get_cells(pos[0], pos[1])
+            if (len(cells_aux) == 1) : 
+                break
+            cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.level))
+            for i in range(len(cells_aux)-1):
+                merged = cells_aux[i].fusion(cells_aux[i+1])
+                if (merged):
+                    break
+                
             
     def convert_position_to_dead_cell(self, row, column):
         if 0 <= row < self.rows and 0 <= column < self.columns:

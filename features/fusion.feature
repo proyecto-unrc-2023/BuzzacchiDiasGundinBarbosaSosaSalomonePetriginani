@@ -31,12 +31,10 @@
      When fusion start at position (6,5)
      Then  a level 2 ice cell is created at position (6, 5) with 40 health points and only one level 1 ice cell at (6, 5) disappears from the battlefield
 
-#   Scenario: Merge four level 1 cells into two level 2 cells
-#     Given I have a level 1 cell at position (3, 3)
-#     And another level 1 cell at position (3, 4)
-#     And a third level 1 cell at position (3, 5)
-#     And a fourth level 1 cell at position (2,4)
-#     When I move the cell at (3, 3) to (3, 4)
-#     And I move the cell at (3, 5) to (3, 4)
-#     And I move the cell at (2,4) to (3, 4)
-#     Then two new level 2 cells coexist in the same cell at position (3, 4)
+  Scenario: Merge four level 1 fire cells into two level 3 cells
+    Given I have a level 1 fire cell at position (8,2) with 12 health points
+    And another level 1 fire cell at position (8,2) with 1 health points
+    And a third level 1 fire cell at position (8,2) with 17 health points
+    And a fourth level 1 fire cell at position (8,2) with 20 health points
+    When fusion start at position (8,2)
+    Then a level 3 fire cells is created at position (8,2) with 60 health points and all level 1 fire cells at (8,2) disappears from the battlefield
