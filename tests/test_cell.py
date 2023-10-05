@@ -17,7 +17,7 @@ def fire_cell(board):
 
 @pytest.fixture
 def ice_cell(board):
-    return IceCell(board=board, level=Level.LEVEL_1, life=2, position=(1,1))
+    return IceCell(board=board, level=Level.LEVEL_1, life=6, position=(1,1))
 
 @pytest.fixture
 def ice_cell2(board):
