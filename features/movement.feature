@@ -33,14 +33,14 @@
   Scenario: Attempt to move level 2 ice cell to an adjacent cell occupied by a level 1 ice cell
     Given I have a level 2 ice cell with life 26 at position (3, 3)
     And a level 1 ice cell with life 9 at position (4, 3)
-    When I try to move the level 2 ice cell to position (4, 3)
-    Then the cells cannot merge, and both coexist at position (4, 3)
+    When I try to move the level 2 ice cell to position (4, 3) with 25 health points
+    Then both cells cannot merge, and coexist at position (4, 3)
 
   Scenario: Attempt to move level 2 fire cell to an adjacent cell occupied by a level 1 fire cell
     Given I have a level 2 fire cell with life 30 at position (3, 3)
     And a level 1 fire cell with life 2 at position (4, 3)
-    When I try to move the level 2 fire cell to position (4, 3)
-    Then the cells cannot merge, and both coexist at position (4, 3)
+    When I try to move the level 2 fire cell to position (4, 3) with 29 health points
+    Then both cells cannot merge, and coexist at position (4, 3)
 
 #   Scenario: Move cell to a cell occupied by 2 cells of different levels same team (coexisting)
 #     Given I have a level 1 fire cell at position (2, 2)
