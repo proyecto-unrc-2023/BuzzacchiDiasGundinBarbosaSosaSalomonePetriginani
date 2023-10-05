@@ -8,6 +8,17 @@ class Level(IntEnum):
     LEVEL_2 = 2
     LEVEL_3 = 3
 
+    #Level_1: (0,20] ; Level_2: (20,40] ; Level_3: (40,60]
+    @staticmethod
+    def life_validation(level, life):
+        if level == Level.LEVEL_1 and (life < 0 or life > 20):
+            raise ValueError("Life invalid for level 1")
+        elif level == Level.LEVEL_2 and (life <= 20 or life > 40):
+            raise ValueError("Life invalid for level 2")
+        elif level == Level.LEVEL_3 and (life <= 40 or life > 60):
+            raise ValueError("Life invalid for level 3")
+        return True
+
 class Cell:
 
     def __init__(self, level=Level.LEVEL_1, life=20, position=None, board=None):
@@ -35,20 +46,10 @@ class Cell:
         self.position = position
     
     def set_life(self, life):
-        if not self.life_validation(self.level, self.life):
-            return
+        if not Level.life_validation(self.level, life):
+            raise ValueError("Invalid life")
         self.life = life
 
-    #Level_1: (0,20] ; Level_2: (20,40] ; Level_3: (40,60]
-    def life_validation(Level, life):
-        if Level == Level.LEVEL_1 and (life < 0 or life > 20):
-            raise ValueError("Life invalid for level 1")
-        if Level == Level.LEVEL_2 and (life <= 20 or life > 40):
-            raise ValueError("Life invalid for level 2")
-        if Level == Level.LEVEL_3 and (life <= 40 or life > 60):
-            raise ValueError("Life invalid for level 3")
-        return True
-    
     def set_level(self, level):
         if level is None:
             raise ValueError("Level cant be none")
@@ -93,6 +94,14 @@ class Cell:
                 ):
                     adjacentList.append(cell)
         return adjacentList
+    
+    def level_up(self):
+        if self.level == Level.LEVEL_1:
+            self.set_level(Level.LEVEL_2)
+        elif self.level == Level.LEVEL_2:
+            self.set_level(Level.LEVEL_3)
+        else:
+            raise Exception('Level_3 cannot be level up')
 
     def fight(self, other_cell):
         if self.position == other_cell.position:
