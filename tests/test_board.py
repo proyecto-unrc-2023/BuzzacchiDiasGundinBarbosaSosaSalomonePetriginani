@@ -95,5 +95,58 @@ def test_fusion_board(board):
     assert cells_in_pos[1].level == Level.LEVEL_2
 
     
+def test_fusion_in_all_board(board):
+    pos0 = (0,0)
+    board.add_cell(pos0[0], pos0[1], IceCell(level=Level.LEVEL_2, life=36, position=pos0, board=board))
+    board.add_cell(pos0[0], pos0[1], IceCell(level=Level.LEVEL_2, life=30, position=pos0, board=board))
+
+    pos1 = (0,1)
+    board.add_cell(pos1[0], pos1[1], IceCell(level=Level.LEVEL_1, life=15, position=pos1, board=board))
+    board.add_cell(pos1[0], pos1[1], IceCell(level=Level.LEVEL_1, life=2, position=pos1, board=board))
+
+    pos2 = (1,0)
+    board.add_cell(pos2[0], pos2[1], FireCell(level=Level.LEVEL_3, life=48, position=pos2, board=board))
+    board.add_cell(pos2[0], pos2[1], IceCell(level=Level.LEVEL_1, life=15, position=pos2, board=board))
+    
+    pos3 = (1,1)
+    board.add_cell(pos3[0], pos3[1], FireCell(level=Level.LEVEL_3, life=50, position=pos3, board=board))
+    board.add_cell(pos3[0], pos3[1], FireCell(level=Level.LEVEL_2, life=29, position=pos3, board=board))
+
+    board.execute_fusions_in_all_positions()
+
+    cells_in_pos_00 = board.get_cells(0, 0)
+    cells_in_pos_01 = board.get_cells(0, 1)
+    cells_in_pos_10 = board.get_cells(1, 0)
+    cells_in_pos_11 = board.get_cells(1, 1)
+
+    # Comprueba la fusión en (0, 0)
+    assert len(cells_in_pos_00) == 1
+    assert isinstance(cells_in_pos_00[0], IceCell)
+    assert cells_in_pos_00[0].life == 60
+    assert cells_in_pos_00[0].level == Level.LEVEL_3
+
+    # Comprueba la fusión en (0, 1)
+    assert len(cells_in_pos_01) == 1
+    assert isinstance(cells_in_pos_01[0], IceCell)
+    assert cells_in_pos_01[0].life == 40
+    assert cells_in_pos_01[0].level == Level.LEVEL_2
+
+    # Comprueba la fusión en (1, 0)
+    assert len(cells_in_pos_10) == 2
+    assert isinstance(cells_in_pos_10[0], FireCell)
+    assert isinstance(cells_in_pos_10[1], IceCell)
+    assert cells_in_pos_10[0].life == 48
+    assert cells_in_pos_10[0].level == Level.LEVEL_3
+    assert cells_in_pos_10[1].life == 15
+    assert cells_in_pos_10[1].level == Level.LEVEL_1
+
+    # Comprueba que no hubo fusión en (1, 1)
+    assert len(cells_in_pos_11) == 2
+    assert isinstance(cells_in_pos_11[0], FireCell)
+    assert isinstance(cells_in_pos_11[1], FireCell)
+    assert cells_in_pos_11[0].life == 50
+    assert cells_in_pos_11[0].level == Level.LEVEL_3
+    assert cells_in_pos_11[1].life == 29
+    assert cells_in_pos_11[1].level == Level.LEVEL_2
     
     

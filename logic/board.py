@@ -79,6 +79,12 @@ class Board:
                 merged = cells_aux[i].fusion(cells_aux[i+1])
                 if (merged):
                     break
+
+    def execute_fusions_in_all_positions(self):
+        for row in range(self.rows):
+            for column in range(self.columns):
+                pos = (row, column)
+                self.fusion(pos)
                 
     def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
         if 0 <= row < self.rows and 0 <= column < self.columns:
