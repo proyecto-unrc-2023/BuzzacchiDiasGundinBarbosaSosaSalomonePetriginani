@@ -1,6 +1,6 @@
 #from logic.board import Board
 from abc import ABC, abstractmethod
-from random import random
+import random
 from enum import IntEnum
 
 class Level(IntEnum):
@@ -76,14 +76,6 @@ class Cell:
             if positionsList:
                 self.position = random.choice(positionsList)
                 self.life = self.life - 1
-                
-    def advance_in_a_position(self, row, column):
-        tuplePos = self.position
-        positionsList = self.get_adjacents_for_move(tuplePos)
-        new_pos = (row, column)
-        if new_pos in positionsList:
-            self.position = new_pos
-            self.life = self.life - 1
 
     #Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY):
@@ -94,13 +86,7 @@ class Cell:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                cell = self.board.get_cells(new_row, new_col)
-                if (
-                    (str(self) == 'F' and str(cell) != 'FS') or
-                    (str(self) == 'I' and str(cell) != 'IS') or
-                    str(cell) == ' '
-                ):
-                    adjacentList.append(cell)
+                adjacentList.append((new_row, new_col))
         return adjacentList
     
     def level_up(self):

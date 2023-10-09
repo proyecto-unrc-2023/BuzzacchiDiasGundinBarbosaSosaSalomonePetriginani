@@ -44,27 +44,27 @@ def test_create_cell_error():
 
 #Test that a cell on an empty board correctly identifies its adjacent cells.
 def test_get_adjacents_empty_board(cell, board):
-    assert cell.get_adjacents_for_move((0, 0)) == [board.get_cells(0, 1), board.get_cells(1, 0), board.get_cells(1, 1)]
+    assert set(cell.get_adjacents_for_move((0, 0))) == set([(0, 1), (1, 0), (1, 1)])
 
 
 #Test that a cell in the center of the board with neighbors correctly identifies its adjacent cells.
 def test_get_adjacents_for_move_center_fire_cell(cell, board):
     board.add_cell(1, 1, FireCell())
-    assert cell.get_adjacents_for_move((1, 1)) == [board.get_cells(0, 0), board.get_cells(0, 1), board.get_cells(0, 2),
-                                                   board.get_cells(1, 0), board.get_cells(1, 2), board.get_cells(2, 0),
-                                                   board.get_cells(2, 1), board.get_cells(2, 2)]
+    assert set(cell.get_adjacents_for_move((1, 1))) == set([(0, 0), (0, 1), (0, 2),
+                                                   (1, 0), (1, 2), (2, 0),
+                                                   (2, 1), (2, 2)])
 
 
 #Test that a cell in a corner of the board with neighbors correctly identifies its adjacent cells.
 def test_get_adjacents_for_move_corner_fire_cell(cell, board):
     board.add_cell(0, 0, FireCell())
-    assert cell.get_adjacents_for_move((0, 0)) == [board.get_cells(0, 1), board.get_cells(1, 0), board.get_cells(1, 1)]
+    assert set(cell.get_adjacents_for_move((0, 0))) == set([(1, 0), (0, 1), (1, 1)])
 
 
 #Test that a cell on an edge of the board with neighbors correctly identifies its adjacent cells.
 def test_get_adjacents_for_move_edge_fire_cell(cell, board):
     board.add_cell(1, 0, FireCell())
-    assert cell.get_adjacents_for_move((1, 0)) == [board.get_cells(0, 0), board.get_cells(0, 1), board.get_cells(1, 1), board.get_cells(2, 0), board.get_cells(2, 1)]
+    assert set(cell.get_adjacents_for_move((1, 0))) == set([(0, 0), (0, 1), (1, 1), (2, 0), (2, 1)])
 
 
 def test_advance_method(cell, board):

@@ -130,16 +130,16 @@ class Board:
             for column in range(self.columns):
                 self.execute_fight_in_position(row, column)
 
-    def advance(self, cell):
-        row = cell.position[0]
-        column = cell.position[1]
-        self.remove_cell(row, column, cell)
-        cell.advance()
-        self.add_cell(cell.position[0], cell.position[1], cell)
-    
-    def advance_in_a_position(self, row, column, cell):
-        r = cell.position[0]
-        c = cell.position[1]
-        self.remove_cell(r, c, cell)
-        cell.advance_in_a_position(row, column)
-        self.add_cell(row, column, cell)
+
+    def advance_in_position(self, row, column):
+        cells = self.get_cells(row, column)
+        for cell in cells:
+            self.remove_cell(row, column, cell)
+            cell.advance()
+            self.add_cell_by_tuple(cell.position, cell)
+            
+
+    def execute_movements_in_all_positions(self):
+        for row in range(self.rows):
+            for column in range(self.columns):
+                self.advance_in_position(row, column)

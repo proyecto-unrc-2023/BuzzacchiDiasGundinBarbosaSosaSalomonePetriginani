@@ -1,5 +1,5 @@
 import pytest
-
+import random
 from logic.board import Board
 from logic.cell import FireCell, IceCell, Cell, DeadCell, Level
 
@@ -221,3 +221,21 @@ def test_fusion_board(board_size, cells_to_add, expected_num_cells, expected_typ
         assert isinstance(cells_in_pos[i], expected_types[i])
         assert cells_in_pos[i].life == expected_life_points[i]
         assert cells_in_pos[i].level == expected_levels[i]
+
+movement_params = [
+    ((10, 10), [(FireCell(level=Level.LEVEL_1, life=20, position=(2,3))),
+              (FireCell(level=Level.LEVEL_1, life=20, position=(2,3))),
+              (FireCell(level=Level.LEVEL_1, life=20, position=(2,3)))], [(1, 3), (3, 3), (2, 4), (2, 2), (1, 2), (3, 4), (3, 2), (1, 4)], 19
+)]
+@pytest.mark.parametrize("board_size, cells_to_add, expected_positions, expected_life_points", movement_params)
+def test_movement_board(board_size, cells_to_add, expected_positions, expected_life_points):
+    board = Board(*board_size)
+    pos = (2, 3)
+    for cell in cells_to_add:
+        cell.board = board
+        cell.position = pos
+        board.add_cell(*pos, cell)
+    board.advance_in_position(2, 3)
+    for cell in cells_to_add:
+        assert cell.position in expected_positions
+        assert cell.life == expected_life_points
