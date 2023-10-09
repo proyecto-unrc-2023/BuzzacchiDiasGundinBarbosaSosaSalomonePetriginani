@@ -75,7 +75,15 @@ class Cell:
             positionsList = self.get_adjacents_for_move(tuplePos)
             if positionsList:
                 self.position = random.choice(positionsList)
-
+                self.life = self.life - 1
+                
+    def advance_in_a_position(self, row, column):
+        tuplePos = self.position
+        positionsList = self.get_adjacents_for_move(tuplePos)
+        new_pos = (row, column)
+        if new_pos in positionsList:
+            self.position = new_pos
+            self.life = self.life - 1
 
     #Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY):

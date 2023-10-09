@@ -130,5 +130,10 @@ class Board:
         self.remove_cell(row, column, cell)
         cell.advance()
         self.add_cell(cell.position[0], cell.position[1], cell)
-
     
+    def advance_in_a_position(self, row, column, cell):
+        r = cell.position[0]
+        c = cell.position[1]
+        self.remove_cell(r, c, cell)
+        cell.advance_in_a_position(row, column)
+        self.add_cell(row, column, cell)
