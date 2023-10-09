@@ -109,7 +109,7 @@ class Cell:
             if type(self) != type(other_cell):
                 # Compare Life Points 
                 if(self.get_life() < 4 or other_cell.get_life() < 4):
-                    self.board.convert_position_to_dead_cell(position[0],position[1])
+                    self.board.convert_two_cells_to_dead_cell(position[0],position[1], self, other_cell)
                 else:
                     # Compare cell levels
                     if self.get_level() > other_cell.get_level():
@@ -132,7 +132,7 @@ class Cell:
                             other_cell.life -= 4
                         else:
                             # If both levels and life are equal, convert both cells to dead
-                            self.board.convert_position_to_dead_cell(position[0], position[1])
+                            self.board.convert_two_cells_to_dead_cell(position[0], position[1], self, other_cell)
             if self in self.board.get_cells(position[0], position[1]):
                 self.modify_cell_after_fight(self)
             else:

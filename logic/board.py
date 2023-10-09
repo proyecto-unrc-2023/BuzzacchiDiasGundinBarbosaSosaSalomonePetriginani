@@ -80,18 +80,25 @@ class Board:
                 if (merged):
                     break
                 
-            
-    def convert_position_to_dead_cell(self, row, column):
+    def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
         if 0 <= row < self.rows and 0 <= column < self.columns:
-            # Get a copy of cells in given position
-            cells_in_position = list(self.get_cells(row, column))
-            for cell in cells_in_position:
-                self.remove_cell(row, column, cell)
+            # Check if the cells exist in the position
+            cells_in_position = self.get_cells(row, column)
+            if cell not in cells_in_position or other_cell not in cells_in_position:
+                raise ValueError("One or both cells not found in the given position")
 
-            dead_cell = DeadCell(position=(row,column), board=self)
-            self.add_cell(row, column, dead_cell)
+            # Remove cell and other cell from the position
+            self.remove_cell(row, column, cell)
+            self.remove_cell(row, column, other_cell)
+
+            # Check if there are any cells left in the position
+            if not self.get_cells(row, column):
+                # If no cells left, add a dead cell to the position
+                dead_cell = DeadCell(position=(row,column), board=self)
+                self.add_cell(row, column, dead_cell)
         else:
             raise ValueError("Invalid row or column")
+
     
     def add_spawn(self, row, column, spawn):
         position = (row, column)
@@ -109,11 +116,19 @@ class Board:
 
         while ice_cells and fire_cells:
             ice_cells[0].fight(fire_cells[0])
-            ice_cells = [cell for cell in ice_cells if cell in self.get_cells(row, col)]
-            fire_cells = [cell for cell in fire_cells if cell in self.get_cells(row, col)]
+            ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.get_cells(row, col)]
+            fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.get_cells(row, col)]
+
+    def execute_fights_in_all_positions(self):
+        for row in range(self.rows):
+            for column in range(self.columns):
+                self.execute_fight_in_position(row, column)
+
     def advance(self, cell):
         row = cell.position[0]
         column = cell.position[1]
         self.remove_cell(row, column, cell)
         cell.advance()
         self.add_cell(cell.position[0], cell.position[1], cell)
+
+    
