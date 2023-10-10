@@ -7,7 +7,6 @@ class Board:
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
-        self.board = []
         self.board = [[[] for _ in range(columns)] for _ in range(rows)]
 
     def __str__(self):
@@ -133,10 +132,11 @@ class Board:
 
     def advance_in_position(self, row, column):
         cells = self.get_cells(row, column)
-        for cell in cells:
-            self.remove_cell(row, column, cell)
+        while len(cells) != 0:
+            cell = cells[0]
             cell.advance()
             self.add_cell_by_tuple(cell.position, cell)
+            self.remove_cell(row, column, cell)
             
 
     def execute_movements_in_all_positions(self):
