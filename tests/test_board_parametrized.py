@@ -186,6 +186,8 @@ def test_execute_fights_in_all_positions(board_size, cells_to_add, expected_boar
     board.execute_fights_in_all_positions()
     assert board.__str__() == expected_board_state
 
+
+
 ############Test para fusion 
 fusion_params = [
     # Parameters: initial board size, list of cells to add, expected number of cells, expected types, expected life points, expected levels
@@ -222,20 +224,34 @@ def test_fusion_board(board_size, cells_to_add, expected_num_cells, expected_typ
         assert cells_in_pos[i].life == expected_life_points[i]
         assert cells_in_pos[i].level == expected_levels[i]
 
+
+
+############Test para movement (move_cells_in_position)
 movement_params = [
     ((10, 10), [(FireCell(level=Level.LEVEL_1, life=20, position=(2,3))),
               (FireCell(level=Level.LEVEL_1, life=20, position=(2,3))),
-              (FireCell(level=Level.LEVEL_1, life=20, position=(2,3)))], [(1, 3), (3, 3), (2, 4), (2, 2), (1, 2), (3, 4), (3, 2), (1, 4)], 19
-)]
+              (FireCell(level=Level.LEVEL_1, life=20, position=(2,3)))], [(1, 3), (3, 3), (2, 4), (2, 2), (1, 2), (3, 4), (3, 2), (1, 4)], 19),
+    ((10, 10), [(IceCell(level=Level.LEVEL_2, life=38, position=(4, 5))),
+        (IceCell(level=Level.LEVEL_2, life=38, position=(4, 5))),
+        (IceCell(level=Level.LEVEL_2, life=38, position=(4, 5)))
+    ], [(3, 5), (5, 5), (4, 6), (4, 4), (3, 4), (5, 6), (5, 4), (3, 6)], 37),
+    ((10, 10), [
+        FireCell(level=Level.LEVEL_1, life=2, position=(4, 5)),
+        FireCell(level=Level.LEVEL_1, life=2, position=(4, 5)),
+        IceCell(level=Level.LEVEL_1, life=2, position=(4, 5)),
+        IceCell(level=Level.LEVEL_1, life=2, position=(4, 5))
+    ], [(3, 5), (5, 5), (4, 6), (4, 4), (3, 4), (5, 6), (5, 4), (3, 6)], 1)
+]
 @pytest.mark.parametrize("board_size, cells_to_add, expected_positions, expected_life_points", movement_params)
 def test_movement_board(board_size, cells_to_add, expected_positions, expected_life_points):
     board = Board(*board_size)
-    pos = (2, 3)
+    pos = cells_to_add[0].get_position()
     for cell in cells_to_add:
         cell.board = board
         cell.position = pos
         board.add_cell(*pos, cell)
-    board.advance_in_position(2, 3)
+    board.move_cells_in_position(*pos)
     for cell in cells_to_add:
         assert cell.position in expected_positions
         assert cell.life == expected_life_points
+        assert cell not in board.get_cells(*pos)
