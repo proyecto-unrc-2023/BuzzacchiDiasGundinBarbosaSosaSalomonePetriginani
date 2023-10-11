@@ -129,8 +129,7 @@ class Board:
             for column in range(self.columns):
                 self.execute_fight_in_position(row, column)
 
-
-    def advance_in_position(self, row, column):
+    def move_cells_in_position(self, row, column):
         cells = self.get_cells(row, column)
         while len(cells) != 0:
             cell = cells[0]
@@ -138,8 +137,7 @@ class Board:
             self.add_cell_by_tuple(cell.position, cell)
             self.remove_cell(row, column, cell)
             
-
     def execute_movements_in_all_positions(self):
         for row in range(self.rows):
             for column in range(self.columns):
-                self.advance_in_position(row, column)
+                self.move_cells_in_position(row, column)

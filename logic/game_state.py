@@ -8,6 +8,10 @@ class GameMode(Enum):
     SPAWN_PLACEMENT = 2
     SIMULATION = 3
 
+class Team(Enum):
+    IceTeam = "IceTeam"
+    FireTeam = "FireTeam"
+
 class GameState:
 
     def __init__(self):
@@ -26,12 +30,21 @@ class GameState:
         self.username = username
         self.team = team
 
-    
     def half_game(self):
         self.mode = GameMode.SPAWN_PLACEMENT
-
 
     def add_spawn(self, rows, columns, spawn):
         self.board.add_spawn(rows, columns, spawn)
         self.mode = GameMode.SIMULATION
     
+    def set_username(self, username):
+        self.username = username
+
+    def set_team(self, team):
+        self.team = team
+
+    def get_mode(self):
+        return self.mode
+    
+    def get_board(self):
+        return self.board
