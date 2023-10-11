@@ -4,7 +4,7 @@ from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=None, position=None, board=None):
+    def __init__(self, life=300, position=None, board=None):
         self.life = life
         self.position = position
         self.board = board
@@ -54,7 +54,7 @@ class Spawn:
             raise ValueError(f'Invalid spawn string: {spawn_str}')
 
 class FireSpawn(Spawn):
-    def __init__(self, life=None, position=None, board=None):
+    def __init__(self, life=300, position=None, board=None):
         self.life = life
         self.position = position
         self.board = board
@@ -91,7 +91,7 @@ class IceSpawn(Spawn):
     def __eq__(self, other):
         return isinstance(other, IceSpawn)
     
-    def __init__(self, life=None, position=None, board=None):
+    def __init__(self, life=300, position=None, board=None):
         self.life = life
         self.position = position
         self.board = board

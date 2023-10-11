@@ -2,7 +2,7 @@ from behave import fixture, use_fixture
 
 from app import create_app
 from logic.cell import DeadCell, FireCell, IceCell
-from logic.game_state import GameState
+from logic.game_controller import GameController
 
 
 @fixture
@@ -36,11 +36,11 @@ def table_from_string(table):
     return '\n'.join(rows_list)
 
 @fixture
-def state(context):
+def game_controller(context):
     #, *args, **kwargs):
-    context.state = GameState()
+    context.GameController = GameController()
     # crear objeto
-    yield context.state
+    yield context.GameController
 
 def before_feature(context, feature):
-    use_fixture(state, context)
+    use_fixture(game_controller, context)

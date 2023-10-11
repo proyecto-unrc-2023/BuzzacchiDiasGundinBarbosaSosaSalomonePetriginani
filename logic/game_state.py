@@ -2,6 +2,7 @@ from enum import Enum
 
 
 from logic.board import Board
+from logic.spawn import Spawn, IceSpawn, FireSpawn
 
 class GameMode(Enum):
     NOT_STARTED = 1
@@ -22,18 +23,20 @@ class GameState:
         self.user_team = None
         self.username = None
 
-    def new_game(self, rows, columns, username = None, team = None):
+    def new_game(self, rows, columns):
         self.rows = rows
         self.columns = columns
         self.board = Board(rows, columns)
         self.mode = GameMode.SPAWN_PLACEMENT
-        self.username = username
-        self.team = team
 
     def half_game(self):
         self.mode = GameMode.SPAWN_PLACEMENT
 
-    def add_spawn(self, rows, columns, spawn):
+    def add_spawn(self, rows, columns):
+        if (self.user_team == "IceTeam"):
+            spawn = IceSpawn((rows, columns), self.board)
+        else:
+            spawn = FireSpawn((rows, columns), self.board)
         self.board.add_spawn(rows, columns, spawn)
         self.mode = GameMode.SIMULATION
     
@@ -42,6 +45,7 @@ class GameState:
 
     def set_team(self, team):
         self.team = team
+        
 
     def get_mode(self):
         return self.mode
