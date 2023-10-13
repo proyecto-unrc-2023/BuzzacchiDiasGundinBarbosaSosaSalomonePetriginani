@@ -108,35 +108,3 @@ class Board:
             row, column = position
             spawn.position = position
             self.board[row][column].append(spawn)
-
-    def execute_fight_in_position(self, row, col):
-        cells = self.get_cells(row, col)
-        ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
-        fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
-        
-        # Order by level and life by descendent order
-        ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-        fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-
-        while ice_cells and fire_cells:
-            ice_cells[0].fight(fire_cells[0])
-            ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.get_cells(row, col)]
-            fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.get_cells(row, col)]
-
-    def execute_fights_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.execute_fight_in_position(row, column)
-
-    def move_cells_in_position(self, row, column):
-        cells = self.get_cells(row, column)
-        while len(cells) != 0:
-            cell = cells[0]
-            cell.advance()
-            self.add_cell_by_tuple(cell.position, cell)
-            self.remove_cell(row, column, cell)
-            
-    def execute_movements_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.move_cells_in_position(row, column)

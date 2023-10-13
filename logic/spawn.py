@@ -6,7 +6,7 @@ class Spawn:
     
     def __init__(self, life=300, position=None, board=None):
         self.life = life
-        self.positions = positions
+        self.position = position
         self.board = board
         self.type = self.get_type()
         
