@@ -44,6 +44,7 @@ def step_impl(context, level, ice_points, fire_points, row, column):
 
 @when(u'the fight starts')
 def step_impl(context):
+    #context.game.execute_fight /put_cell
     context.state.board.execute_fights_in_all_positions()
 
 @then(u'the {loser_cell} disappears from the battlefield and the {winner_cell} wins with {winning_life_points:d} life points and level {winner_level:d}')
@@ -52,15 +53,6 @@ def step_impl(context, loser_cell, winner_cell, winning_life_points, winner_leve
     assert isinstance(context.state.board.get_cells(*context.state.position)[0], globals()[winner_cell])
     assert context.state.board.get_cells(*context.state.position)[0].get_life() == winning_life_points
     assert context.state.board.get_cells(*context.state.position)[0].get_level() == winner_level
-
-
-# @then(u'the FireCell disappears and the IceCell wins with 54 life points')
-# def step_impl(context):
-#     assert len(context.state.board.get_cells(1, 1)) == 1
-#     assert isinstance(context.state.board.get_cells(1, 1)[0], IceCell)
-#     assert context.state.board.get_cells(1, 1)[0].get_life() == 54
-#     assert context.state.board.get_cells(1, 1)[0].get_level() == Level.LEVEL_3
-
 
 
 ##########Scenario #3: one level 1 IceCell against a level 2 FireCell
@@ -73,6 +65,7 @@ def step_impl(context, row, column):
     
     context.state.board.add_cell(row, column, ice_cell)
     context.state.board.add_cell(row, column, fire_cell)
+
 
 
 ##########Scenario #4: two fights, followed by an additional third one

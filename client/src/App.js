@@ -27,7 +27,7 @@ function App() {
     };
 
     // Send to backend
-    fetch('/start_game', {
+    fetch('/init_game/start', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
