@@ -1,6 +1,6 @@
 #from logic.board import Board
 from abc import ABC, abstractmethod
-import random
+
 from enum import IntEnum
 
 class Level(IntEnum):
@@ -18,6 +18,15 @@ class Level(IntEnum):
         elif level == Level.LEVEL_3 and (life <= 40 or life > 60):
             raise ValueError("Life invalid for level 3")
         return True
+    @staticmethod
+    def max_life_level(self):
+        if (self == 1):
+            return 20
+        elif (self == 2):
+            return 40
+        elif(self==3):
+            return 60
+            
 
 class Cell:
 
@@ -67,27 +76,6 @@ class Cell:
     def get_position(self):
         return self.position
 
-    #Move the cell to one of its adjacent positions if possible
-    #return adjacent cell selected
-    def advance(self):
-        if self.position is not None and self.board is not None:
-            tuplePos = self.position
-            positionsList = self.get_adjacents_for_move(tuplePos)
-            if positionsList:
-                self.position = random.choice(positionsList)
-                self.life = self.life - 1
-
-    #Get a list of adjacent cells to the cell's current position.
-    def get_adjacents_for_move(self, posXY):
-        row, col = posXY
-        length = len(self.board)
-        adjacentList = []
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
-        for dr, dc in directions:
-            new_row, new_col = row + dr, col + dc
-            if 0 <= new_row < length and 0 <= new_col < length:
-                adjacentList.append((new_row, new_col))
-        return adjacentList
     
     def level_up(self):
         if self.level == Level.LEVEL_1:
@@ -139,20 +127,6 @@ class Cell:
         if (cell.get_level() == Level.LEVEL_2 and cell.get_life() < 20):
             cell.set_level(Level.LEVEL_1)
                         
-    def fusion(self, cell2):
-        if(self.level != cell2.level):
-            return False
-        if(self.level == Level.LEVEL_1):
-            self.set_level(Level.LEVEL_2)
-            self.set_life(40)
-            self.board.remove_cell(self.position[0], self.position[1], cell2)
-            return True
-        elif(self.level == Level.LEVEL_2):
-            self.set_level(Level.LEVEL_3)
-            self.set_life(60)
-            self.board.remove_cell(self.position[0], self.position[1], cell2)
-            return True
-        return False
     
 class DeadCell(Cell):
 

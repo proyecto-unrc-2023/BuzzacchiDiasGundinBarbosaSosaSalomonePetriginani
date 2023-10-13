@@ -1,5 +1,5 @@
 
-from logic.cell import IceCell, FireCell, Cell, DeadCell
+from logic.cell import IceCell, FireCell, Cell, DeadCell, Level
 from logic.spawn import Spawn, IceSpawn, FireSpawn
 
 class Board:
@@ -45,7 +45,7 @@ class Board:
                     else:
                         raise ValueError("Unknown cell type: " + cell_str)
         return new_board
-
+        
     def add_cell(self, row, column, cell):
         self.board[row][column].append(cell)
 
@@ -66,24 +66,20 @@ class Board:
                     return (i, j)
         return None
     
-    def fusion(self, pos):
-        merged = True
-        while merged:
-            merged = False
-            cells_aux = self.get_cells(pos[0], pos[1])
-            if (len(cells_aux) == 1) : 
-                break
-            cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.level))
-            for i in range(len(cells_aux)-1):
-                merged = cells_aux[i].fusion(cells_aux[i+1])
-                if (merged):
-                    break
-
-    def execute_fusions_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                pos = (row, column)
-                self.fusion(pos)
+    def fusion(self, cell1, cell2):
+        if(cell1.get_level() != cell2.get_level()):
+            return False
+        if(cell1.get_level() == Level.LEVEL_1):
+            cell1.set_level(Level.LEVEL_2)
+            cell1.set_life(40)
+            cell1.board.remove_cell(cell1.get_position()[0], cell1.get_position()[1], cell2)
+            return True
+        elif(cell1.get_level() == Level.LEVEL_2):
+            cell1.set_level(Level.LEVEL_3)
+            cell1.set_life(60)
+            cell1.board.remove_cell(cell1.get_position()[0], cell1.get_position()[1], cell2)
+            return True
+        return False
                 
     def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
         if 0 <= row < self.rows and 0 <= column < self.columns:
@@ -110,34 +106,3 @@ class Board:
         spawn.position = position
         self.board[row][column].append(spawn)
 
-    def execute_fight_in_position(self, row, col):
-        cells = self.get_cells(row, col)
-        ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
-        fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
-        
-        # Order by level and life by descendent order
-        ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-        fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-
-        while ice_cells and fire_cells:
-            ice_cells[0].fight(fire_cells[0])
-            ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.get_cells(row, col)]
-            fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.get_cells(row, col)]
-
-    def execute_fights_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.execute_fight_in_position(row, column)
-
-    def move_cells_in_position(self, row, column):
-        cells = self.get_cells(row, column)
-        while len(cells) != 0:
-            cell = cells[0]
-            cell.advance()
-            self.add_cell_by_tuple(cell.position, cell)
-            self.remove_cell(row, column, cell)
-            
-    def execute_movements_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.move_cells_in_position(row, column)
