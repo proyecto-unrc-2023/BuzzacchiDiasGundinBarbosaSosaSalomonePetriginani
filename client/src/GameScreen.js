@@ -6,7 +6,7 @@ function GameScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/get_game_data'); // GET request to backend
+        const response = await fetch('/init_game/get_game_data'); // GET request to backend
         if (!response.ok) {
           throw new Error('Error loading data');
         }

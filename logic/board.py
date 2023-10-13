@@ -4,10 +4,13 @@ from logic.spawn import Spawn, IceSpawn, FireSpawn
 
 class Board:
 
-    def __init__(self, rows, columns):
+    def __init__(self, rows, columns, board=None):
         self.rows = rows
         self.columns = columns
-        self.board = [[[] for _ in range(columns)] for _ in range(rows)]
+        if board is not None:
+            self.board = board
+        else:
+            self.board = [[[] for _ in range(columns)] for _ in range(rows)]
 
     def __str__(self):
         rows_str = []
@@ -100,9 +103,9 @@ class Board:
         else:
             raise ValueError("Invalid row or column")
 
-    
-    def add_spawn(self, row, column, spawn):
-        position = (row, column)
-        spawn.position = position
-        self.board[row][column].append(spawn)
+    def add_spawn(self, positions, spawn):
+        for position in positions:
+            row, column = position
+            spawn.position = position
+            self.board[row][column].append(spawn)
 

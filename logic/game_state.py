@@ -19,14 +19,12 @@ class GameState:
     def __init__(self):
         self.mode = GameMode.NOT_STARTED
         self.board = None
-        self.columns = None
-        self.rows = None
         self.user_team = None
         self.username = None
+        self.ice_spawn = None
+        self.fire_spawn = None
 
     def new_game(self, rows, columns):
-        self.rows = rows
-        self.columns = columns
         self.board = Board(rows, columns)
         self.mode = GameMode.SPAWN_PLACEMENT
 
@@ -138,8 +136,8 @@ class GameState:
                     break
 
     def execute_fusions_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
+        for row in range(self.board.rows):
+            for column in range(self.board.columns):
                 pos = (row, column)
                 self.fusion(pos)
         

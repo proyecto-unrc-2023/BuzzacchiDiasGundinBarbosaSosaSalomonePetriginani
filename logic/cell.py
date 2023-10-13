@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 
 from enum import IntEnum
+#from api.games.game import CellSchema
 
 class Level(IntEnum):
     LEVEL_1 = 1
@@ -35,6 +36,7 @@ class Cell:
         self.set_life(life)        
         self.position = position
         self.board = board
+        self.type = self.get_type()
 
     @staticmethod
     def from_string(cell_str):
@@ -75,6 +77,9 @@ class Cell:
     
     def get_position(self):
         return self.position
+    
+    def get_type(self):
+        return 'Cell'
 
     
     def level_up(self):
@@ -136,7 +141,9 @@ class DeadCell(Cell):
     def __eq__(self, other):
         return self is other
 
-
+    def get_type(self):
+        return 'DeadCell'
+    
 class IceCell(Cell):
 
     def __str__(self):
@@ -144,6 +151,9 @@ class IceCell(Cell):
 
     def __eq__(self, other):
         return self is other
+    
+    def get_type(self):
+        return 'IceCell'
 
 class FireCell(Cell):
 
@@ -152,3 +162,6 @@ class FireCell(Cell):
 
     def __eq__(self, other):
         return self is other
+
+    def get_type(self):
+        return 'FireCell'
