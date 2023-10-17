@@ -4,9 +4,9 @@ from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=300, position=None, board=None):
+    def __init__(self, life=300, positions=None, board=None):
         self.life = life
-        self.position = position
+        self.positions = positions
         self.board = board
         self.type = self.get_type()
         

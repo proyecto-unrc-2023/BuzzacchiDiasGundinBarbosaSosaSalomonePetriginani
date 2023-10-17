@@ -19,10 +19,11 @@ class GameState:
     def __init__(self):
         self.mode = GameMode.NOT_STARTED
         self.board = None
-        self.user_team = None
+        self.team = None
         self.username = None
         self.ice_spawn = None
         self.fire_spawn = None
+        #self.cell_id_counter = 1
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
@@ -31,12 +32,12 @@ class GameState:
     def half_game(self):
         self.mode = GameMode.SPAWN_PLACEMENT
 
-    def add_spawn(self, rows, columns ,team):
-        if (team == "ice"):
-            spawn = IceSpawn((rows, columns), self.board)
+    def add_spawn(self, positions):
+        if (self.get_team() == Team.IceTeam):
+            spawn = IceSpawn(positions = positions, board = self.board)
         else:
-            spawn = FireSpawn((rows, columns), self.board)
-        self.board.add_spawn(rows, columns, spawn)
+            spawn = FireSpawn(positions = positions, board = self.board)
+        self.board.add_spawn(positions = positions, spawn = spawn)
         self.mode = GameMode.SIMULATION
     
     def set_username(self, username):
@@ -45,7 +46,7 @@ class GameState:
     def set_team(self, team):
         self.team = team
         
-    def create_cell_in_board(self, row, column, team, level, life):
+    def create_cell(self, row, column, team, level, life):
         pos = row, column
         if (level == 1):
            level_enum = Level.LEVEL_1
@@ -53,12 +54,17 @@ class GameState:
             level_enum = Level.LEVEL_2
         if (level== 3):
             level_enum = Level.LEVEL_3
-            
-        if (team == "ice"):
+        
+        #cell_id = self.cell_id_counter  
+        #self.cell_id_counter += 1
+
+        if (team == Team.IceTeam):
+            #self.board.add_cell(row, column, IceCell(cell_id = cell_id, level=level_enum, life = life, position=pos, board=self.board))
             self.board.add_cell(row, column, IceCell(level=level_enum, life = life, position=pos, board=self.board))
         else:
+            #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
             self.board.add_cell(row, column, FireCell(level=level_enum, life=life, position=pos, board=self.board))
-        
+
     # FIGTHS    
     def execute_fight_in_position(self, row, col):
         cells = self.board.get_cells(row, col)
@@ -147,3 +153,9 @@ class GameState:
     
     def get_board(self):
         return self.board
+    
+    def get_team(self):
+        return self.team
+    
+    def get_cells(self, row, column):
+        return self.get_board().get_cells(row, column)

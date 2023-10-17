@@ -19,6 +19,7 @@ class Level(IntEnum):
         elif level == Level.LEVEL_3 and (life <= 40 or life > 60):
             raise ValueError("Life invalid for level 3")
         return True
+    
     @staticmethod
     def max_life_level(self):
         if (self == 1):
