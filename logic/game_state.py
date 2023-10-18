@@ -46,6 +46,15 @@ class GameState:
     def set_team(self, team):
         self.team = team
         
+    def create_spawn(self, row, column, team):
+        positions = (row, column)
+        if (team == "ice"):
+            spawn = IceSpawn(positions = positions, board = self.board)
+        else:
+            spawn = FireSpawn(positions = positions, board = self.board)
+        self.board.add_spawn(positions = positions, spawn = spawn)
+        self.mode = GameMode.SIMULATION
+            
     def create_cell(self, row, column, team, level, life):
         pos = row, column
         if (level == 1):

@@ -35,6 +35,9 @@ class GameController:
     def add_spawn(self, positions):
         self.game_state.add_spawn(positions)
         
+    def create_spawn(self, row, column, team):
+        self.game_state.create_spawn(row, column, team  )
+        
     def create_cell(self, row, column, team, level, life):
         self.game_state.create_cell(row, column, team, level, life)
         
