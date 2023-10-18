@@ -36,7 +36,7 @@ class GameController:
         self.game_state.add_spawn(positions)
         
     def create_spawn(self, row, column, team):
-        self.game_state.create_spawn(row, column, team  )
+        self.game_state.create_spawn(row, column, team)
         
     def create_cell(self, row, column, team, level, life):
         self.game_state.create_cell(row, column, team, level, life)
@@ -52,3 +52,7 @@ class GameController:
 
     def get_cells(self, row, column):
         return self.game_state.get_cells(row, column)
+    
+    def get_adyacents_pos(self, row, column):
+        pos = (row, column)
+        return self.game_state.get_adjacents_pos(pos)

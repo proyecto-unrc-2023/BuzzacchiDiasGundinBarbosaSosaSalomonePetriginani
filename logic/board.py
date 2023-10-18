@@ -104,7 +104,6 @@ class Board:
             raise ValueError("Invalid row or column")
 
     def add_spawn(self, positions, spawn):
-        for position in positions:
-            row, column = position
-            spawn.position = position
+        for pos in positions:
+            row, column = pos
             self.board[row][column].append(spawn)

@@ -16,6 +16,9 @@ class Spawn:
     def set_board(self, board):
         self.board = board
         
+    def get_position(self):
+        self.position
+        
     def decrease_life(self, damage):
         life -= damage
     
