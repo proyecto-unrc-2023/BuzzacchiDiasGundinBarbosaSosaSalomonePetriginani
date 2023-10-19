@@ -42,7 +42,6 @@ class GameState:
         self._check_position(row, column)
         position = (row, column)
         positions_spawn = self._get_adjacents_pos(position)
-        positions_spawn.append(position)
         if team == Team.IceTeam:
             self.ice_spawn = IceSpawn(positions=positions_spawn, board=self.board)
         else:

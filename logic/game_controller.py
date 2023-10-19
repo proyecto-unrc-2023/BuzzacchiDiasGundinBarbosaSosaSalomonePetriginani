@@ -32,12 +32,16 @@ class GameController:
     def no_spawns_in_pos(self, row, column):
         return self.game_state.no_spawns_in_pos(row, column)
     
+    #Corregir
     def add_spawn(self, positions):
         self.game_state.add_spawn(positions)
         
     def create_spawn(self, row, column, team):
-        self.game_state.create_spawn(row, column, team)
-        
+        if team == 'Ice':
+            self.game_state.create_spawn(row, column, Team.IceTeam)
+        else:
+            self.game_state.create_spawn(row, column, Team.FireTeam)
+
     def create_cell(self, row, column, team, level, life):
         self.game_state.create_cell(row, column, team, level, life)
         
