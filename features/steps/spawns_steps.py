@@ -14,7 +14,7 @@ def step_impl(context):
 @given(u'the game is waiting for put the Ice spawn')
 def step_impl(context):
   context.GameController.new_game(50,50)
-  assert context.GameController.get_mode == GameMode.SPAWN_PLACEMENT
+  assert context.GameController.get_mode() == GameMode.SPAWN_PLACEMENT
 
 @when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the {team} spawn will create in the position ({row:d}, {column:d})')
 def step_impl(context, row, column, team):
@@ -22,14 +22,14 @@ def step_impl(context, row, column, team):
 
 @then(u'the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Ice spawn')
 def step_impl(context):
-  assert context.GameController.get_mode == GameMode.SIMULATION
+  assert context.GameController.get_mode() == GameMode.SIMULATION
 
 ###Scenario: First fire spawn
 
 @given(u'the game is waiting for put the Fire spawn')
 def step_impl(context):
   context.GameController.new_game(rows = 50, columns = 50)
-  assert context.GameController.get_mode == GameMode.SPAWN_PLACEMENT
+  assert context.GameController.get_mode() == GameMode.SPAWN_PLACEMENT
 
 #@when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the {team} spawn will create in the position ({row:d}, {column:d})')
 #def step_impl(context, row, column, team):
@@ -37,7 +37,7 @@ def step_impl(context):
 
 @then(u'the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn')
 def step_impl(context):
-  assert context.GameController.get_mode == GameMode.SIMULATION
+  assert context.GameController.get_mode() == GameMode.SIMULATION
 
 
 ###Scenario: Second ice spawn
@@ -46,12 +46,12 @@ def step_impl(context):
 def step_impl(context, row, column, team):
   context.GameController.new_game(rows = 50, columns = 50)
   context.GameController.create_spawn(row, column, team)
-  assert context.GameController.get_mode == GameMode.SIMULATION
+  assert context.GameController.get_mode() == GameMode.SIMULATION
 
 @given(u'the game is in the half game time and the game shows on the screen to choose the position of the second Ice spawn')
 def step_impl(context):
-  context.state.half_game()
-  assert context.GameController.get_mode == GameMode.SPAWN_PLACEMENT
+  context.GameController.half_game()
+  assert context.GameController.get_mode() == GameMode.SPAWN_PLACEMENT
 
 @when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the second {team} spawn will create in the position ({row:d}, {column:d})')
 def step_impl(context, row, column, team):
@@ -59,7 +59,7 @@ def step_impl(context, row, column, team):
 
 @then(u'the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION')
 def step_impl(context):
-  assert context.GameController.get_mode == GameMode.SIMULATION
+  assert context.GameController.get_mode() == GameMode.SIMULATION
 
 
 ###Scenario: Second fire spawn
@@ -72,8 +72,8 @@ def step_impl(context):
 
 @given(u'the game is in the half game time and the game shows on the screen to choose the position of the second Fire spawn')
 def step_impl(context):
-  context.state.half_game()
-  assert context.GameController.get_mode == GameMode.SPAWN_PLACEMENT
+  context.GameController.half_game()
+  assert context.GameController.get_mode() == GameMode.SPAWN_PLACEMENT
 
 #@when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the second {team} spawn will create in the position ({row:d}, {column:d})')
 #def step_impl(context, row, column, team):

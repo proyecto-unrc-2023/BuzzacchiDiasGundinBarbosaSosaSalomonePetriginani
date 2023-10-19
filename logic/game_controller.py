@@ -19,6 +19,9 @@ class GameController:
     
     def new_game(self, rows, columns):
         self.game_state.new_game(rows, columns)
+
+    def half_game(self):
+        self.game_state.half_game()
         
     def get_mode(self):
         return self.game_state.get_mode()
