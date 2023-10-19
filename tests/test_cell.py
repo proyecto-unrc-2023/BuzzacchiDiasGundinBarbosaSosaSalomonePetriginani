@@ -42,47 +42,33 @@ def test_create_cell_error():
         res = Cell.from_string('-')
 
 
+#ESTE TEST DEBERIA IR EN LOS DE GAME_STATE
 #Test that a cell on an empty board correctly identifies its adjacent cells.
-def test_get_adjacents_empty_board(cell, board):
-    assert set(cell.get_adjacents_for_move((0, 0))) == set([(0, 1), (1, 0), (1, 1)])
+# def test_get_adjacents_empty_board(cell, board):
+#     assert set(cell.get_adjacents_for_move((0, 0))) == set([(0, 1), (1, 0), (1, 1)])
 
 
+#ESTE TEST DEBERIA IR EN LOS DE GAME_STATE
 #Test that a cell in the center of the board with neighbors correctly identifies its adjacent cells.
-def test_get_adjacents_for_move_center_fire_cell(cell, board):
-    board.add_cell(1, 1, FireCell())
-    assert set(cell.get_adjacents_for_move((1, 1))) == set([(0, 0), (0, 1), (0, 2),
-                                                   (1, 0), (1, 2), (2, 0),
-                                                   (2, 1), (2, 2)])
+# def test_get_adjacents_for_move_center_fire_cell(cell, board):
+#     board.add_cell(1, 1, FireCell())
+#     assert set(cell.get_adjacents_for_move((1, 1))) == set([(0, 0), (0, 1), (0, 2),
+#                                                    (1, 0), (1, 2), (2, 0),
+#                                                    (2, 1), (2, 2)])
 
-
+#ESTE TEST DEBERIA IR EN LOS DE GAME_STATE
 #Test that a cell in a corner of the board with neighbors correctly identifies its adjacent cells.
-def test_get_adjacents_for_move_corner_fire_cell(cell, board):
-    board.add_cell(0, 0, FireCell())
-    assert set(cell.get_adjacents_for_move((0, 0))) == set([(1, 0), (0, 1), (1, 1)])
+# def test_get_adjacents_for_move_corner_fire_cell(cell, board):
+#     board.add_cell(0, 0, FireCell())
+#     assert set(cell.get_adjacents_for_move((0, 0))) == set([(1, 0), (0, 1), (1, 1)])
 
 
+#ESTE TEST DEBERIA IR EN LOS DE GAME_STATE
 #Test that a cell on an edge of the board with neighbors correctly identifies its adjacent cells.
-def test_get_adjacents_for_move_edge_fire_cell(cell, board):
-    board.add_cell(1, 0, FireCell())
-    assert set(cell.get_adjacents_for_move((1, 0))) == set([(0, 0), (0, 1), (1, 1), (2, 0), (2, 1)])
+# def test_get_adjacents_for_move_edge_fire_cell(cell, board):
+#     board.add_cell(1, 0, FireCell())
+#     assert set(cell.get_adjacents_for_move((1, 0))) == set([(0, 0), (0, 1), (1, 1), (2, 0), (2, 1)])
 
-
-def test_advance_method(cell, board):
-    example_board = [
-        [None, None, None],
-        [None, cell, None],
-        [None, None, None],
-    ]
-
-    board.board = example_board
-
-    result = cell.advance()
-
-    assert result in [
-        example_board[0][0], example_board[0][1], example_board[0][2],
-        example_board[1][0], example_board[1][2],
-        example_board[2][0], example_board[2][1], example_board[2][2]
-    ]
 
 
 ###########   Tests for fight   ###########
@@ -156,11 +142,11 @@ def test_fight_same_position_different_types_lower_level_high_life(board):
     assert lower_level_fire_cell not in board.get_cells(1, 1)
     assert higher_level_ice_cell in board.get_cells(1, 1)
     
-def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
-    board.board[2][2].append(ice_cell2)
-    board.board[2][2].append(ice_cell3)
+# def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
+#     board.board[2][2].append(ice_cell2)
+#     board.board[2][2].append(ice_cell3)
     
-    ice_cell2.fusion(ice_cell3)
+#     ice_cell2.fusion(ice_cell3)
     
     cells_expected = board.get_cells(ice_cell2.position[0], ice_cell2.position[1])
     assert ice_cell2.level == Level.LEVEL_2

@@ -110,20 +110,20 @@ class GameState:
                 self.execute_fight_in_position(row, column)
                 
     # MOVEMENT
-    def _move_cells_in_position(self, row, column):
+    def move_cells_in_position(self, row, column):
         cells = self.board.get_cells(row, column)
         while len(cells) != 0:
             cell = cells[0]
-            self._advance(cell)
+            self.advance(cell)
             self.board.add_cell_by_tuple(cell.position, cell)
             self.board.remove_cell(row, column, cell)
             
     def execute_movements_in_all_positions(self):
         for row in range(self.board.rows):
             for column in range(self.board.columns):
-                self._move_cells_in_position(row, column)
+                self.move_cells_in_position(row, column)
     
-    def _advance(self, cell):
+    def advance(self, cell):
         if cell.get_position() is not None and self.board is not None:
             tuplePos = cell.get_position()
             positionsList = self._get_adjacents_for_move(tuplePos)
