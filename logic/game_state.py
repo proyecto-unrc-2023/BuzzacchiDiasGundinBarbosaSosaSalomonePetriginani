@@ -32,38 +32,44 @@ class GameState:
     def half_game(self):
         self.mode = GameMode.SPAWN_PLACEMENT
 
-    def add_spawn(self, position):
-        positions_spawn = self._get_adjacents_pos(position)
-        positions_spawn.append(position)
-        if (self.get_team() == Team.IceTeam):
-            spawn = IceSpawn(positions = positions_spawn, board = self.board)
-        else:
-            spawn = FireSpawn(positions = positions_spawn, board = self.board)
-        self.board.add_spawn(positions = positions_spawn, spawn = spawn)
-        self.mode = GameMode.SIMULATION
-    
     def set_username(self, username):
         self.username = username
 
     def set_team(self, team):
         self.team = team
-        
+   
     def create_spawn(self, row, column, team):
+        self._check_position(row, column)
         position = (row, column)
         positions_spawn = self._get_adjacents_pos(position)
         positions_spawn.append(position)
-        if (team == "ice"):
-            spawn = IceSpawn(positions = positions_spawn, board = self.board)
+        if team == Team.IceTeam:
+            self.ice_spawn = IceSpawn(positions=positions_spawn, board=self.board)
         else:
-            spawn = FireSpawn(positions = positions_spawn, board = self.board)
-        self.board.add_spawn(positions = positions_spawn, spawn = spawn)
+            self.fire_spawn = FireSpawn(positions=positions_spawn, board=self.board)
+        spawn = self.ice_spawn if team == Team.IceTeam else self.fire_spawn
+        self.board.add_spawn(positions=positions_spawn, spawn=spawn)
+        self.mode = GameMode.SIMULATION
+
+    def _check_position(self, row, column):
+        length = len(self.board)
+        if row == 0 or row == length - 1 or column == 0 or column == length - 1:
+            raise ValueError("The position is on the edge of the board")
+        
+    def add_spawn(self, position):
+        positions_spawn = self._get_adjacents_pos(position)
+        if self.get_team() == Team.IceTeam:
+            spawn = IceSpawn(positions=positions_spawn, board=self.board)
+        else:
+            spawn = FireSpawn(positions=positions_spawn, board=self.board)
+        self.board.add_spawn(positions=positions_spawn, spawn=spawn)
         self.mode = GameMode.SIMULATION
         
-    def get_adjacents_pos(self, pos):
+    def _get_adjacents_pos(self, pos):
         row, col = pos
         length = len(self.board)
         adjacentList = []
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        directions = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
