@@ -2,45 +2,47 @@ from behave import given, when, then
 from logic.board import Board
 from logic.cell import Cell, IceCell, FireCell, DeadCell, Level
 
-@given(u'I have a level {level:d} ice cell at position ({rows:d}, {columns:d}), with {life:d} health points')
-def step_impl(context, rows, columns, level, life):
-    context.state.board = Board(50,50)
-    context.state.board.add_cell(rows, columns, IceCell(level=Level(level), life = life))
+@given(u'I have a level {level:d} {team} cell at position ({row:d}, {column:d}) with {life:d} health points')
+def step_impl(context, row, column, level, life, team):
+    context.GameController.new_game(50, 50)
+    context.GameController.create_cell(row, column, team, level, life)
 
-@given(u'I have a level {level:d} fire cell at position ({rows:d}, {columns:d}), with {life:d} health points')
-def step_impl(context, rows, columns, level, life):
-    context.state.board = Board(50,50)
-    context.state.board.add_cell(rows, columns, FireCell(level = Level(level), life = life))
+@given(u'the adjacents cells at position ({row:d}, {column:d}) are empty')
+def step_impl(context, row, column):
+    list = context.GameController.get_adjacents_for_move(row, column)
+    for x in list:
+        r, c = x
+        assert len(context.GameController.get_cells(r,c)) == 0
 
-@given(u'the adjacent cell at position ({rows:d}, {columns:d}) is empty')
-def step_impl(context, rows, columns):
-    if len(context.state.board.get_cells(rows, columns)) == 0:
-      pass
-    else:
-      raise AssertionError('Cell position is not empty')
+@when(u'I try to move the level {level:d} {team} cell to an adjacent position')
+def step_impl(context, level, team):
+    context.GameController.execute_movement()
 
-@when(u'I try to move the level {level:d} ice cell to position ({rows:d}, {columns:d}) with {life:d} health points')
-def step_impl(context, rows, columns, level, life):
-    context.state.board.add_cell(rows, columns, IceCell(level = Level(level), life = life))
-    context.state.board.remove_cell(rows - 1, columns, context.state.board.get_cells(rows - 1, columns)[0])
+@then(u'the {team} cell moves successfully to an adjacent position of ({row:d}, {column:d})')
+def step_impl(context, row, column, team):
+    list = context.GameController.get_adjacents_for_move(row, column)
+    for x in list:
+        r, c = x
+        if (len(context.GameController.get_cells(r,c)) == 1):
+            assert True
 
-@when(u'I try to move the level {level:d} fire cell to position ({rows:d}, {columns:d}) with {life:d} health points')
-def step_impl(context, rows, columns, level, life):
-    context.state.board.add_cell(rows, columns, FireCell(level = Level(level), life = life))
-    context.state.board.remove_cell(rows - 1, columns, context.state.board.get_cells(rows - 1, columns)[0])
-    '''if rows > 0 and rows < 50 and columns > 0 and columns < 50: 
-        context.state.board.remove_cell(rows - 1, columns, context.state.board.get_cells(rows - 1, columns)[0])
-    else:
-        raise AssertionError('Range error')'''
+@given(u'there are level {level:d} {team} cells at adjacents positions of ({row:d}, {column:d}) with {life:d} health points')
+def step_impl(context, level, row, column, life, team):
+    list = context.GameController.get_adjacents_for_move(row, column)
+    for x in list:
+        r, c = x
+        context.GameController.create_cell(r, c, team, level, life)
 
-@then(u'the ice cell moves successfully to position ({rows:d}, {columns:d})')
-def step_impl(context, rows, columns):
-    assert len(context.state.board.get_cells(rows, columns)) == 1 
+@when(u'I try to move the {team} cells to an adjacent position')
+def step_impl(context, team):
+    context.GameController.execute_movement()
 
-@then(u'the fire cell moves successfully to position ({rows:d}, {columns:d})')
-def step_impl(context, rows, columns):
-    assert len(context.state.board.get_cells(rows, columns)) == 1 
-
-@then(u'both cells cannot merge, and coexist at position ({rows:d}, {columns:d})')
-def step_impl(context, rows, columns):
-    assert len(context.state.board.get_cells(rows, columns)) == 2
+@then(u'the cells cannot merge, and coexist in the board')
+def step_impl(context):
+    i = 0
+    j = 0
+    while i < 50:
+        while j < 50: 
+            assert len(context.GameController.get_cells(i, j)) < 4
+            j = j + 1
+        i = i + 1

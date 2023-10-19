@@ -63,4 +63,8 @@ class GameController:
     
     def get_adyacents_pos(self, row, column):
         pos = (row, column)
-        return self.game_state.get_adjacents_pos(pos)
+        return self.game_state.get_adjacents_for_move(pos)
+    
+    def get_adjacents_for_move(self, row, column):
+        pos = (row, column)
+        return self.game_state.get_adjacents_for_move(pos)

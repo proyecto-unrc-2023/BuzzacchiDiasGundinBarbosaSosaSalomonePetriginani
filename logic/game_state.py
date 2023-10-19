@@ -89,10 +89,10 @@ class GameState:
 
         if (team == Team.IceTeam):
             #self.board.add_cell(row, column, IceCell(cell_id = cell_id, level=level_enum, life = life, position=pos, board=self.board))
-            self.board.add_cell(row, column, IceCell(level=level_enum, life = life, position=pos, board=self.board))
+            self.board.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos, board=self.board)))
         else:
             #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
-            self.board.add_cell(row, column, FireCell(level=level_enum, life=life, position=pos, board=self.board))
+            self.board.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos, board=self.board)))
 
     # FIGTHS    
     def execute_fight_in_position(self, row, col):
@@ -131,13 +131,13 @@ class GameState:
     def advance(self, cell):
         if cell.get_position() is not None and self.board is not None:
             tuplePos = cell.get_position()
-            positionsList = self._get_adjacents_for_move(tuplePos)
+            positionsList = self.get_adjacents_for_move(tuplePos)
             if positionsList:
                 cell.set_position(random.choice(positionsList))
                 cell.set_life(cell.get_life() - 1)
 
     #Get a list of adjacent cells to the cell's current position.
-    def _get_adjacents_for_move(self, posXY):
+    def get_adjacents_for_move(self, posXY):
         row, col = posXY
         length = len(self.board)
         adjacentList = []
