@@ -39,7 +39,11 @@ class GameController:
         self.game_state.create_spawn(row, column, team)
         
     def create_cell(self, row, column, team, level, life):
-        self.game_state.create_cell(row, column, team, level, life)
+        if team == "Ice":
+            self.game_state.create_cell(row, column, Team.IceTeam, level, life)
+        else:
+            self.game_state.create_cell(row, column, Team.FireTeam, level, life)
+
         
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
