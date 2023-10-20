@@ -46,12 +46,11 @@ class GameController:
             self.game_state.create_spawn(row, column, Team.FireTeam)
 
     def create_cell(self, row, column, team, level, life):
-        if team == "Ice":
+        if team == 'Ice':
             self.game_state.create_cell(row, column, Team.IceTeam, level, life)
         else:
             self.game_state.create_cell(row, column, Team.FireTeam, level, life)
 
-        
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
         
@@ -71,3 +70,18 @@ class GameController:
     def get_adjacents_for_move(self, row, column):
         pos = (row, column)
         return self.game_state.get_adjacents_for_move(pos)
+    
+    def count_cells_by_type(self, row, column):
+        count_ice, count_fire = 0, 0
+        for cell in self.get_cells(row, column):
+            if isinstance(cell, FireCell):
+                count_fire += 1
+            elif isinstance(cell, IceCell):
+                count_ice += 1
+        return count_ice, count_fire
+
+    def find_matching_cells(self, position, cell_type, life_points, level):
+        cells = self.get_cells(*position)
+        matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == level]
+        return matching_cells
+    
