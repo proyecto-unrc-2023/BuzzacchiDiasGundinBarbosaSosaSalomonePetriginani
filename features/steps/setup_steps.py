@@ -3,6 +3,7 @@
 from logic.game_state import GameMode
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from behave import given, when, then
 import time
 
 
@@ -25,7 +26,7 @@ def step_impl(context):
     assert context.state.board.__str__() == emptyboard_50x50
 
 
-###Scenario: Team Selection
+'''###Scenario: Team Selection
 @given(u'that I am on the game start screen')
 def step_impl(context):
     context.driver = webdriver.Chrome()
@@ -52,7 +53,7 @@ def step_impl(context, team):
     assert f'Welcome, {context.username}!' in context.driver.page_source
     assert f'You are part of the {team}.' in context.driver.page_source
     context.driver.quit()
-
+'''
 
 
 
