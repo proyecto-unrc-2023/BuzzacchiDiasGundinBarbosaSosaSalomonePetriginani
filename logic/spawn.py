@@ -42,7 +42,7 @@ class Spawn:
             for i in range(cantCells):
                 position = random.choice(positionsList)
                 positionsList.remove(position)
-                cellN = Cell.__init__(1, 20, position, self.board)
+                Cell.__init__(1, 20, position, self.board)
     
     @staticmethod
     def from_string(spawn_str):
@@ -82,7 +82,7 @@ class FireSpawn(Spawn):
             for i in range(cantCells):
                 position = random.choice(positionsList)
                 positionsList.remove(position)
-                cellN = FireCell.__init__(1, 20, position, self.board)
+                FireCell.__init__(1, 20, position, self.board)
 
 class IceSpawn(Spawn):
     def __str__(self):
@@ -113,4 +113,4 @@ class IceSpawn(Spawn):
             for i in range(cantCells):
                 position = random.choice(positionsList)
                 positionsList.remove(position)
-                cellN = IceCell.__init__(1, 20, position, self.board)
+                IceCell.__init__(1, 20, position, self.board)
