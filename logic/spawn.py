@@ -14,9 +14,31 @@ class Spawn:
         
     def set_board(self, board):
         self.board = board
-        
+    
+    def set_position(self, position):
+        self.position = position    
+
     def decrease_life(self, damage):
-        life -= damage
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
+            
+    def get_adjacents_for_move(self, posXY):
+        row, col = posXY
+        length = len(self.board)
+        adjacentList = []
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            if 0 <= new_row < length and 0 <= new_col < length:
+                cell = self.board.get_cells(new_row, new_col)
+                if (
+                    (str(self) == 'F' and str(cell) != 'FS') or
+                    (str(self) == 'I' and str(cell) != 'IS') or
+                    str(cell) == ' '
+                ):
+                    adjacentList.append(cell)
+        return adjacentList
     
     def __str__(self):
         return 'SP' 
@@ -43,10 +65,13 @@ class Spawn:
                 position = random.choice(positionsList)
                 positionsList.remove(position)
                 Cell.__init__(1, 20, position, self.board)
+            # return cantCells
     
     @staticmethod
     def from_string(spawn_str):
-        if spawn_str == IceSpawn().__str__():
+        if(spawn_str == Spawn().__str__()):
+            return Spawn()
+        elif spawn_str == IceSpawn().__str__():
             return IceSpawn()
         elif spawn_str == FireSpawn().__str__():
             return FireSpawn()
@@ -66,8 +91,10 @@ class FireSpawn(Spawn):
         self.board = board
         
     def decrease_life(self, damage):
-        life -= damage
-    
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
+            
     def __str__(self):
         return 'FS'
     
@@ -80,6 +107,8 @@ class FireSpawn(Spawn):
             positionsList = self.get_adjacents_for_move(tuplePos)
             cantCells = random.randint(0,4)
             for i in range(cantCells):
+                if(len(positionsList) == 0):
+                    break
                 position = random.choice(positionsList)
                 positionsList.remove(position)
                 FireCell.__init__(1, 20, position, self.board)
@@ -103,7 +132,9 @@ class IceSpawn(Spawn):
         self.board = board
         
     def decrease_life(self, damage):
-        life -= damage
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
         
     def generate_cells(self):
         if self.position is not None:
