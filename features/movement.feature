@@ -36,17 +36,17 @@ Feature: Movement of cells from the same team
     When I try to move the Fire cells to an adjacent position
     Then the cells cannot merge, and coexist in the board
 
-#   Scenario: Attempt to move level 2 ice cell to an adjacent cell occupied by a level 1 ice cell
-#     Given I have a level 2 ice cell at position (3, 3) with 26 health points
-#     And I have a level 1 ice cell at position (4, 3) with 9 health points
-#     When I try to move the level 2 ice cell to position (4, 3) with 26 health points
-#     Then both cells cannot merge, and coexist at position (4, 3)
+  Scenario: Attempt to move level 2 ice cell to an adjacent cell occupied by a level 1 ice cell
+    Given I have a level 2 Ice cell at position (6, 6) with 26 health points
+    And there are level 1 Ice cells at adjacents positions of (6, 6) with 9 health points
+    When I try to move the Ice cells to an adjacent position
+    Then the cells cannot merge, and coexist in the board
 
-#   Scenario: Attempt to move level 2 fire cell to an adjacent cell occupied by a level 1 fire cell
-#     Given I have a level 2 fire cell at position (3, 3) with 30 health points
-#     And I have a level 1 fire cell at position (4, 3) with 2 health points
-#     When I try to move the level 2 fire cell to position (4, 3) with 30 health points
-#     Then both cells cannot merge, and coexist at position (4, 3)
+  Scenario: Attempt to move level 2 fire cell to an adjacent cell occupied by a level 1 fire cell
+    Given I have a level 2 Fire cell at position (7, 7) with 30 health points
+    And there are level 1 Fire cells at adjacents positions of (7, 7) with 2 health points
+    When I try to move the Fire cells to an adjacent position
+    Then the cells cannot merge, and coexist in the board
 
 # #   Scenario: Move cell to a cell occupied by 2 cells of different levels same team (coexisting)
 # #     Given I have a level 1 fire cell at position (2, 2)
