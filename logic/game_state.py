@@ -120,7 +120,7 @@ class GameState:
         while len(cells) != 0:
             cell = cells[0]
             self.advance(cell)
-            self.board.add_cell_by_tuple(cell.position, cell)
+            self.board.add_cell_by_tuple(cell.get_position(), cell)
             self.board.remove_cell(row, column, cell)
             
     def execute_movements_in_all_positions(self):
