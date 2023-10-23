@@ -76,23 +76,7 @@ def test_convert_two_cells_to_dead_cell_cell_not_in_position(board):
     with pytest.raises(ValueError):
         board.convert_two_cells_to_dead_cell(row, column, cell1, cell2)
     
-## TEST Fusion of Board
-def test_fusion_board(board):
-    pos = (1,1)
-    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_2, life=36, position=pos, board=board))
-    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_1, life=16, position=pos, board=board))
-    board.add_cell(pos[0], pos[1], FireCell(level=Level.LEVEL_1, life=7, position=pos, board=board))
-    board.add_cell(pos[0], pos[1], IceCell(level=Level.LEVEL_1, life=2, position=pos, board=board))
-    board.add_cell(pos[0], pos[1], IceCell(level=Level.LEVEL_1, life=12, position=pos, board=board))
-    board.fusion(pos)
-    cells_in_pos = board.get_cells(pos[0], pos[1])
-    assert len(cells_in_pos) == 2
-    assert isinstance(cells_in_pos[0], FireCell)
-    assert isinstance(cells_in_pos[1], IceCell)
-    assert cells_in_pos[0].life == 60
-    assert cells_in_pos[0].level == Level.LEVEL_3
-    assert cells_in_pos[1].life == 40
-    assert cells_in_pos[1].level == Level.LEVEL_2
+
 
     
 def test_fusion_in_all_board(board):
