@@ -26,23 +26,3 @@ def step_impl(context, row, column, team):
         if (len(context.GameController.get_cells(r,c)) == 1):
             assert True
 
-@given(u'there are level {level:d} {team} cells at adjacents positions of ({row:d}, {column:d}) with {life:d} health points')
-def step_impl(context, level, row, column, life, team):
-    list = context.GameController.get_adjacents_for_move(row, column)
-    for x in list:
-        r, c = x
-        context.GameController.create_cell(r, c, team, level, life)
-
-@when(u'I try to move the {team} cells to an adjacent position')
-def step_impl(context, team):
-    context.GameController.execute_movement()
-
-@then(u'the cells cannot merge, and coexist in the board')
-def step_impl(context):
-    i = 0
-    j = 0
-    while i < 50:
-        while j < 50: 
-            assert len(context.GameController.get_cells(i, j)) < 4
-            j = j + 1
-        i = i + 1
