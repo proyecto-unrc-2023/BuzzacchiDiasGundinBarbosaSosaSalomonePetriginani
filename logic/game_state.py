@@ -259,4 +259,6 @@ class GameState:
                             spawn = cell
         num = random.randint(0,4)
         for j in range(num):
-            self.get_board().generate_cell(spawn)
+            cell = spawn.generate_cell()
+            r,c = cell.position
+            self.get_board().add_cell(r, c, cell)

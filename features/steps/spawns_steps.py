@@ -72,7 +72,23 @@ def step_impl(context):
 def step_impl(context, row, column, team):
   context.GameController.create_spawn(row, column, team)
 
+@when(u'the Spawn creates cells')
+def step_impl(context):
+  context.GameController.generate_cell()
 
+@then(u'it should be create {team} cells in some adjacents positions of the spawn in ({row:d}, {column:d})')
+def step_impl(context, team, row, column):
+  list = context.GameController.get_adjacents_for_move(row, column)
+  spawn_positions = [] 
+  for pos in list:
+    r,c = pos
+    spawn_positions.append(context.GameController.get_adjacents_for_move(r, c))
+  for posi in spawn_positions:
+    ro, co = posi
+    lista = context.GameController.get_cells(ro, co)
+    if lista:
+      for li in lista:
+        assert isinstance(li, Cell)
 #@when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the second {team} spawn will create in the position ({row:d}, {column:d})')
 #def step_impl(context, row, column, team):
 #  context.GameController.create_spawn(row, column, team)

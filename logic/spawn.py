@@ -112,8 +112,8 @@ class FireSpawn(Spawn):
                 if list:
                     positionsList.append(list)
                     position = random.choice(positionsList)
-                return FireCell(position = position, board = self.board)
-
+                cell = (FireCell(position = position, board = self.board))
+            return cell  
 
 class IceSpawn(Spawn):
     def __str__(self):
@@ -140,7 +140,7 @@ class IceSpawn(Spawn):
                 if list:
                     positionsList.append(list)
                     position = random.choice(positionsList)
-                return IceCell(position = position, board = self.board)
-        
+                cell = (IceCell(position = position, board = self.board))
+            return cell    
     def get_type(self):
         return 'IceSpawn'

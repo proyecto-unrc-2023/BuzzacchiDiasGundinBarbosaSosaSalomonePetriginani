@@ -108,6 +108,3 @@ class Board:
             row, column = pos
             self.board[row][column].append(spawn)
 
-    def generate_cell(self, spawn):
-        cell = spawn.generate_cell()
-        self.add_cell_by_tuple(cell.position, cell)
