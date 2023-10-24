@@ -3,7 +3,7 @@ Feature: Fight of Cells
   Background: 
     Given a new game is started in Spawn Placement mode
     And a user with username Genaro is logged selecting team IceTeam
-    And the user selects to put Ice Spawn at the position (1,1)
+    And the user selects to put Ice Spawn at the position (8,8)
     And simulation starts
 
   Scenario: Two level 1 cells fight

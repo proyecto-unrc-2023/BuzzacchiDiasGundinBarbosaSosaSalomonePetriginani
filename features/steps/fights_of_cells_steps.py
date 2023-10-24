@@ -1,9 +1,8 @@
-from logic.cell import Level
-from logic.game_state import GameMode, Team
+
 from logic.spawn import IceSpawn
 from logic.cell import Level
+from logic.game_state import GameMode, GameState, Team
 from behave import given, when, then
-
 
 ##########BACKGROUND
 @given(u'a new game is started in Spawn Placement mode')
@@ -53,16 +52,3 @@ def step_impl(context, cell_type, cells_reduced):
 def step_impl(context, cell_type, life_points, level):
     matching_cells = context.GameController.find_matching_cells(context.position, cell_type, life_points, level)
     assert len(matching_cells) > 0
-
-
-
-
-
-
-
-
-
-
-
-
-

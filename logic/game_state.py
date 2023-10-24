@@ -9,6 +9,7 @@ class GameMode(Enum):
     NOT_STARTED = 1
     SPAWN_PLACEMENT = 2
     SIMULATION = 3
+    FINISHED = 4
 
 class Team(Enum):
     IceTeam = "IceTeam"
@@ -38,6 +39,29 @@ class GameState:
     def set_team(self, team):
         self.team = team
    
+    def set_mode(self, mode):
+        self.mode = mode
+
+    def get_ice_spawn(self):
+        return self.ice_spawn
+    
+    def get_fire_spawn(self):
+        return self.fire_spawn
+    
+    def get_spawn(self, spawn):
+        return self.get_ice_spawn() if spawn.get_type() == 'IceSpawn' else self.get_fire_spawn()
+    
+    def get_cells_in_spawn(self, spawn):
+        spawn = self.ice_spawn if spawn.get_type() == 'IceSpawn' else self.fire_spawn
+        positions = spawn.get_positions()
+        cells_in_spawn = []
+        for position in positions:
+            cells_in_position = self.get_cells(*position)
+            for cell in cells_in_position:
+                if isinstance(cell, FireCell) or isinstance(cell,IceCell):
+                    cells_in_spawn.append(cell)
+        return cells_in_spawn
+
     def create_spawn(self, row, column, team):
         self._check_position(row, column)
         position = (row, column)
@@ -94,20 +118,51 @@ class GameState:
             #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
             self.board.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos, board=self.board)))
 
-    # FIGTHS    
+    # FIGTHS
+    # def execute_fight_in_position(self, row, col):
+    #     cells = self.board.get_cells(row, col)
+    #     ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
+    #     fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
+        
+    #     # Order by level and life by descendent order
+    #     ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+    #     fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+
+    #     while ice_cells and fire_cells:
+    #         ice_cells[0].fight(fire_cells[0])
+    #         ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.board.get_cells(row, col)]
+    #         fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.board.get_cells(row, col)]
+
     def execute_fight_in_position(self, row, col):
         cells = self.board.get_cells(row, col)
         ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
         fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
-        
-        # Order by level and life by descendent order
-        ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-        fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+        spawn = [spawn for spawn in cells if isinstance(spawn, Spawn)]
 
-        while ice_cells and fire_cells:
-            ice_cells[0].fight(fire_cells[0])
-            ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.board.get_cells(row, col)]
-            fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.board.get_cells(row, col)]
+        if not spawn:
+            # Order by level and life by descendent order
+            ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+            fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+
+            while ice_cells and fire_cells:
+                ice_cells[0].fight(fire_cells[0])
+                ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.board.get_cells(row, col)]
+                fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.board.get_cells(row, col)]
+        else:
+            #Fight spawns
+            if spawn[0].get_type() == 'IceSpawn':
+                for fire_cell in fire_cells:
+                    spawn[0].fight(fire_cell)
+            else:
+                for ice_cell in ice_cells:
+                    spawn[0].fight(ice_cell)
+
+            if spawn[0].get_life() == 0:
+                for position in spawn[0].get_positions():
+                    self.remove_cell(*position, spawn[0])
+                self.set_mode(GameMode.FINISHED)
+                
+
 
     def execute_fights_in_all_positions(self):
         for row in range(self.board.rows):
@@ -176,6 +231,11 @@ class GameState:
                 pos = (row, column)
                 self.fusion(pos)
         
+    def add_cell(self, row, column, cell):
+        self.get_board().add_cell(row, column, cell)
+
+    def remove_cell(self, row, column, cell):
+        self.get_board().remove_cell(row, column, cell)
 
     def get_mode(self):
         return self.mode

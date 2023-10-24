@@ -16,8 +16,11 @@ class Spawn:
     def set_board(self, board):
         self.board = board
         
-    def get_position(self):
-        self.positions
+    def get_positions(self):
+        return self.positions
+
+    def get_life(self):
+        return self.life
         
     def decrease_life(self, damage):
         life -= damage
@@ -50,6 +53,15 @@ class Spawn:
                 position = random.choice(positionsList)
                 positionsList.remove(position)
                 cellN = Cell.__init__(1, 20, position, self.board)
+
+    def fight(self, cell):
+        if cell.get_position() in self.get_positions():
+            new_life = self.get_life() - cell.get_life()
+            if new_life > 0:
+                self.set_life(new_life)
+                self.board.remove_cell(*cell.get_position(), cell)
+            else:
+                self.set_life(0)
     
     @staticmethod
     def from_string(spawn_str):

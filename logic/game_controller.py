@@ -65,12 +65,18 @@ class GameController:
     
     def get_adyacents_pos(self, row, column):
         pos = (row, column)
-        return self.game_state.get_adjacents_for_move(pos)
+        return self.game_state.get_adjacents_pos(pos)
     
     def get_adjacents_for_move(self, row, column):
         pos = (row, column)
         return self.game_state.get_adjacents_for_move(pos)
     
+    def get_ice_spawn(self):
+        return self.game_state.get_ice_spawn()
+    
+    def get_cells_in_spawn(self, spawn):
+        return self.game_state.get_cells_in_spawn(spawn)
+
     def count_cells_by_type(self, row, column):
         count_ice, count_fire = 0, 0
         for cell in self.get_cells(row, column):
@@ -84,4 +90,3 @@ class GameController:
         cells = self.get_cells(*position)
         matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == level]
         return matching_cells
-    
