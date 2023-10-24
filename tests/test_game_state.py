@@ -8,7 +8,7 @@ from logic.cell import FireCell, IceCell, Cell
 def gamestate():
     game_state = GameState()
     game_state.set_team(Team.FireTeam)
-    game_state.new_game(3, 3)
+    game_state.new_game(10, 10)
     return game_state
 
 ##TEST Cell on Board
@@ -50,6 +50,19 @@ def test_advance_method(gamestate):
         result.get_cells(1, 0), result.get_cells(1, 2), result.get_cells(2, 0),
         result.get_cells(2, 1), result.get_cells(2, 2)
     ]
+
+@pytest.mark.parametrize("run", range(20))
+def test_advance_method_with_spawn(gamestate, run):
+    gamestate.set_team(Team.FireTeam)
+    gamestate.create_cell(0, 0, gamestate.get_team(), Level.LEVEL_1, 20)
+    gamestate.create_cell(0, 0, gamestate.get_team(), Level.LEVEL_1, 20)
+    gamestate.create_cell(0, 0, gamestate.get_team(), Level.LEVEL_1, 20)
+
+    gamestate.create_spawn(2, 2, Team.IceTeam)
+
+    gamestate.move_cells_in_position(0, 0)
+    
+    assert len(gamestate.get_cells_in_spawn(gamestate.get_ice_spawn())) > 0
 
 ## TEST Fusion of Board
 def test_fusion_board(gamestate):
