@@ -248,3 +248,15 @@ class GameState:
     
     def get_cells(self, row, column):
         return self.get_board().get_cells(row, column)
+    
+    def generate_cell(self):
+        for row in range(self.board.rows):
+            for column in range(self.board.columns):
+                list = self.get_cells(row, column)
+                if list is not None:
+                    for cell in list:
+                        if isinstance(cell, Spawn):
+                            spawn = cell
+        num = random.randint(0,4)
+        for j in range(num):
+            self.get_board().generate_cell(spawn)

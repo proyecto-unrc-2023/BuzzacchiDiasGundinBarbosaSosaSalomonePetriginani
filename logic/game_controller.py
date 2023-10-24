@@ -90,3 +90,7 @@ class GameController:
         cells = self.get_cells(*position)
         matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == level]
         return matching_cells
+
+    
+    def generate_cell(self):
+        self.game_state.generate_cell()
