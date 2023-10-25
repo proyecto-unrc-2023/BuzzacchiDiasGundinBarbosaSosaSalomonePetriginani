@@ -4,6 +4,7 @@ import random
 from logic.cell import IceCell, FireCell, Level
 from logic.board import Board
 from logic.spawn import Spawn, IceSpawn, FireSpawn
+from logic.healing_area import HealingArea
 
 class GameMode(Enum):
     NOT_STARTED = 1
@@ -24,10 +25,14 @@ class GameState:
         self.username = None
         self.ice_spawn = None
         self.fire_spawn = None
+        self.ice_healing = None
+        self.fire_healing = None
         #self.cell_id_counter = 1
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
+        self._add_healing_area(Team.IceTeam)
+        self._add_healing_area(Team.FireTeam)
         self.mode = GameMode.SPAWN_PLACEMENT
 
     def half_game(self):
@@ -101,6 +106,22 @@ class GameState:
             if 0 <= new_row < length and 0 <= new_col < length:
                 adjacentList.append((new_row, new_col))
         return adjacentList
+    
+    def _add_healing_area(self, team):
+        positions = self._healing_area_pos()
+        healing = HealingArea(self.board, positions, team)
+        if (team == Team.IceTeam):
+            self.ice_healing = healing
+        else:
+            self.fire_healing = healing
+        self.board.add_healing_area(healing)
+        
+    def _healing_area_pos(self):
+        row = random.choice(range(50))
+        column = random.choice(range(50))
+        pos = (row, column)
+        positions = self._get_adjacents_pos(self, pos)
+        return positions
             
     def create_cell(self, row, column, team, level, life):
         pos = row, column

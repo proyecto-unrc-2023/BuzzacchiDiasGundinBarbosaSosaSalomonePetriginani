@@ -3,12 +3,18 @@ from logic.board import  Board
 
 class HealingArea:
     
-    def __init__(self, board, positions, duration, affected_cell_type):
+    def __init__(self, board, positions, affected_cell_type):
         self.board = board
         self.positions = positions
-        self.duration = duration  
+        self.duration = 100  
         self.healing_rate = 3  
         self.affected_cell_type = affected_cell_type  
+        
+    def __str__(self):
+        return 'HA'
+    
+    def get_positions(self):
+        return self.positions
 
     def apply_effect(self):
         if self.duration > 0:

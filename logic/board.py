@@ -71,22 +71,7 @@ class Board:
                 if cell in cell_list:
                     return (i, j)
         return None
-    
-    # def fusion(self, cell1, cell2):
-    #     if(cell1.get_level() != cell2.get_level()):
-    #         return False
-    #     if(cell1.get_level() == Level.LEVEL_1):
-    #         cell1.set_level(Level.LEVEL_2)
-    #         cell1.set_life(40)
-    #         cell1.board.remove_cell(cell1.get_position()[0], cell1.get_position()[1], cell2)
-    #         return True
-    #     elif(cell1.get_level() == Level.LEVEL_2):
-    #         cell1.set_level(Level.LEVEL_3)
-    #         cell1.set_life(60)
-    #         cell1.board.remove_cell(cell1.get_position()[0], cell1.get_position()[1], cell2)
-    #         return True
-    #     return False
-                
+
     def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
         if 0 <= row < self.rows and 0 <= column < self.columns:
             # Check if the cells exist in the position
@@ -110,4 +95,10 @@ class Board:
         for pos in positions:
             row, column = pos
             self.board[row][column].append(spawn)
+            
+    def add_healing_area(self, healing):
+        positions = healing.get_positions()
+        for pos in positions:
+            row, column = pos
+            self.board[row][column].append(healing)
 
