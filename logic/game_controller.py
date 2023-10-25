@@ -67,9 +67,9 @@ class GameController:
         pos = (row, column)
         return self.game_state.get_adjacents_pos(pos)
     
-    def get_adjacents_for_move(self, row, column):
+    def get_adjacents_for_move(self, row, column, team):
         pos = (row, column)
-        return self.game_state.get_adjacents_for_move(pos)
+        return self.game_state.get_adjacents_for_move(pos, team)
     
     def get_ice_spawn(self):
         return self.game_state.get_ice_spawn()

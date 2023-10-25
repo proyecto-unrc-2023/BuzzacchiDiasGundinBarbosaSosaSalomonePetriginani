@@ -185,14 +185,18 @@ class GameState:
     
     def advance(self, cell):
         if cell.get_position() is not None and self.board is not None:
+            if isinstance(cell, IceCell):    
+                team = 'Ice'
+            else:
+                team = 'Fire'    
             tuplePos = cell.get_position()
-            positionsList = self.get_adjacents_for_move(tuplePos)
+            positionsList = self.get_adjacents_for_move(tuplePos, team)
             if positionsList:
                 cell.set_position(random.choice(positionsList))
                 cell.set_life(cell.get_life() - 1)
 
     #Get a list of adjacent cells to the cell's current position.
-    def get_adjacents_for_move(self, posXY):
+    def get_adjacents_for_move(self, posXY, team):
         row, col = posXY
         length = len(self.board)
         adjacentList = []
@@ -200,15 +204,19 @@ class GameState:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                if (self.no_spawns_in_pos(new_row, new_col)):
+                if (self.no_spawns_in_pos(new_row, new_col, team)):
                     adjacentList.append((new_row, new_col))
         return adjacentList
     
-    def no_spawns_in_pos(self, row, column):
+    def no_spawns_in_pos(self, row, column, team):
         cells = self.board.get_cells(row, column)
         for cell in cells:
-            if (isinstance(cell, Spawn)):
-                return False
+            if team == 'Ice':   
+                if (isinstance(cell, IceSpawn)):
+                    return False
+            else:
+                if (isinstance(cell, FireSpawn)):
+                    return False   
         return True
     
     # FUSION
@@ -257,8 +265,8 @@ class GameState:
                     for cell in list:
                         if isinstance(cell, Spawn):
                             spawn = cell
-        num = random.randint(0,4)
+        num = random.randint(1,4)
         for j in range(num):
             cell = spawn.generate_cell()
-            r,c = cell.position
+            r, c = cell.get_position()
             self.get_board().add_cell(r, c, cell)

@@ -111,8 +111,8 @@ class FireSpawn(Spawn):
                 list = self.get_adjacents_for_move(pos)
                 if list:
                     positionsList.append(list)
-                    position = random.choice(positionsList)
-                cell = (FireCell(position = position, board = self.board))
+                    pos = random.choice(positionsList)
+                cell = (FireCell(position = pos, board = self.board))
             return cell  
 
 class IceSpawn(Spawn):

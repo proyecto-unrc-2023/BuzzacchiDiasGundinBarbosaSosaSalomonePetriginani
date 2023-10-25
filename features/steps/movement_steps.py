@@ -7,9 +7,9 @@ def step_impl(context, row, column, level, life, team):
     context.GameController.new_game(50, 50)
     context.GameController.create_cell(row, column, team, level, life)
 
-@given(u'the adjacents cells at position ({row:d}, {column:d}) are empty')
-def step_impl(context, row, column):
-    list = context.GameController.get_adjacents_for_move(row, column)
+@given(u'the adjacents cells at position of the {team} cell ({row:d}, {column:d}) are empty')
+def step_impl(context, row, column, team):
+    list = context.GameController.get_adjacents_for_move(row, column, team)
     for x in list:
         r, c = x
         assert len(context.GameController.get_cells(r,c)) == 0
@@ -20,7 +20,7 @@ def step_impl(context, level, team):
 
 @then(u'the {team} cell moves successfully to an adjacent position of ({row:d}, {column:d})')
 def step_impl(context, row, column, team):
-    list = context.GameController.get_adjacents_for_move(row, column)
+    list = context.GameController.get_adjacents_for_move(row, column, team)
     for x in list:
         r, c = x
         if (len(context.GameController.get_cells(r,c)) == 1):
