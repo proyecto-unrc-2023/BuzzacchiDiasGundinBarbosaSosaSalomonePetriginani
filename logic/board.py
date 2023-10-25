@@ -1,21 +1,31 @@
 
-from logic.cell import DeadCell, IceCell, FireCell, Cell
+from logic.cell import IceCell, FireCell, Cell, DeadCell, Level
+from logic.spawn import Spawn, IceSpawn, FireSpawn
 
 class Board:
 
-    def __init__(self, rows, columns):
+    def __init__(self, rows, columns, board=None):
         self.rows = rows
         self.columns = columns
-        self.board = []
-        for row in range(self.rows):
-            curr_row = []
-            for col in range(self.columns):
-                curr_row.append(DeadCell())
-            self.board.append(curr_row)
+        if board is not None:
+            self.board = board
+        else:
+            self.board = [[[] for _ in range(columns)] for _ in range(rows)]
 
     def __str__(self):
-        rows_str = ['|'.join(map (str, row)) for row in self.board]
+        rows_str = []
+        for row in self.board:
+            cell_strs = []
+            for cell_list in row:
+                if not cell_list:
+                    cell_strs.append(' ')
+                else:
+                    cell_strs.append(','.join(str(cell) for cell in cell_list))
+            rows_str.append('|'.join(cell_strs))
         return '\n'.join(rows_str)
+
+    def __len__(self):
+        return self.rows
 
     @staticmethod
     def from_string(board_str):
@@ -26,38 +36,69 @@ class Board:
         for i in range(rows):
             row_cells = board_rows[i].split('|')
             for j in range(columns):
-                cell_str = row_cells[j]
-                if cell_str == str(DeadCell()):
-                    new_board.put_cell(i, j, DeadCell())
-                elif cell_str == str(FireCell()):
-                    new_board.put_cell(i, j, FireCell())
-                elif cell_str == str(IceCell()):
-                    new_board.put_cell(i, j, IceCell())
-                else:
-                    raise ValueError("Unknown cell type: " + cell_str)
+                cell_strs = row_cells[j].split(',')
+                for cell_str in cell_strs:
+                    cell_str = cell_str.strip()
+                    if cell_str == '':
+                        new_board.add_cell(i, j, DeadCell())
+                    elif cell_str == 'F':
+                        new_board.add_cell(i, j, FireCell())
+                    elif cell_str == 'I':
+                        new_board.add_cell(i, j, IceCell())
+                    else:
+                        raise ValueError("Unknown cell type: " + cell_str)
         return new_board
+        
+    def add_cell(self, row, column, cell):
+        cell.set_board(self)
+        pos = (row, column)
+        cell.set_position(pos)
+        self.board[row][column].append(cell)
 
+    def add_cell_by_tuple(self, position, cell):
+        row, column = position
+        self.add_cell(row, column, cell)
 
-    def get_cell(self, row, column):
+    def remove_cell(self, row, column, cell):
+        self.board[row][column].remove(cell)
+
+    def get_cells(self, row, column):
         return self.board[row][column]
 
-    def put_cell(self, row, column, cell):
-        self.board[row][column] = cell
-    
     def get_pos(self, cell):
-        for i in self.board:
-            for j in range(len(self.board)):
-                if(self.board[i][j] == cell):
+        for i, row in enumerate(self.board):
+            for j, cell_list in enumerate(row):
+                if cell in cell_list:
                     return (i, j)
+        return None
 
-    def put_fire_cell(self, row, column):
-        if self.get_cell(row, column).__eq__(DeadCell()):
-            self.board[row][column] = FireCell()
-        else:
-            raise ValueError
+    def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
+        if 0 <= row < self.rows and 0 <= column < self.columns:
+            # Check if the cells exist in the position
+            cells_in_position = self.get_cells(row, column)
+            if cell not in cells_in_position or other_cell not in cells_in_position:
+                raise ValueError("One or both cells not found in the given position")
 
-    def put_ice_cell(self, row, column):
-        if self.get_cell(row, column).__eq__(DeadCell()):
-            self.board[row][column] = IceCell()
+            # Remove cell and other cell from the position
+            self.remove_cell(row, column, cell)
+            self.remove_cell(row, column, other_cell)
+
+            # Check if there are any cells left in the position
+            if not self.get_cells(row, column):
+                # If no cells left, add a dead cell to the position
+                dead_cell = DeadCell(position=(row,column), board=self)
+                self.add_cell(row, column, dead_cell)
         else:
-            raise ValueError
+            raise ValueError("Invalid row or column")
+
+    def add_spawn(self, positions, spawn):
+        for pos in positions:
+            row, column = pos
+            self.board[row][column].append(spawn)
+            
+    def add_healing_area(self, healing):
+        positions = healing.get_positions()
+        for pos in positions:
+            row, column = pos
+            self.board[row][column].append(healing)
+
