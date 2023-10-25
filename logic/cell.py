@@ -69,6 +69,9 @@ class Cell:
             raise ValueError("Level must be in [1,2,3]")
         self.level = level
         
+    def set_board(self, board):
+        self.board = board
+        
     ####  Getters  ####
     def get_level(self):
         return self.level
@@ -90,6 +93,21 @@ class Cell:
             self.set_level(Level.LEVEL_3)
         else:
             raise Exception('Level_3 cannot be level up')
+        
+    def fusion(self, cell2):
+        if(self.level != cell2.get_level()):
+            return False
+        if(self.level == Level.LEVEL_1):
+            self.level = Level.LEVEL_2
+            self.life = 40
+            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            return True
+        elif(self.level == Level.LEVEL_2):
+            self.level = Level.LEVEL_3
+            self.life = 60
+            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            return True
+        return False
 
     def fight(self, other_cell):
         if self.position == other_cell.position:

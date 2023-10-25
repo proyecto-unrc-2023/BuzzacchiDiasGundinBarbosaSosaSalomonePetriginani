@@ -32,6 +32,9 @@ class GameState:
 
     def half_game(self):
         self.mode = GameMode.SPAWN_PLACEMENT
+        
+    def set_board(self, board):
+        self.board = board
 
     def set_username(self, username):
         self.username = username
@@ -229,7 +232,7 @@ class GameState:
                 break
             cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.get_level()))
             for i in range(len(cells_aux)-1):
-                merged = self.board.fusion(cells_aux[i], cells_aux[i+1])
+                merged = cells_aux[i].fusion(cells_aux[i+1])
                 if (merged):
                     break
 
