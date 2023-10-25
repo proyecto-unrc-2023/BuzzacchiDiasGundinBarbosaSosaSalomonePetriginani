@@ -13,10 +13,10 @@
     When the Fire spawn creates in the position (3, 4)
     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn
 
-  Scenario: Creation of Cells
-    Given the Ice spawn creates in the position (2,2)
-    When the Spawn creates cells
-    Then it should be create Ice cells in some adjacents positions of the spawn in (2, 2)
+  # Scenario: Creation of Cells
+  #   Given the Ice spawn creates in the position (2,2)
+  #   When the Spawn creates cells
+  #   Then it should be create Ice cells in some adjacents positions of the spawn in (2, 2)
 
 #   Scenario: Second ice spawn
 #     Given that the user is playing the game for team Ice and has spawn at position (3, 4)

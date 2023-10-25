@@ -31,8 +31,8 @@ class GameState:
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
-        self._add_healing_area(Team.IceTeam)
-        self._add_healing_area(Team.FireTeam)
+        # self._add_healing_area(Team.IceTeam)
+        # self._add_healing_area(Team.FireTeam)
         self.mode = GameMode.SPAWN_PLACEMENT
 
     def half_game(self):
