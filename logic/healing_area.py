@@ -1,5 +1,4 @@
 from logic.cell import Cell, Level
-from logic.board import  Board
 
 class HealingArea:
     
@@ -9,9 +8,6 @@ class HealingArea:
         self.duration = 100  
         self.healing_rate = 3  
         self.affected_cell_type = affected_cell_type  
-        
-    def __str__(self):
-        return 'HA'
     
     def get_positions(self):
         return self.positions
@@ -33,6 +29,17 @@ class HealingArea:
                             cell.set_life(cell.get_life() + self.healing_rate)
             self.duration -= 1
 
+    def get_type(self):
+        if self.affected_cell_type == 'IceCell':
+            return 'IceHealingArea'
+        else:
+            return 'FireHealingArea'
+        
+    def __str__(self):
+        if self.affected_cell_type == 'IceCell':
+            return 'IH'
+        else:
+            return 'FH'
 '''                            
 cell.level_up()
 #try:

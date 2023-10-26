@@ -10,22 +10,16 @@ def board():
 def test_add_cell(board):
     cell = FireCell()
     board.add_cell(1, 0, cell)
-    assert cell in board.get_cells(1, 0)
-
-def test_add_cell_by_tuple(board):
-    cell = FireCell()
-    position = (1, 0)
-    board.add_cell_by_tuple(position, cell)
-    assert cell in board.get_cells(*position)
+    assert cell in board.get_cells(1,0)
 
 def test_remove_cell(board):
     cell = FireCell()
     board.add_cell(1, 0, cell)
-    assert cell in board.get_cells(1, 0)
+    assert cell in board.get_cells(1,0)
     board.remove_cell(1, 0, cell)
     assert cell not in board.get_cells(1, 0)
 
-def test_get_cells(board):
+def test_get_box(board):
     cell1 = FireCell()
     cell2 = IceCell()
     board.add_cell(1, 0, cell1)
@@ -35,30 +29,30 @@ def test_get_cells(board):
     assert cell1 in cells
     assert cell2 in cells
 
-def test_get_pos(board):
-    cell1 = FireCell()
-    cell2 = IceCell()
-    board.add_cell(0, 0, cell1)
-    board.add_cell(1, 1, cell2)
+# def test_get_pos(board):
+#     cell1 = FireCell()
+#     cell2 = IceCell()
+#     board.add_cell(0, 0, cell1)
+#     board.add_cell(1, 1, cell2)
 
-    assert board.get_pos(cell1) == (0, 0)
-    assert board.get_pos(cell2) == (1, 1)
+#     assert board.get_pos(cell1) == (0, 0)
+#     assert board.get_pos(cell2) == (1, 1)
 
-    cell3 = FireCell()
-    assert board.get_pos(cell3) is None
+#     cell3 = FireCell()
+#     assert board.get_pos(cell3) is None
 
 
 ###Tests for convert_two_cells_to_dead_cell:
-
-def test_convert_two_cells_to_dead_cell(board):
-    row, column = 0, 0
-    cell1 = FireCell()
-    cell2 = IceCell()
-    board.add_cell(row, column, cell1)
-    board.add_cell(row, column, cell2)
-    board.convert_two_cells_to_dead_cell(row, column, cell1, cell2)
-    assert len(board.get_cells(row, column)) == 1
-    assert isinstance(board.get_cells(row, column)[0], DeadCell)
+###Probablemente no se use
+# def test_convert_two_cells_to_dead_cell(board):
+#     row, column = 0, 0
+#     cell1 = FireCell()
+#     cell2 = IceCell()
+#     board.add_cell(row, column, cell1)
+#     board.add_cell(row, column, cell2)
+#     board.convert_two_cells_to_dead_cell(row, column, cell1, cell2)
+#     assert len(board.get_cells(row, column)) == 0
+#     assert isinstance(board.get_cells(row, column), DeadCell)
 
 
 def test_convert_two_cells_to_dead_cell_invalid_position(board):

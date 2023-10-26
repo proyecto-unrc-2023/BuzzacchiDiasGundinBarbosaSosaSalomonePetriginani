@@ -53,6 +53,14 @@ class Cell:
     def __str__(self):
         raise NotImplementedError
 
+    #<
+    def __lt__(self, other_cell):
+        if self.level != other_cell.level:
+            return self.level > other_cell.level
+        else:
+            return self.life > other_cell.life
+
+        
     ####  Getters  ####
     def set_position(self, position):
         self.position = position

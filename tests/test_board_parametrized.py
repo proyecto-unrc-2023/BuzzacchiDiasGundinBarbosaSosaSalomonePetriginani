@@ -33,17 +33,24 @@ def test_empty_board_to_string(rows, columns, expected):
 
 board_with_cells_params = [
     # Parameters: initial board size, list of cells to add, expected board configuration
-    ((2, 2), [(0, 0, IceCell()), (0, 0, FireCell())], 'I,F| \n'\
+    ((2, 2), [(0, 0, IceCell()), (0, 0, FireCell())], 'F,I| \n'\
                                                       ' | '),
-    ((2, 2), [(0, 0, IceCell()), (0, 0, FireCell()), (1, 1, FireCell()), (1, 1, FireCell())], 'I,F| \n'\
+    ((2, 2), [(0, 0, IceCell()), (0, 0, FireCell()), (1, 1, FireCell()), (1, 1, FireCell())], 'F,I| \n'\
                                                                                               ' |F,F'),
-    ((3, 3), [(0, 0, IceCell()), (0, 0, FireCell()), (2, 2, FireCell()), (1, 2, IceCell())], 'I,F| | \n'\
+    ((3, 3), [(0, 0, IceCell()), (0, 0, FireCell()), (2, 2, FireCell()), (1, 2, IceCell())], 'F,I| | \n'\
                                                                                              ' | |I\n'\
                                                                                              ' | |F'),
     ((4, 3), [(0, 0, FireCell()), (2, 2, IceCell()), (1, 1, FireCell()), (3, 0, FireCell())], 'F| | \n'\
                                                                                               ' |F| \n'\
                                                                                               ' | |I\n'\
-                                                                                              'F| | ')
+                                                                                              'F| | '),
+    ((3, 3), [(1, 1, IceCell()), (1, 1, FireCell()), (2, 2, FireCell()), (0, 2, IceCell())], ' |I| \n'\
+                                                                                             ' |F| \n'\
+                                                                                             ' | |F'),
+    ((4, 4), [(3, 3, FireCell()), (2, 2, IceCell()), (1, 1, FireCell()), (0, 0, FireCell())], 'F| | | \n'\
+                                                                                              ' |F| | \n'\
+                                                                                              ' | |I| \n'\
+                                                                                              ' | | |F')
 ]
 
 @pytest.mark.parametrize("board_size, cells_to_add, expected", board_with_cells_params)
