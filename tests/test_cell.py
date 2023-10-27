@@ -112,12 +112,6 @@ def test_fight_same_position_different_types_lower_level_high_life(board):
     assert lower_level_fire_cell not in board.get_cells(1, 1)
     assert higher_level_ice_cell in board.get_cells(1, 1)
     
-# def test_fusion_two_level_1_ice_cells(board, ice_cell2, ice_cell3):
-#     board.board[2][2].append(ice_cell2)
-#     board.board[2][2].append(ice_cell3)
-    
-#     ice_cell2.fusion(ice_cell3)
-    
     cells_expected = board.get_cells(ice_cell2.position[0], ice_cell2.position[1])
     assert ice_cell2.level == Level.LEVEL_2
     assert ice_cell2.life == 40

@@ -76,12 +76,12 @@ def test_fusion_board(gamestate):
     gamestate.fusion(pos)
     cells_in_pos = gamestate.get_cells(pos[0], pos[1])
     assert len(cells_in_pos) == 2
-    assert isinstance(cells_in_pos[0], FireCell)
-    assert isinstance(cells_in_pos[1], IceCell)
-    assert cells_in_pos[0].get_life() == 60
-    assert cells_in_pos[0].get_level() == Level.LEVEL_3
-    assert cells_in_pos[1].get_life() == 40
-    assert cells_in_pos[1].get_level() == Level.LEVEL_2
+    assert isinstance(cells_in_pos[0], IceCell)
+    assert isinstance(cells_in_pos[1], FireCell)
+    assert cells_in_pos[0].get_life() == 40
+    assert cells_in_pos[0].get_level() == Level.LEVEL_2
+    assert cells_in_pos[1].get_life() == 60
+    assert cells_in_pos[1].get_level() == Level.LEVEL_3
     
 def test_fusion_in_all_board(gamestate):
     pos0 = (0,0)
@@ -121,12 +121,12 @@ def test_fusion_in_all_board(gamestate):
 
     # Comprueba la fusión en (1, 0)
     assert len(cells_in_pos_10) == 2
-    assert isinstance(cells_in_pos_10[0], FireCell)
-    assert isinstance(cells_in_pos_10[1], IceCell)
-    assert cells_in_pos_10[0].life == 48
-    assert cells_in_pos_10[0].level == Level.LEVEL_3
-    assert cells_in_pos_10[1].life == 15
-    assert cells_in_pos_10[1].level == Level.LEVEL_1
+    assert isinstance(cells_in_pos_10[0], IceCell)
+    assert isinstance(cells_in_pos_10[1], FireCell)
+    assert cells_in_pos_10[0].life == 15
+    assert cells_in_pos_10[0].level == Level.LEVEL_1
+    assert cells_in_pos_10[1].life == 48
+    assert cells_in_pos_10[1].level == Level.LEVEL_3
 
     # Comprueba que no hubo fusión en (1, 1)
     assert len(cells_in_pos_11) == 2

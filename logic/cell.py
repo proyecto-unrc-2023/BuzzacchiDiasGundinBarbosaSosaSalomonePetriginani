@@ -21,12 +21,12 @@ class Level(IntEnum):
         return True
     
     @staticmethod
-    def max_life_level(self):
-        if (self == 1):
+    def max_life_level(level):
+        if (level == Level.LEVEL_1):
             return 20
-        elif (self == 2):
+        elif (level == Level.LEVEL_2):
             return 40
-        elif(self==3):
+        elif(level==Level.LEVEL_3):
             return 60
             
 class Cell:
@@ -97,20 +97,13 @@ class Cell:
             raise Exception('Level_3 cannot be level up')
     
     #Comments should be done in another class
-    def fusion(self, cell2):
-        if(self.level != cell2.get_level()):
+    def level_and_life_up(self):
+        if (self.level != 3):
+            self.level_up()
+            self.life = Level.max_life_level(self.level)
+            return True
+        else:
             return False
-        if(self.level == Level.LEVEL_1):
-            self.level = Level.LEVEL_2
-            self.life = 40
-            #self.board.remove_cell(self.position[0], self.position[1], cell2)
-            return True
-        elif(self.level == Level.LEVEL_2):
-            self.level = Level.LEVEL_3
-            self.life = 60
-            #self.board.remove_cell(self.position[0], self.position[1], cell2)
-            return True
-        return False
 
     def fight(self, other_cell):
         if self.position == other_cell.position:

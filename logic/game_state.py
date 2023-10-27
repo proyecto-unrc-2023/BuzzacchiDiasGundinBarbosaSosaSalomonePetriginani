@@ -3,6 +3,7 @@ import random
 
 from logic.cell import IceCell, FireCell, Level
 from logic.board import Board
+from logic.box import Box
 from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.healing_area import HealingArea
 
@@ -81,14 +82,10 @@ class GameState:
             level_enum = Level.LEVEL_2
         if (level== 3):
             level_enum = Level.LEVEL_3
-        
-        #cell_id = self.cell_id_counter  
-        #self.cell_id_counter += 1
-
         if (team == Team.IceTeam):
             #self.board.add_cell(row, column, IceCell(cell_id = cell_id, level=level_enum, life = life, position=pos, board=self.board))
             self.board.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos, board=self.board)))
-        else:
+        elif (team == Team.FireTeam):
             #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
             self.board.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos, board=self.board)))
 
@@ -188,17 +185,64 @@ class GameState:
     
     # FUSION
     def fusion(self, pos):
-        merged = True
-        while merged:
-            merged = False
-            cells_aux = self.board.get_cells(pos[0], pos[1])
-            if (len(cells_aux) == 1) : 
-                break
-            cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.get_level()))
-            for i in range(len(cells_aux)-1):
-                merged = cells_aux[i].fusion(cells_aux[i+1])
-                if (merged):
-                    break
+        box = self.board.get_box(pos[0], pos[1])
+        cells_ice_aux =  box.get_ice_cells()
+        cells_fire_aux = box.get_fire_cells()
+        remove_this_cells = []
+        # print("Comienzo de Fusion")
+        #For Ice Cells
+        count_fusion = 1
+        # if(cells_ice_aux):
+        #     print("entre al if de ice")
+        while(count_fusion > 0):
+        # print("entre al while de ice")
+            count_fusion = 0
+            remove_this_cells.clear()
+            for i in range(len(cells_ice_aux)-1):
+                print("entre al for de ice")
+                if (cells_ice_aux[i].get_level() == cells_ice_aux[i+1].get_level()):
+                    print("Entre al if level del ice")
+                    merged = cells_ice_aux[i+1].level_and_life_up()
+                    if(merged):
+                        remove_this_cells.append(cells_ice_aux[i])
+                        count_fusion += 1
+                    print("merge un Ice")
+            for cell in remove_this_cells:
+                print("se elimino .Ice")
+                print(cell)
+                self.board.remove_cell(pos[0], pos[1], cell)
+        # For Fire Cells
+        count_fusion = 1
+        # if(cells_fire_aux):
+        #     print("entre al if de fire")
+        while(count_fusion > 0):
+            count_fusion = 0
+            remove_this_cells.clear()
+            for i in range(len(cells_fire_aux)-1):
+                if (cells_fire_aux[i].get_level() == cells_fire_aux[i+1].get_level( )):
+                    merged = cells_fire_aux[i+1].level_and_life_up()
+                    if(merged):
+                        remove_this_cells.append(cells_fire_aux[i])
+                        count_fusion += 1
+                    print("merge un Fire")
+            for cell in remove_this_cells:
+                print("se elimino .Fire")
+                print(cell)
+                self.board.remove_cell(pos[0], pos[1], cell)
+    
+        
+        # merged = True
+        # while merged:
+        #     merged = False
+        #     cells_aux = self.board.get_cells(pos[0], pos[1])
+        #     if (len(cells_aux) == 1) : 
+        #         break
+        #     cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.get_level()))
+        #     for i in range(len(cells_aux)-1):
+        #         if (cells_aux[i].get_level() == cells_aux[i+1])
+        #         merged = cells_aux[i].fusion(cells_aux[i+1])
+        #         if (merged):
+        #             break
 
     def execute_fusions_in_all_positions(self):
         for row in range(self.board.rows):
