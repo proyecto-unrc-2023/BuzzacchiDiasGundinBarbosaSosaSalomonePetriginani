@@ -1,11 +1,12 @@
 import pytest
 
 from logic.board import Board
-from logic.cell import IceCell, FireCell, DeadCell, Level
+from logic.cell import IceCell, FireCell
+from logic.spawn import IceSpawn
 
 @pytest.fixture
 def board():
-    return Board(2, 2)
+    return Board(10, 10)
 
 def test_add_cell(board):
     cell = FireCell()
@@ -69,3 +70,13 @@ def test_convert_two_cells_to_dead_cell_cell_not_in_position(board):
     board.add_cell(row, column, cell1)
     with pytest.raises(ValueError):
         board.convert_two_cells_to_dead_cell(row, column, cell1, cell2)
+
+def test_create_spawn(board):
+    board.create_spawn(1, 1, IceSpawn)
+    adjacent_positions = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
+    assert board.get_box(1, 1).get_spawn() is not None
+    assert isinstance(board.get_box(1,1).get_spawn(), IceSpawn)
+
+    for position in adjacent_positions:
+        assert board.get_box(*position).get_spawn() is not None
+        assert isinstance(board.get_box(*position).get_spawn(), IceSpawn)

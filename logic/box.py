@@ -46,6 +46,12 @@ class Box:
     def set_ice_healing_area(self, value):
         self.ice_healing_area = value
 
+    def set_healing_area(self, healing_area):
+        if healing_area.get_affected_cell_type() == IceCell:
+            self.set_ice_healing_area(healing_area)
+        else:
+            self.set_fire_healing_area(healing_area)
+
     # Getter para 'pos'
     def get_pos(self):
         return self.pos

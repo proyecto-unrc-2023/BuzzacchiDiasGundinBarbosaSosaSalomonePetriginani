@@ -69,60 +69,13 @@ class GameState:
                 if isinstance(cell, FireCell) or isinstance(cell,IceCell):
                     cells_in_spawn.append(cell)
         return cells_in_spawn
-
-    def create_spawn(self, row, column, team):
-        self._check_position(row, column)
-        position = (row, column)
-        positions_spawn = self._get_adjacents_pos(position)
-        if team == Team.IceTeam:
-            self.ice_spawn = IceSpawn(positions=positions_spawn, board=self.board)
-        else:
-            self.fire_spawn = FireSpawn(positions=positions_spawn, board=self.board)
-        spawn = self.ice_spawn if team == Team.IceTeam else self.fire_spawn
-        self.board.add_spawn(positions=positions_spawn, spawn=spawn)
-        self.mode = GameMode.SIMULATION
-
-    def _check_position(self, row, column):
-        length = len(self.board)
-        if row == 0 or row == length - 1 or column == 0 or column == length - 1:
-            raise ValueError("The position is on the edge of the board")
-        
-    def add_spawn(self, position):
-        positions_spawn = self._get_adjacents_pos(position)
-        if self.get_team() == Team.IceTeam:
-            spawn = IceSpawn(positions=positions_spawn, board=self.board)
-        else:
-            spawn = FireSpawn(positions=positions_spawn, board=self.board)
-        self.board.add_spawn(positions=positions_spawn, spawn=spawn)
-        self.mode = GameMode.SIMULATION
-        
-    def _get_adjacents_pos(self, pos):
-        row, col = pos
-        length = len(self.board)
-        adjacentList = []
-        directions = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
-        for dr, dc in directions:
-            new_row, new_col = row + dr, col + dc
-            if 0 <= new_row < length and 0 <= new_col < length:
-                adjacentList.append((new_row, new_col))
-        return adjacentList
-    
-    def _add_healing_area(self, team):
-        positions = self._healing_area_pos()
-        healing = HealingArea(self.board, positions, team)
-        if (team == Team.IceTeam):
-            self.ice_healing = healing
-        else:
-            self.fire_healing = healing
-        self.board.add_healing_area(healing)
-        
-    def _healing_area_pos(self):
-        row = random.choice(range(50))
-        column = random.choice(range(50))
-        pos = (row, column)
-        positions = self._get_adjacents_pos(self, pos)
-        return positions
             
+    def create_healing_area(self, row, column, affected_cell_type):
+        if affected_cell_type == IceCell:
+            self.ice_healing = self.board.create_healing_area(row, column, affected_cell_type)
+        else:
+            self.fire_healing = self.board.create_healing_area(row, column, affected_cell_type)
+
     def create_cell(self, row, column, team, level, life):
         pos = row, column
         if (level == 1):
@@ -142,20 +95,11 @@ class GameState:
             #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
             self.board.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos, board=self.board)))
 
-    # FIGTHS
-    # def execute_fight_in_position(self, row, col):
-    #     cells = self.board.get_cells(row, col)
-    #     ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
-    #     fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
-        
-    #     # Order by level and life by descendent order
-    #     ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-    #     fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-
-    #     while ice_cells and fire_cells:
-    #         ice_cells[0].fight(fire_cells[0])
-    #         ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.board.get_cells(row, col)]
-    #         fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.board.get_cells(row, col)]
+    def create_spawn(self, row, column, spawn_team):
+        if spawn_team == IceSpawn:
+            self.ice_spawn = self.board.create_spawn(row, column, spawn_team)
+        else:
+            self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
 
     def execute_fight_in_position(self, row, col):
         cells = self.board.get_cells(row, col)
@@ -186,21 +130,21 @@ class GameState:
                     self.remove_cell(*position, spawn[0])
                 self.set_mode(GameMode.FINISHED)
                 
-
-
     def execute_fights_in_all_positions(self):
         for row in range(self.board.rows):
             for column in range(self.board.columns):
                 self.execute_fight_in_position(row, column)
                 
     # MOVEMENT
+    # Copy of list created because of an infinite loop
     def move_cells_in_position(self, row, column):
-        cells = self.board.get_cells(row, column)
+        cells = list(self.board.get_cells(row, column))  
         while len(cells) != 0:
             cell = cells[0]
             self.advance(cell)
-            self.board.add_cell_by_tuple(cell.get_position(), cell)
+            self.board.add_cell(*cell.get_position(), cell)
             self.board.remove_cell(row, column, cell)
+            cells.remove(cell)  
             
     def execute_movements_in_all_positions(self):
         for row in range(self.board.rows):
@@ -210,17 +154,18 @@ class GameState:
     def advance(self, cell):
         if cell.get_position() is not None and self.board is not None:
             if isinstance(cell, IceCell):    
-                team = 'Ice'
+                cell_team = Team.IceTeam
             else:
-                team = 'Fire'    
+                cell_team = Team.FireTeam    
             tuplePos = cell.get_position()
-            positionsList = self.get_adjacents_for_move(tuplePos, team)
+            positionsList = self.get_adjacents_for_move(tuplePos, cell_team)
             if positionsList:
                 cell.set_position(random.choice(positionsList))
-                cell.set_life(cell.get_life() - 1)
+                if cell.get_life() > 0:
+                    cell.set_life(cell.get_life() - 1)
 
     #Get a list of adjacent cells to the cell's current position.
-    def get_adjacents_for_move(self, posXY, team):
+    def get_adjacents_for_move(self, posXY, cell_team):
         row, col = posXY
         length = len(self.board)
         adjacentList = []
@@ -228,14 +173,14 @@ class GameState:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                if (self.no_spawns_in_pos(new_row, new_col, team)):
+                if (self.no_spawns_in_pos(new_row, new_col, cell_team)):
                     adjacentList.append((new_row, new_col))
         return adjacentList
     
-    def no_spawns_in_pos(self, row, column, team):
+    def no_spawns_in_pos(self, row, column, cell_team):
         cells = self.board.get_cells(row, column)
         for cell in cells:
-            if team == 'Ice':   
+            if cell_team == Team.IceTeam:   
                 if (isinstance(cell, IceSpawn)):
                     return False
             else:

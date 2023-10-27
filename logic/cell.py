@@ -29,14 +29,12 @@ class Level(IntEnum):
         elif(self==3):
             return 60
             
-
 class Cell:
 
     def __init__(self, level=Level.LEVEL_1, life=20, position=None, board=None):
         self.set_level(level)
         self.set_life(life)        
         self.position = position
-        self.board = board
         self.type = self.get_type()
 
     @staticmethod
@@ -77,9 +75,6 @@ class Cell:
             raise ValueError("Level must be in [1,2,3]")
         self.level = level
         
-    def set_board(self, board):
-        self.board = board
-        
     ####  Getters  ####
     def get_level(self):
         return self.level
@@ -93,7 +88,6 @@ class Cell:
     def get_type(self):
         return 'Cell'
 
-    
     def level_up(self):
         if self.level == Level.LEVEL_1:
             self.set_level(Level.LEVEL_2)
@@ -101,19 +95,20 @@ class Cell:
             self.set_level(Level.LEVEL_3)
         else:
             raise Exception('Level_3 cannot be level up')
-        
+    
+    #Comments should be done in another class
     def fusion(self, cell2):
         if(self.level != cell2.get_level()):
             return False
         if(self.level == Level.LEVEL_1):
             self.level = Level.LEVEL_2
             self.life = 40
-            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            #self.board.remove_cell(self.position[0], self.position[1], cell2)
             return True
         elif(self.level == Level.LEVEL_2):
             self.level = Level.LEVEL_3
             self.life = 60
-            self.board.remove_cell(self.position[0], self.position[1], cell2)
+            #self.board.remove_cell(self.position[0], self.position[1], cell2)
             return True
         return False
 

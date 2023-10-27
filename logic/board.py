@@ -1,8 +1,9 @@
 
-from logic.cell import IceCell, FireCell, Cell, DeadCell, Level
-from logic.spawn import Spawn, IceSpawn, FireSpawn
+from logic.cell import IceCell, FireCell, DeadCell, Level
+from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
+#from logic.game_state import Team
 
 class Board:
 
@@ -63,7 +64,6 @@ class Board:
         return new_board
         
     def add_cell(self, row, column, cell):
-        cell.set_board(self)
         pos = (row, column)
         cell.set_position(pos)
         box = self.get_box(row, column)
@@ -108,14 +108,50 @@ class Board:
         else:
             raise ValueError("Invalid row or column")
 
-    def add_spawn(self, positions, spawn):
-        for pos in positions:
-            row, column = pos
-            self.board[row][column].append(spawn)
-            
-    def add_healing_area(self, healing):
-        positions = healing.get_positions()
-        for pos in positions:
-            row, column = pos
-            self.board[row][column].append(healing)
+    def _check_position(self, row, column):
+        length = len(self.board)
+        if row == 0 or row == length - 1 or column == 0 or column == length - 1:
+            raise ValueError("The position is on the edge of the board")
+        
+    def create_spawn(self, row, column, spawn_team):
+        self._check_position(row, column)
+        position = (row, column)
+        positions_spawn = self._get_adjacents_pos(position)
+        ice_spawn = None
+        fire_spawn = None
+        if spawn_team == IceSpawn:
+            ice_spawn = IceSpawn(positions=positions_spawn, board=self.board)
+        else:
+            fire_spawn = FireSpawn(positions=positions_spawn, board=self.board)
+        spawn = ice_spawn if ice_spawn else fire_spawn
+        self.add_spawn(spawn=spawn)
+        return spawn
+        #self.mode = GameMode.SIMULATION
 
+    def create_healing_area(self, row, column, affected_cell_type):
+        self._check_position(row, column)
+        position = (row, column)
+        positions_healing = self._get_adjacents_pos(position)
+        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
+        self.add_healing_area(self, healing_area)
+
+    def add_spawn(self, spawn):
+        positions_spawn = spawn.get_positions()
+        for position in positions_spawn:
+            self.get_box(*position).set_spawn(spawn)
+        
+    def add_healing(self, position, healing_area):
+        positions_healing = healing_area.get_positions()
+        for position in positions_healing:
+            self.get_box(*position).set_healing_area(healing_area)
+    
+    def _get_adjacents_pos(self, pos):
+        row, col = pos
+        length = len(self.board)
+        adjacentList = []
+        directions = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            if 0 <= new_row < length and 0 <= new_col < length:
+                adjacentList.append((new_row, new_col))
+        return adjacentList

@@ -44,8 +44,8 @@ board_with_cells_params = [
                                                                                               ' |F| \n'\
                                                                                               ' | |I\n'\
                                                                                               'F| | '),
-    ((3, 3), [(1, 1, IceCell()), (1, 1, FireCell()), (2, 2, FireCell()), (0, 2, IceCell())], ' |I| \n'\
-                                                                                             ' |F| \n'\
+    ((3, 3), [(1, 1, IceCell()), (1, 1, FireCell()), (2, 2, FireCell()), (0, 2, IceCell())], ' | |I\n'\
+                                                                                             ' |F,I| \n'\
                                                                                              ' | |F'),
     ((4, 4), [(3, 3, FireCell()), (2, 2, IceCell()), (1, 1, FireCell()), (0, 0, FireCell())], 'F| | | \n'\
                                                                                               ' |F| | \n'\
