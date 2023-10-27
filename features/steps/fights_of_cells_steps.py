@@ -19,8 +19,9 @@ def step_impl(context, username, team):
 def step_impl(context, row, column, team):
     context.GameController.create_spawn(row, column, team)
     positions_spawn = [(i,j) for i in range(row-1, row+2) for j in range(column-1, column+2)]
+    print(str(context.GameController.get_board()))
     for pos in positions_spawn:
-        assert isinstance(context.GameController.get_cells(*pos)[0], IceSpawn)
+        assert isinstance(context.GameController.get_spawn(*pos), IceSpawn)
 
 @given(u'simulation starts')
 def step_impl(context):

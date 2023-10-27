@@ -75,6 +75,9 @@ class Board:
     def get_cells(self, row, column):
         return self.get_box(row,column).get_cells()
     
+    def get_spawn(self, row, column):
+        return self.get_box(row,column).get_spawn()
+    
     def remove_cell(self, row, column, cell):
         self.get_box(row, column).remove_cell(cell)
 

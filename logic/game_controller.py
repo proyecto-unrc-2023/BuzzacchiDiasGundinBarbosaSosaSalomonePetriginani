@@ -31,7 +31,10 @@ class GameController:
     
     def get_team(self):
         return self.game_state.get_team()
-        
+    
+    def get_spawn(self, row, column):
+        return self.game_state.get_spawn(row, column)
+    
     def no_spawns_in_pos(self, row, column):
         return self.game_state.no_spawns_in_pos(row, column)
     
@@ -39,17 +42,17 @@ class GameController:
     def add_spawn(self, positions):
         self.game_state.add_spawn(positions)
         
-    def create_spawn(self, row, column, team):
-        if team == 'Ice':
-            self.game_state.create_spawn(row, column, Team.IceTeam)
+    def create_spawn(self, row, column, spawn_type):
+        if spawn_type == 'Ice':
+            self.game_state.create_spawn(row, column, IceSpawn)
         else:
-            self.game_state.create_spawn(row, column, Team.FireTeam)
+            self.game_state.create_spawn(row, column, FireSpawn)
 
-    def create_cell(self, row, column, team, level, life):
-        if team == 'Ice':
-            self.game_state.create_cell(row, column, Team.IceTeam, level, life)
+    def create_cell(self, row, column, cell_type, level, life):
+        if cell_type == 'Ice':
+            self.game_state.create_cell(row, column, IceCell, level, life)
         else:
-            self.game_state.create_cell(row, column, Team.FireTeam, level, life)
+            self.game_state.create_cell(row, column, FireCell, level, life)
 
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()

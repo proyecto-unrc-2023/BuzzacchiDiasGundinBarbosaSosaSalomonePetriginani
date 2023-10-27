@@ -34,9 +34,6 @@ class GameState:
         # self._add_healing_area(Team.IceTeam)
         # self._add_healing_area(Team.FireTeam)
         self.mode = GameMode.SPAWN_PLACEMENT
-
-    def half_game(self):
-        self.mode = GameMode.SPAWN_PLACEMENT
         
     def set_board(self, board):
         self.board = board
@@ -100,6 +97,7 @@ class GameState:
             self.ice_spawn = self.board.create_spawn(row, column, spawn_team)
         else:
             self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
+        self.check_simulation()
 
     def execute_fight_in_position(self, row, col):
         cells = self.board.get_cells(row, col)
@@ -226,6 +224,9 @@ class GameState:
     def get_cells(self, row, column):
         return self.get_board().get_cells(row, column)
     
+    def get_spawn(self, row, column):
+        return self.get_board().get_spawn(row, column)
+    
     def generate_cell(self):
         for row in range(self.board.rows):
             for column in range(self.board.columns):
@@ -239,3 +240,7 @@ class GameState:
             cell = spawn.generate_cell()
             r, c = cell.get_position()
             self.get_board().add_cell(r, c, cell)
+
+    def check_simulation(self):
+        if self.ice_spawn is not None and self.fire_spawn is not None: 
+            self.set_mode(GameMode.SIMULATION)
