@@ -57,6 +57,9 @@ class GameState:
     def get_spawn(self, spawn):
         return self.get_ice_spawn() if spawn.get_type() == 'IceSpawn' else self.get_fire_spawn()
     
+    def add_cell(self, row, column, cell):
+        self.board.add_cell(row, column, cell)
+
     def get_cells_in_spawn(self, spawn):
         spawn = self.ice_spawn if spawn.get_type() == 'IceSpawn' else self.fire_spawn
         positions = spawn.get_positions()
@@ -82,12 +85,13 @@ class GameState:
             level_enum = Level.LEVEL_2
         if (level== 3):
             level_enum = Level.LEVEL_3
+
         if (team == Team.IceTeam):
             #self.board.add_cell(row, column, IceCell(cell_id = cell_id, level=level_enum, life = life, position=pos, board=self.board))
-            self.board.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos, board=self.board)))
-        elif (team == Team.FireTeam):
+            self.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos)))
+        else:
             #self.board.add_cell(row, column, FireCell(cell_id = cell_id, level=level_enum, life=life, position=pos, board=self.board))
-            self.board.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos, board=self.board)))
+            self.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos)))
 
     def create_spawn(self, row, column, spawn_team):
         if spawn_team == IceSpawn:
@@ -249,27 +253,6 @@ class GameState:
             for column in range(self.board.columns):
                 pos = (row, column)
                 self.fusion(pos)
-        
-    def add_cell(self, row, column, cell):
-        self.get_board().add_cell(row, column, cell)
-
-    def remove_cell(self, row, column, cell):
-        self.get_board().remove_cell(row, column, cell)
-
-    def get_mode(self):
-        return self.mode
-    
-    def get_board(self):
-        return self.board
-    
-    def get_team(self):
-        return self.team
-    
-    def get_cells(self, row, column):
-        return self.get_board().get_cells(row, column)
-    
-    def get_spawn(self, row, column):
-        return self.get_board().get_spawn(row, column)
     
     def generate_cell(self):
         for row in range(self.board.rows):

@@ -3,6 +3,7 @@ import pytest
 from logic.game_state import GameState, Team
 from logic.board import Level
 from logic.cell import FireCell, IceCell
+from logic.spawn import IceSpawn
 
 @pytest.fixture
 def gamestate():
@@ -52,6 +53,7 @@ def test_advance_method(gamestate):
         result.get_cells(2, 1), result.get_cells(2, 2)
     ]
 
+###########   Next test is not working if of 20 executions, 20 gives error. if some test pass method works ok.
 # @pytest.mark.parametrize("run", range(20))
 # def test_advance_method_with_spawn(gamestate, run):
 #     gamestate.set_team(Team.FireTeam)
@@ -59,7 +61,7 @@ def test_advance_method(gamestate):
 #     gamestate.create_cell(0, 0, gamestate.get_team(), Level.LEVEL_1, 20)
 #     gamestate.create_cell(0, 0, gamestate.get_team(), Level.LEVEL_1, 20)
 
-#     gamestate.create_spawn(2, 2, Team.IceTeam)
+#     gamestate.create_spawn(2, 2, IceSpawn)
 
 #     gamestate.move_cells_in_position(0, 0)
     

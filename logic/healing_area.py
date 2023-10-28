@@ -15,17 +15,12 @@ class HealingArea:
         if self.duration > 0:
             for cell in cells:
                 if isinstance(cell, self.affected_cell_type):
-                    try:
-                        new_life = cell.get_life() + self.healing_rate
-                        if cell.get_level() == Level.LEVEL_3 and new_life > 60:
-                            cell.set_life(60)
-                            continue
-                        cell.set_life(new_life)
-                    except ValueError:
-                        cell.level_up()
-                        cell.set_life(cell.get_life() + self.healing_rate)
+                    new_life = cell.get_life() + self.healing_rate
+                    if cell.get_level() == Level.LEVEL_3 and new_life > 60:
+                        cell.set_life(60)
+                        continue
+                    cell.set_life(new_life)
             self.duration -= 1
-
 
     def get_type(self):
         if self.affected_cell_type == 'IceCell':
@@ -41,10 +36,3 @@ class HealingArea:
     
     def get_affected_cell_type(self):
         return self.affected_cell_type
-'''                            
-cell.level_up()
-#try:
-cell.set_life(cell.get_life() + self.healing_rate)
-#except ValueError as e:
-#    print(f"Error al establecer la vida de la célula después de aumentar el nivel: {e}")
-'''
