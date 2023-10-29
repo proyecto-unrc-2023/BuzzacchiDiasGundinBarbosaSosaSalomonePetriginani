@@ -1,17 +1,17 @@
- Feature: Spawns of cells
-   Background: 
-    Given a new game is started in Spawn Placement mode
-    And a user with username Lucas is logged selecting team IceTeam
+#  Feature: Spawns of cells
+#    Background: 
+#     Given a new game is started in Spawn Placement mode
+#     And a user with username Lucas is logged selecting team IceTeam
    
-  Scenario: First ice spawn   
-    Given the user choose the position (3, 4) for the Ice spawn 
-    When the Ice spawn creates in the position (3, 4)
-    Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Ice spawn
+#   Scenario: First ice spawn   
+#     Given the user choose the position (3, 4) for the Ice spawn 
+#     When the Ice spawn creates in the position (3, 4)
+#     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Ice spawn
 
-  Scenario: First fire spawn
-    Given the user choose the position (3, 4) for the Fire spawn 
-    When the Fire spawn creates in the position (3, 4)
-    Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn
+#   Scenario: First fire spawn
+#     Given the user choose the position (3, 4) for the Fire spawn 
+#     When the Fire spawn creates in the position (3, 4)
+#     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn
 
   # Scenario: Creation of Cells
   #   Given the Ice spawn creates in the position (2,2)

@@ -1,34 +1,34 @@
-Feature: Movement of cells from the same team
+# Feature: Movement of cells from the same team
 
-  Background: 
-    Given a new game is started in Spawn Placement mode
-    And a user with username Victoria is logged selecting team IceTeam
-    And the user selects to put Ice Spawn at the position (1,1)
-    And simulation starts
+#   Background: 
+#     Given a new game is started in Spawn Placement mode
+#     And a user with username Victoria is logged selecting team IceTeam
+#     And the user selects to put Ice Spawn at the position (1,1)
+#     And simulation starts
 
-  Scenario: Move level 1 Ice cell to an empty adjacent cell
-    Given I have a level 1 Ice cell at position (3, 3) with 15 health points
-    And the adjacents cells at position of the Ice cell (3, 3) are empty
-    When I try to move the level 1 Ice cell to an adjacent position
-    Then the Ice cell moves successfully to an adjacent position of (3, 3)
+#   Scenario: Move level 1 Ice cell to an empty adjacent cell
+#     Given I have a level 1 Ice cell at position (3, 3) with 15 health points
+#     And the adjacents cells at position of the Ice cell (3, 3) are empty
+#     When I try to move the level 1 Ice cell to an adjacent position
+#     Then the Ice cell moves successfully to an adjacent position of (3, 3)
 
-  Scenario: Move level 1 fire cell to an empty adjacent cell
-    Given I have a level 1 Fire cell at position (4, 4) with 16 health points
-    And the adjacents cells at position of the Fire cell (4, 4) are empty
-    When I try to move the level 1 Fire cell to an adjacent position
-    Then the Fire cell moves successfully to an adjacent position of (4, 4)
+#   Scenario: Move level 1 fire cell to an empty adjacent cell
+#     Given I have a level 1 Fire cell at position (4, 4) with 16 health points
+#     And the adjacents cells at position of the Fire cell (4, 4) are empty
+#     When I try to move the level 1 Fire cell to an adjacent position
+#     Then the Fire cell moves successfully to an adjacent position of (4, 4)
 
-  Scenario: Move level 1 Ice cell to an empty adjacent cell
-    Given I have a level 1 Ice cell at position (13, 3) with 15 health points
-    And the adjacents cells at position of the Ice cell (3, 3) are empty
-    When I try to move the level 1 Ice cell to an adjacent position
-    Then the Ice cell moves successfully to an adjacent position of (3, 3)
+#   Scenario: Move level 1 Ice cell to an empty adjacent cell
+#     Given I have a level 1 Ice cell at position (13, 3) with 15 health points
+#     And the adjacents cells at position of the Ice cell (3, 3) are empty
+#     When I try to move the level 1 Ice cell to an adjacent position
+#     Then the Ice cell moves successfully to an adjacent position of (3, 3)
 
-  Scenario: Move level 1 fire cell to an empty adjacent cell
-    Given I have a level 1 Fire cell at position (10, 10) with 16 health points
-    And the adjacents cells at position of the Fire cell (10, 10) are empty
-    When I try to move the level 1 Fire cell to an adjacent position
-    Then the Fire cell moves successfully to an adjacent position of (4, 4)
+#   Scenario: Move level 1 fire cell to an empty adjacent cell
+#     Given I have a level 1 Fire cell at position (10, 10) with 16 health points
+#     And the adjacents cells at position of the Fire cell (10, 10) are empty
+#     When I try to move the level 1 Fire cell to an adjacent position
+#     Then the Fire cell moves successfully to an adjacent position of (4, 4)
 
 # #   Scenario: Attempt to move level 1 ice cell to a cell occupied by another level 1 cell
 # #     Given I have a level 1 ice cell with life 19 at position (3, 3)

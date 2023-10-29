@@ -1,7 +1,7 @@
 import pytest
 import random
 from logic.board import Board
-from logic.cell import FireCell, IceCell, Cell, DeadCell, Level
+from logic.cell import FireCell, IceCell
 
 empty_board_params = [
     (2,2, ' | \n'\

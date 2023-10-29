@@ -101,8 +101,12 @@ class Box:
         if self.fire_cells:
             elements.append(",".join(str(cell) for cell in self.fire_cells))
         if self.ice_cells:
-            elements.append(", ".join(str(cell) for cell in self.ice_cells))
+            elements.append(",".join(str(cell) for cell in self.ice_cells))
         return ",".join(elements)
 
     def isEmpty(self):
         return not self.spawn and not self.fire_cells and not self.ice_cells and not self.fire_healing_area and not self.ice_healing_area
+    
+
+
+

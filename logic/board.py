@@ -1,9 +1,8 @@
 
-from logic.cell import IceCell, FireCell, DeadCell, Level
+from logic.cell import IceCell, FireCell
 from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
-#from logic.game_state import Team
 
 class Board:
 
@@ -30,9 +29,12 @@ class Board:
     def __len__(self):
         return self.rows
 
+    def get_columns(self):
+        return self.columns
+    
     @staticmethod
     def from_string(board_str):
-        board_rows = board_str.split('\n')
+        board_rows = [row.rstrip() for row in board_str.split('\n')]  # strip trailing spaces
         rows = len(board_rows)
         columns = len(board_rows[0].split('|'))
         new_board = Board(rows, columns)
@@ -57,7 +59,6 @@ class Board:
                         new_box.set_ice_healing_area(HealingArea(affected_cell_type=IceCell))
                     elif box_str == 'FH':
                         new_box.set_fire_healing_area(HealingArea(affected_cell_type=FireCell))
-                    # Add more elif conditions here for other cell types
                     else:
                         raise ValueError("Unknown object type: " + box_str)
                 new_board.board[i][j] = new_box
@@ -74,6 +75,12 @@ class Board:
 
     def get_cells(self, row, column):
         return self.get_box(row,column).get_cells()
+    
+    def get_ice_cells(self, row, column):
+        return self.get_box(row, column).get_ice_cells()
+    
+    def get_fire_cells(self, row, column):
+        return self.get_box(row, column).get_fire_cells()
     
     def get_spawn(self, row, column):
         return self.get_box(row,column).get_spawn()
@@ -92,25 +99,6 @@ class Board:
     #                 return (i, j)
     #     return None
 
-    def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
-        if 0 <= row < self.rows and 0 <= column < self.columns:
-            # Check if the cells exist in the position
-            cells_in_position = self.get_cells(row, column)
-            if cell not in cells_in_position or other_cell not in cells_in_position:
-                raise ValueError("One or both cells not found in the given position")
-
-            # Remove cell and other cell from the position
-            self.remove_cell(row, column, cell)
-            self.remove_cell(row, column, other_cell)
-
-            # Check if there are any cells left in the position
-            if not self.get_cells(row, column):
-                # If no cells left, add a dead cell to the position
-                dead_cell = DeadCell(position=(row,column), board=self)
-                self.add_cell(row, column, dead_cell)
-        else:
-            raise ValueError("Invalid row or column")
-
     def _check_position(self, row, column):
         length = len(self.board)
         if row == 0 or row == length - 1 or column == 0 or column == length - 1:
@@ -123,13 +111,12 @@ class Board:
         ice_spawn = None
         fire_spawn = None
         if spawn_team == IceSpawn:
-            ice_spawn = IceSpawn(positions=positions_spawn, board=self.board)
+            ice_spawn = IceSpawn(positions=positions_spawn)
         else:
-            fire_spawn = FireSpawn(positions=positions_spawn, board=self.board)
+            fire_spawn = FireSpawn(positions=positions_spawn)
         spawn = ice_spawn if ice_spawn else fire_spawn
         self.add_spawn(spawn=spawn)
         return spawn
-        #self.mode = GameMode.SIMULATION
 
     def create_healing_area(self, row, column, affected_cell_type):
         self._check_position(row, column)

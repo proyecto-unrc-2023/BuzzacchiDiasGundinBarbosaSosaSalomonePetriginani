@@ -1,9 +1,8 @@
 import pytest
 
-from logic.game_state import GameState, Team
-from logic.board import Level
-from logic.cell import FireCell, IceCell
-from logic.spawn import IceSpawn
+from logic.game_state import GameState, Team, GameMode
+from logic.cell import FireCell, IceCell, Level
+from logic.spawn import IceSpawn, FireSpawn
 
 @pytest.fixture
 def gamestate():
@@ -52,6 +51,40 @@ def test_advance_method(gamestate):
         result.get_cells(1, 0), result.get_cells(1, 2), result.get_cells(2, 0),
         result.get_cells(2, 1), result.get_cells(2, 2)
     ]
+
+def test_create_inverse_spawn():
+    game_state = GameState()
+    game_state.new_game(10,10)  
+
+    game_state.create_spawn(2, 2, IceSpawn)
+
+    ice_spawn = game_state.get_ice_spawn()
+    fire_spawn = game_state.get_fire_spawn()
+
+    expected_ice_positions = [(1,1), (1,2), (1,3), (2,1), (2,2), (2,3), (3,1), (3,2), (3,3)]
+    expected_fire_positions = [(6,6), (6,7), (6,8), (7,6), (7,7), (7,8), (8,6), (8,7), (8,8)]
+    assert ice_spawn.get_positions() == expected_ice_positions
+    assert fire_spawn.get_positions() == expected_fire_positions 
+    assert game_state.get_mode() == GameMode.SIMULATION
+    assert isinstance(ice_spawn, IceSpawn)
+    assert isinstance(fire_spawn, FireSpawn)
+
+def test_create_inverse_spawn_2():
+    game_state = GameState()
+    game_state.new_game(50,50)  
+
+    game_state.create_spawn(20, 20, IceSpawn)
+
+    ice_spawn = game_state.get_ice_spawn()
+    fire_spawn = game_state.get_fire_spawn()
+
+    expected_ice_positions = [(19, 19), (19, 20), (19, 21), (20, 19), (20, 20), (20, 21), (21, 19), (21, 20), (21, 21)]
+    expected_fire_positions = [(30, 30), (30, 29), (30, 28), (29, 30), (29, 29), (29, 28), (28, 30), (28, 29), (28, 28)]
+    assert set(ice_spawn.get_positions()) == set(expected_ice_positions)
+    assert set(fire_spawn.get_positions()) == set(expected_fire_positions) 
+    assert game_state.get_mode() == GameMode.SIMULATION
+    assert isinstance(ice_spawn, IceSpawn)
+    assert isinstance(fire_spawn, FireSpawn)
 
 ###########   Next test is not working if of 20 executions, 20 gives error. if some test pass method works ok.
 # @pytest.mark.parametrize("run", range(20))
@@ -138,3 +171,4 @@ def test_fusion_in_all_board(gamestate):
     assert cells_in_pos_11[0].level == Level.LEVEL_3
     assert cells_in_pos_11[1].life == 29
     assert cells_in_pos_11[1].level == Level.LEVEL_2
+

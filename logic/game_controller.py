@@ -32,8 +32,8 @@ class GameController:
     def get_team(self):
         return self.game_state.get_team()
     
-    def get_spawn(self, row, column):
-        return self.game_state.get_spawn(row, column)
+    def get_spawn(self, spawn_type):
+        return self.game_state.get_spawn(spawn_type)
     
     def no_spawns_in_pos(self, row, column):
         return self.game_state.no_spawns_in_pos(row, column)
@@ -43,16 +43,16 @@ class GameController:
         self.game_state.add_spawn(positions)
         
     def create_spawn(self, row, column, spawn_type):
-        if spawn_type == 'Ice':
+        if eval(spawn_type) == IceSpawn:
             self.game_state.create_spawn(row, column, IceSpawn)
         else:
             self.game_state.create_spawn(row, column, FireSpawn)
 
     def create_cell(self, row, column, cell_type, level, life):
-        if cell_type == 'Ice':
-            self.game_state.create_cell(row, column, Team.IceTeam, level, life)
+        if eval(cell_type) == IceCell:
+            self.game_state.create_cell(row, column, cell_type, level, life)
         else:
-            self.game_state.create_cell(row, column, Team.FireTeam, level, life)
+            self.game_state.create_cell(row, column, cell_type, level, life)
 
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
@@ -65,6 +65,12 @@ class GameController:
 
     def get_cells(self, row, column):
         return self.game_state.get_cells(row, column)
+    
+    def get_ice_cells(self, row, column):
+        return self.game_state.get_ice_cells(row, column)
+    
+    def get_fire_cells(self, row, column):
+        return self.game_state.get_fire_cells(row, column)
     
     def get_adyacents_pos(self, row, column):
         pos = (row, column)
@@ -80,14 +86,6 @@ class GameController:
     def get_cells_in_spawn(self, spawn):
         return self.game_state.get_cells_in_spawn(spawn)
 
-    def count_cells_by_type(self, row, column):
-        count_ice, count_fire = 0, 0
-        for cell in self.get_cells(row, column):
-            if isinstance(cell, FireCell):
-                count_fire += 1
-            elif isinstance(cell, IceCell):
-                count_ice += 1
-        return count_ice, count_fire
 
     def find_matching_cells(self, position, cell_type, life_points, level):
         cells = self.get_cells(*position)

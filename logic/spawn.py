@@ -4,10 +4,9 @@ from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=300, positions=None, board=None):
+    def __init__(self, life=300, positions=None):
         self.life = life
         self.positions = positions
-        self.board = board
         self.type = self.get_type()
         
     def set_life(self, life):
@@ -66,13 +65,11 @@ class Spawn:
                 cellN = Cell.__init__(1, 20, position, self.board)
 
     def fight(self, cell):
-        if cell.get_position() in self.get_positions():
-            new_life = self.get_life() - cell.get_life()
-            if new_life > 0:
-                self.set_life(new_life)
-                self.board.remove_cell(*cell.get_position(), cell)
-            else:
-                self.set_life(0)
+        new_life = self.get_life() - cell.get_life()
+        if new_life > 0:
+            self.set_life(new_life)
+        else:
+            self.set_life(0)
     
     @staticmethod
     def from_string(spawn_str):
