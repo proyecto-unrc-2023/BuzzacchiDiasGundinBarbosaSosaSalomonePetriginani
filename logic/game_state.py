@@ -107,7 +107,7 @@ class GameState:
         if (level== 3):
             level_enum = Level.LEVEL_3
 
-        if (eval(cell_type) == IceCell):
+        if (cell_type == IceCell):
             self.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos)))
         else:
             self.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos)))

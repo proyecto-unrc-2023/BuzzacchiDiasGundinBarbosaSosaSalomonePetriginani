@@ -50,9 +50,9 @@ class GameController:
 
     def create_cell(self, row, column, cell_type, level, life):
         if eval(cell_type) == IceCell:
-            self.game_state.create_cell(row, column, cell_type, level, life)
+            self.game_state.create_cell(row, column, IceCell, level, life)
         else:
-            self.game_state.create_cell(row, column, cell_type, level, life)
+            self.game_state.create_cell(row, column, FireCell, level, life)
 
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
