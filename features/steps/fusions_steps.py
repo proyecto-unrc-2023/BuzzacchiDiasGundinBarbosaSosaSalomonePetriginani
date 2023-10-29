@@ -1,170 +1,66 @@
+from behave import given, when, then
 from logic.cell import IceCell, FireCell, DeadCell, Cell, Level
 from logic.board import Board
-##########Scenario: Fusion Two Level 1 Ice Cells
-@given(u'I have a level 1 ice cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    context.state.board = Board(50, 50)  
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
 
-@given(u'another level 1 ice cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
+#Given a level 1 Ice cell at position (3, 3) with 5 health points
+@given(u'a level {level:d} {team} cell at position ({row:d}, {column:d}) with {life:d} health points')
+def step_imp(context, row, column, level, life, team):
+    context.GameController.create_cell(row, column, team, level, life)
+    
+@when(u'fusion start at position ({row:d}, {column:d})')
+def step_impl(context, row, column):
+    print(str(context.GameController.get_board().get_box(row, column)))
+    context.GameController.execute_fusion()
 
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
+@then(u'a level {level_c1:d} Ice cell is created at position ({row:d}, {column:d}) with {life:d} health points and the level {level_c2:d} Ice cells at ({row:d}, {column:d}) disappears from the battlefield')
+def step_impl(context, row, column, life, level_c1, level_c2):
+    print(str(context.GameController.get_board().get_box(row, column)))
+    assert len(context.GameController.get_cells(row, column)) == 1
+    assert isinstance(context.GameController.get_cells(row, column)[0], IceCell)
+    assert context.GameController.get_cells(row, column)[0].get_life() == life
+    assert context.GameController.get_cells(row, column)[0].get_level() == level_c1
 
-@then(u'a level 2 ice cell is created at position ({row:d},{column:d}) with {life:d} health points and the level 1 ice cells at ({row:d},{column:d}) disappears from the battlefield')
-def step_impl(context, row, column, life):
-    assert len(context.state.board.get_cells(row, column)) == 1
-    assert isinstance(context.state.board.get_cells(row, column)[0], IceCell)
-    assert context.state.board.get_cells(row, column)[0].get_life() == life
-    assert context.state.board.get_cells(row, column)[0].get_level() == 2
-    
-##########Scenario: Fusion Two Level 2 Fire Cells
-@given(u'I have a level 2 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    context.state.board = Board(50, 50)
-    fire_cell = FireCell(level=Level.LEVEL_2, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@given(u'another level 2 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    fire_cell = FireCell(level=Level.LEVEL_2, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
+@then(u'a level {level_c1:d} Fire cell is created at position ({row:d}, {column:d}) with {life:d} health points and the level {level_c2:d} Fire cells at ({row:d}, {column:d}) disappears from the battlefield')
+def step_impl(context, row, column, life, level_c1, level_c2):
+    assert len(context.GameController.get_cells(row, column)) == 1
+    assert isinstance(context.GameController.get_cells(row, column)[0], FireCell)
+    assert context.GameController.get_cells(row, column)[0].get_life() == life
+    assert context.GameController.get_cells(row, column)[0].get_level() == level_c1
 
-@then(u'a level 3 fire cell is created at position ({row:d},{column:d}) with {life:d} health points and the level 2 fire cells at ({row:d},{column:d}) disappears from the battlefield')
-def step_impl(context, row, column, life):
-    assert len(context.state.board.get_cells(row, column)) == 1
-    assert isinstance(context.state.board.get_cells(row,column)[0], FireCell)
-    assert context.state.board.get_cells(row,column)[0].get_life() == life
-    assert context.state.board.get_cells(row,column)[0].get_level() == 3
+@then(u'the Ice cells cannot merge, and both coexist two cells level {level_c1:d} with {life_c1:d} health points and other cell level {level_c2:d} with {life_c2:d} health points at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level_c1, level_c2, life_c1, life_c2):
+    assert len(context.GameController.get_cells(row, column)) == 2
+    assert isinstance(context.GameController.get_cells(row,column)[0], IceCell)
+    assert isinstance(context.GameController.get_cells(row,column)[1], IceCell)
+    assert context.GameController.get_cells(row,column)[0].get_life() == life_c1
+    assert context.GameController.get_cells(row,column)[0].get_level() == level_c1
+    assert context.GameController.get_cells(row,column)[1].get_life() == life_c2
+    assert context.GameController.get_cells(row,column)[1].get_level() == level_c2
+    
+@then(u'the Fire cells cannot merge, and both coexist two cells level {level_c1:d} with {life_c1:d} health points and other cell level {level_c2:d} with {life_c2:d} health points at position ({row:d}, {column:d})')
+def step_impl(context, row, column, level_c1, level_c2, life_c1, life_c2):
+    assert len(context.GameController.get_cells(row, column)) == 2
+    assert isinstance(context.GameController.get_cells(row,column)[0], FireCell)
+    assert isinstance(context.GameController.get_cells(row,column)[1], FireCell)
+    assert context.GameController.get_cells(row,column)[1].get_life() == life_c1
+    assert context.GameController.get_cells(row,column)[1].get_level() == level_c1
+    assert context.GameController.get_cells(row,column)[0].get_life() == life_c2
+    assert context.GameController.get_cells(row,column)[0].get_level() == level_c2
 
-############ Scenario: Attempt to merge two level 3 ice cells
-@given(u'I have a level 3 ice cell at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    context.state.board = Board(50, 50)
-    ice_cell = IceCell(level=Level.LEVEL_3, board=context.state.board, life=53, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
-    
-@given(u'another level 3 ice cell at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    ice_cell = IceCell(level=Level.LEVEL_3, board=context.state.board, life=45, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
-    
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
-    
-@then(u'the cells cannot merge, and both coexist at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    assert len(context.state.board.get_cells(row, column)) == 2
-    assert isinstance(context.state.board.get_cells(row,column)[0], IceCell)
-    assert isinstance(context.state.board.get_cells(row,column)[1], IceCell)
-    assert context.state.board.get_cells(row,column)[0].get_life() == 53
-    assert context.state.board.get_cells(row,column)[0].get_level() == 3
-    assert context.state.board.get_cells(row,column)[1].get_life() == 45
-    assert context.state.board.get_cells(row,column)[1].get_level() == 3
-    
-######## Scenario: Attempt to merge a level 2 fire cell with a level 3 fire cell
-@given(u'I have a level 2 fire cell at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    context.state.board = Board(50, 50)
-    fire_cell = FireCell(level=Level.LEVEL_2, board=context.state.board, life=21, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@given(u'a level 3 fire cell at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    fire_cell = FireCell(level=Level.LEVEL_3, board=context.state.board, life=41, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
-    
-@then(u'the cells cannot merge and both coexist in ({row:d},{column:d})')
-def step_impl(context, row, column):
-    assert len(context.state.board.get_cells(row, column)) == 2
-    assert isinstance(context.state.board.get_cells(row,column)[0], FireCell)
-    assert isinstance(context.state.board.get_cells(row,column)[1], FireCell)
-    assert context.state.board.get_cells(row,column)[0].get_life() == 21
-    assert context.state.board.get_cells(row,column)[0].get_level() == 2
-    assert context.state.board.get_cells(row,column)[1].get_life() == 41
-    assert context.state.board.get_cells(row,column)[1].get_level() == 3
+@then(u'a level {level_c1:d} Ice cell is created at position ({row:d}, {column:d}) with {life:d} health points and only one level {level_c2:d} Ice cell at ({row:d}, {column:d}) with {life_c2:d} health points disappears from the battlefield')
+def step_impl(context, row, column, life, life_c2, level_c1, level_c2):
+    print(str(context.GameController.get_cells(row,column)[0].get_life()))
+    assert len(context.GameController.get_cells(row, column)) == 2
+    assert isinstance(context.GameController.get_cells(row,column)[0], IceCell)
+    assert isinstance(context.GameController.get_cells(row,column)[1], IceCell)
+    assert context.GameController.get_cells(row,column)[0].get_life() == life
+    assert context.GameController.get_cells(row,column)[0].get_level() == level_c1
+    assert context.GameController.get_cells(row,column)[1].get_life() == life_c2
+    assert context.GameController.get_cells(row,column)[1].get_level() == level_c2
 
-##########    Scenario: Attempt to merge three level 1 ice cells
-@given(u'I have a level 1 ice cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    context.state.board = Board(50, 50)
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
-    
-@given(u'another level 1 ice cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    context.state.board = Board(50, 50)
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
-    
-@given(u'a third level 1 ice cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
-    
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
-    
-@then(u'a level 2 ice cell is created at position ({row:d},{column:d}) with {life:d} health points and only one level 1 ice cell at ({row:d},{column:d}) disappears from the battlefield')
-def step_impl(context, row, column, life):
-    assert len(context.state.board.get_cells(row, column)) == 2
-    assert isinstance(context.state.board.get_cells(row,column)[0], IceCell)
-    assert isinstance(context.state.board.get_cells(row,column)[1], IceCell)
-    assert context.state.board.get_cells(row,column)[0].get_life() == life
-    assert context.state.board.get_cells(row,column)[0].get_level() == 2
-    assert context.state.board.get_cells(row,column)[1].get_life() == 19
-    assert context.state.board.get_cells(row,column)[1].get_level() == 1
-
-########  Scenario: Merge four level 1 fire cells into two level 2 cells
-@given(u'I have a level 1 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    context.state.board = Board(50, 50)
-    fire_cell = FireCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@given(u'another level 1 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    fire_cell = FireCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@given(u'a third level 1 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    fire_cell = FireCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@given(u'a fourth level 1 fire cell at position ({row:d},{column:d}) with {life:d} health points')
-def step_impl(context, row, column, life):
-    fire_cell = FireCell(level=Level.LEVEL_1, board=context.state.board, life=life, position=(row,column))
-    context.state.board.add_cell(row, column, fire_cell)
-    
-@when(u'fusion start at position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    pos = (row,column)
-    context.state.board.fusion(pos)
-
-@then(u'a level 3 fire cells is created at position ({row:d},{column:d}) with {life:d} health points and all level 1 fire cells at ({row:d},{column:d}) disappears from the battlefield')
-def step_impl(context, row, column, life):
-    assert len(context.state.board.get_cells(row, column)) == 1
-    assert isinstance(context.state.board.get_cells(row,column)[0], FireCell)
-    assert context.state.board.get_cells(row,column)[0].get_life() == life
-    assert context.state.board.get_cells(row,column)[0].get_level() == 3
+@then(u'a level {level:d} Fire cells is created at position ({row:d}, {column:d}) with {life:d} health points and all level 1 Fire cells at ({row:d}, {column:d}) disappears from the battlefield')
+def step_impl(context, row, column, life, level):
+    assert len(context.GameController.get_cells(row, column)) == 1
+    assert isinstance(context.GameController.get_cells(row,column)[0], FireCell)
+    assert context.GameController.get_cells(row,column)[0].get_life() == life
+    assert context.GameController.get_cells(row,column)[0].get_level() == level

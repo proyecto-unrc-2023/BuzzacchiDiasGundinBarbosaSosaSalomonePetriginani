@@ -1,6 +1,8 @@
 
-from logic.cell import IceCell, FireCell, Cell, DeadCell
-from logic.spawn import Spawn, IceSpawn, FireSpawn
+from logic.cell import IceCell, FireCell
+from logic.spawn import IceSpawn, FireSpawn
+from logic.box import Box
+from logic.healing_area import HealingArea
 
 class Board:
 
@@ -10,138 +12,136 @@ class Board:
         if board is not None:
             self.board = board
         else:
-            self.board = [[[] for _ in range(columns)] for _ in range(rows)]
+            self.board = [[Box() for _ in range(columns)] for _ in range(rows)]
 
     def __str__(self):
         rows_str = []
         for row in self.board:
             cell_strs = []
-            for cell_list in row:
-                if not cell_list:
+            for box in row:
+                if box.isEmpty():
                     cell_strs.append(' ')
                 else:
-                    cell_strs.append(','.join(str(cell) for cell in cell_list))
+                    cell_strs.append(str(box))
             rows_str.append('|'.join(cell_strs))
         return '\n'.join(rows_str)
 
     def __len__(self):
         return self.rows
 
+    def get_columns(self):
+        return self.columns
+    
     @staticmethod
     def from_string(board_str):
-        board_rows = board_str.split('\n')
+        board_rows = [row.rstrip() for row in board_str.split('\n')]  # strip trailing spaces
         rows = len(board_rows)
         columns = len(board_rows[0].split('|'))
         new_board = Board(rows, columns)
         for i in range(rows):
-            row_cells = board_rows[i].split('|')
+            row_boxes = board_rows[i].split('|')
             for j in range(columns):
-                cell_strs = row_cells[j].split(',')
-                for cell_str in cell_strs:
-                    cell_str = cell_str.strip()
-                    if cell_str == '':
-                        new_board.add_cell(i, j, DeadCell())
-                    elif cell_str == 'F':
-                        new_board.add_cell(i, j, FireCell())
-                    elif cell_str == 'I':
-                        new_board.add_cell(i, j, IceCell())
+                box_strs = row_boxes[j].split(',')
+                new_box = Box()
+                for box_str in box_strs:
+                    box_str = box_str.strip()
+                    if box_str == '':
+                        continue  
+                    elif box_str == 'F':
+                        new_box.add_fire_cell(FireCell())
+                    elif box_str == 'I':
+                        new_box.add_ice_cell(IceCell())
+                    elif box_str == 'IS':
+                        new_box.set_spawn(IceSpawn())
+                    elif box_str == 'FS':
+                        new_box.set_spawn(FireSpawn())
+                    elif box_str == 'IH':
+                        new_box.set_ice_healing_area(HealingArea(affected_cell_type=IceCell))
+                    elif box_str == 'FH':
+                        new_box.set_fire_healing_area(HealingArea(affected_cell_type=FireCell))
                     else:
-                        raise ValueError("Unknown cell type: " + cell_str)
+                        raise ValueError("Unknown object type: " + box_str)
+                new_board.board[i][j] = new_box
         return new_board
-
+        
     def add_cell(self, row, column, cell):
-        self.board[row][column].append(cell)
-
-    def add_cell_by_tuple(self, position, cell):
-        row, column = position
-        self.add_cell(row, column, cell)
-
-    def remove_cell(self, row, column, cell):
-        self.board[row][column].remove(cell)
+        pos = (row, column)
+        cell.set_position(pos)
+        box = self.get_box(row, column)
+        if isinstance(cell, FireCell):
+            box.add_fire_cell(cell)
+        elif isinstance(cell, IceCell):
+            box.add_ice_cell(cell)
 
     def get_cells(self, row, column):
+        return self.get_box(row,column).get_cells()
+    
+    def get_ice_cells(self, row, column):
+        return self.get_box(row, column).get_ice_cells()
+    
+    def get_fire_cells(self, row, column):
+        return self.get_box(row, column).get_fire_cells()
+    
+    def get_spawn(self, row, column):
+        return self.get_box(row,column).get_spawn()
+    
+    def remove_cell(self, row, column, cell):
+        self.get_box(row, column).remove_cell(cell)
+
+    def get_box(self, row, column):
         return self.board[row][column]
 
-    def get_pos(self, cell):
-        for i, row in enumerate(self.board):
-            for j, cell_list in enumerate(row):
-                if cell in cell_list:
-                    return (i, j)
-        return None
-    
-    def fusion(self, pos):
-        merged = True
-        while merged:
-            merged = False
-            cells_aux = self.get_cells(pos[0], pos[1])
-            if (len(cells_aux) == 1) : 
-                break
-            cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.level))
-            for i in range(len(cells_aux)-1):
-                merged = cells_aux[i].fusion(cells_aux[i+1])
-                if (merged):
-                    break
+    #Innecesario?
+    # def get_pos(self, cell):
+    #     for i, row in enumerate(self.board):
+    #         for j, cell_list in enumerate(row):
+    #             if cell in cell_list:
+    #                 return (i, j)
+    #     return None
 
-    def execute_fusions_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                pos = (row, column)
-                self.fusion(pos)
-                
-    def convert_two_cells_to_dead_cell(self, row, column, cell, other_cell):
-        if 0 <= row < self.rows and 0 <= column < self.columns:
-            # Check if the cells exist in the position
-            cells_in_position = self.get_cells(row, column)
-            if cell not in cells_in_position or other_cell not in cells_in_position:
-                raise ValueError("One or both cells not found in the given position")
-
-            # Remove cell and other cell from the position
-            self.remove_cell(row, column, cell)
-            self.remove_cell(row, column, other_cell)
-
-            # Check if there are any cells left in the position
-            if not self.get_cells(row, column):
-                # If no cells left, add a dead cell to the position
-                dead_cell = DeadCell(position=(row,column), board=self)
-                self.add_cell(row, column, dead_cell)
-        else:
-            raise ValueError("Invalid row or column")
-
-    def add_spawn(self, positions, spawn):
-        for position in positions:
-            row, column = position
-            spawn.position = position
-            self.board[row][column].append(spawn)
-
-    def execute_fight_in_position(self, row, col):
-        cells = self.get_cells(row, col)
-        ice_cells = [cell for cell in cells if isinstance(cell, IceCell)]
-        fire_cells = [cell for cell in cells if isinstance(cell, FireCell)]
+    def _check_position(self, row, column):
+        length = len(self.board)
+        if row == 0 or row == length - 1 or column == 0 or column == length - 1:
+            raise ValueError("The position is on the edge of the board")
         
-        # Order by level and life by descendent order
-        ice_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
-        fire_cells.sort(key=lambda cell: (cell.get_level(), cell.get_life()), reverse=True)
+    def create_spawn(self, row, column, spawn_team):
+        self._check_position(row, column)
+        position = (row, column)
+        positions_spawn = self._get_adjacents_pos(position)
+        ice_spawn = None
+        fire_spawn = None
+        if spawn_team == IceSpawn:
+            ice_spawn = IceSpawn(positions=positions_spawn)
+        else:
+            fire_spawn = FireSpawn(positions=positions_spawn)
+        spawn = ice_spawn if ice_spawn else fire_spawn
+        self.add_spawn(spawn=spawn)
+        return spawn
 
-        while ice_cells and fire_cells:
-            ice_cells[0].fight(fire_cells[0])
-            ice_cells = [cell for cell in cells if isinstance(cell, IceCell) and cell in self.get_cells(row, col)]
-            fire_cells = [cell for cell in cells if isinstance(cell, FireCell) and cell in self.get_cells(row, col)]
+    def create_healing_area(self, row, column, affected_cell_type):
+        self._check_position(row, column)
+        position = (row, column)
+        positions_healing = self._get_adjacents_pos(position)
+        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
+        self.add_healing_area(self, healing_area)
 
-    def execute_fights_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.execute_fight_in_position(row, column)
-
-    def move_cells_in_position(self, row, column):
-        cells = self.get_cells(row, column)
-        while len(cells) != 0:
-            cell = cells[0]
-            cell.advance()
-            self.add_cell_by_tuple(cell.position, cell)
-            self.remove_cell(row, column, cell)
-            
-    def execute_movements_in_all_positions(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                self.move_cells_in_position(row, column)
-
+    def add_spawn(self, spawn):
+        positions_spawn = spawn.get_positions()
+        for position in positions_spawn:
+            self.get_box(*position).set_spawn(spawn)
+        
+    def add_healing(self, position, healing_area):
+        positions_healing = healing_area.get_positions()
+        for position in positions_healing:
+            self.get_box(*position).set_healing_area(healing_area)
+    
+    def _get_adjacents_pos(self, pos):
+        row, col = pos
+        length = len(self.board)
+        adjacentList = []
+        directions = [(i, j) for i in range(-1, 2) for j in range(-1, 2)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            if 0 <= new_row < length and 0 <= new_col < length:
+                adjacentList.append((new_row, new_col))
+        return adjacentList
