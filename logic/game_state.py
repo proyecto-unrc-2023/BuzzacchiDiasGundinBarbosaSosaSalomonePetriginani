@@ -211,21 +211,20 @@ class GameState:
         cells_ice_aux =  box.get_ice_cells()
         cells_fire_aux = box.get_fire_cells()
         remove_this_cells = []
-        # print("Comienzo de Fusion")
-        #For Ice Cells
         count_fusion = 1
-        # if(cells_ice_aux):
-        #     print("entre al if de ice")
         while(count_fusion > 0):
-        # print("entre al while de ice")
             count_fusion = 0
             remove_this_cells.clear()
             for i in range(len(cells_ice_aux)-1):
                 print("entre al for de ice")
                 if (cells_ice_aux[i].get_level() == cells_ice_aux[i+1].get_level()):
                     print("Entre al if level del ice")
-                    merged = cells_ice_aux[i+1].level_and_life_up()
+                    merged = cells_ice_aux[i+1].get_level() != Level.LEVEL_3
                     if(merged):
+                        if(cells_ice_aux[i+1].get_level() == Level.LEVEL_1):
+                            cells_ice_aux[i+1].set_life(40)
+                        else:
+                            cells_ice_aux[i+1].set_life(60)
                         remove_this_cells.append(cells_ice_aux[i])
                         count_fusion += 1
                     print("merge un Ice")
@@ -233,17 +232,18 @@ class GameState:
                 print("se elimino .Ice")
                 print(cell)
                 self.board.remove_cell(pos[0], pos[1], cell)
-        # For Fire Cells
         count_fusion = 1
-        # if(cells_fire_aux):
-        #     print("entre al if de fire")
         while(count_fusion > 0):
             count_fusion = 0
             remove_this_cells.clear()
             for i in range(len(cells_fire_aux)-1):
                 if (cells_fire_aux[i].get_level() == cells_fire_aux[i+1].get_level( )):
-                    merged = cells_fire_aux[i+1].level_and_life_up()
+                    merged = cells_fire_aux[i+1].get_level() != Level.LEVEL_3
                     if(merged):
+                        if(cells_fire_aux[i+1].get_level() == Level.LEVEL_1):
+                            cells_fire_aux[i+1].set_life(40)
+                        else:
+                            cells_fire_aux[i+1].set_life(60)
                         remove_this_cells.append(cells_fire_aux[i])
                         count_fusion += 1
                     print("merge un Fire")
@@ -251,20 +251,6 @@ class GameState:
                 print("se elimino .Fire")
                 print(cell)
                 self.board.remove_cell(pos[0], pos[1], cell)
-    
-        
-        # merged = True
-        # while merged:
-        #     merged = False
-        #     cells_aux = self.board.get_cells(pos[0], pos[1])
-        #     if (len(cells_aux) == 1) : 
-        #         break
-        #     cells_aux = sorted(cells_aux, key=lambda cell: (isinstance(cell, IceCell), isinstance(cell, FireCell), cell.get_level()))
-        #     for i in range(len(cells_aux)-1):
-        #         if (cells_aux[i].get_level() == cells_aux[i+1])
-        #         merged = cells_aux[i].fusion(cells_aux[i+1])
-        #         if (merged):
-        #             break
 
     def execute_fusions_in_all_positions(self):
         for row in range(self.board.rows):
