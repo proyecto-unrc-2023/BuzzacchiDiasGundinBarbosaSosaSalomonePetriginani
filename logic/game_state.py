@@ -8,26 +8,32 @@ from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.healing_area import HealingArea
 
 class GameMode(Enum):
-    NOT_STARTED = 1
-    SPAWN_PLACEMENT = 2
-    SIMULATION = 3
-    FINISHED = 4
+    NOT_STARTED = "NOT_STARTED"
+    SPAWN_PLACEMENT = "SPAWN_PLACEMENT"
+    SIMULATION = "SIMULATION"
+    FINISHED = "FINISHED"
+
+    def to_json(self):
+        return self.value
 
 class Team(Enum):
     IceTeam = "IceTeam"
     FireTeam = "FireTeam"
 
+    def to_json(self):
+        return self.value
+
 class GameState:
 
-    def __init__(self):
-        self.mode = GameMode.NOT_STARTED
-        self.board = None
-        self.team = None
-        self.username = None
-        self.ice_spawn = None
-        self.fire_spawn = None
-        self.ice_healing = None
-        self.fire_healing = None
+    def __init__(self, mode = GameMode.NOT_STARTED, board = None, team = None, username = None, ice_spawn = None, fire_spawn = None, ice_healing_area = None, fire_healing_area = None):
+        self.mode = mode
+        self.board = board
+        self.team = team
+        self.username = username
+        self.ice_spawn = ice_spawn
+        self.fire_spawn = fire_spawn
+        self.ice_healing_area = ice_healing_area
+        self.fire_healing_area = fire_healing_area
         #self.cell_id_counter = 1
 
     def new_game(self, rows, columns):
@@ -98,7 +104,7 @@ class GameState:
         else:
             self.fire_healing = self.board.create_healing_area(row, column, affected_cell_type)
 
-    def create_cell(self, row, column, cell_type, level, life):
+    def create_cell(self, row, column, cell_type, level=Level.LEVEL_1, life=20):
         pos = row, column
         if (level == 1):
            level_enum = Level.LEVEL_1

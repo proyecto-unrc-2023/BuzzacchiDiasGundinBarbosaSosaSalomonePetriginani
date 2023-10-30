@@ -2,7 +2,7 @@ import pytest
 
 from logic.board import Board
 from logic.cell import IceCell, FireCell
-from logic.spawn import IceSpawn
+from logic.spawn import IceSpawn, FireSpawn
 
 @pytest.fixture
 def board():
@@ -30,7 +30,23 @@ def test_get_box(board):
     assert cell1 in cells
     assert cell2 in cells
 
-# def test_get_pos(board):
+def test_to_string():
+    board = Board(8,8)
+    board.create_spawn(1,1, IceSpawn)
+    board.create_spawn(6,6, FireSpawn)
+    board.create_healing_area(4,4, IceCell)
+    board.add_cell(5,5,IceCell())
+    string_board = str(board)
+    assert string_board == 'IS|IS|IS| | | | | \n'\
+                           'IS|IS|IS| | | | | \n'\
+                           'IS|IS|IS| | | | | \n'\
+                           ' | | |IH|IH|IH| | \n'\
+                           ' | | |IH|IH|IH| | \n'\
+                           ' | | |IH|IH|FS,IH,I|FS|FS\n'\
+                           ' | | | | |FS|FS|FS\n'\
+                           ' | | | | |FS|FS|FS'\
+
+# def test_get_pos(board):s
 #     cell1 = FireCell()
 #     cell2 = IceCell()
 #     board.add_cell(0, 0, cell1)

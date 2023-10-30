@@ -6,7 +6,6 @@ class CellSchema(Schema):
     level = EnumField(Level, by_value=True)
     life = fields.Int()
     position = fields.Tuple((fields.Int(), fields.Int()))
-    type = fields.Str()
 
 
 

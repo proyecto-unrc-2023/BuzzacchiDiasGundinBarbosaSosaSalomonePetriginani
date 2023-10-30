@@ -7,6 +7,8 @@ from logic.board import Board
 from api.games import init_game_bp
 from random import randint, choice
 from logic.spawn import IceSpawn
+from api.games.game_state_schema import GameStateSchema
+from api.games.game_state_model import GameStateModel
 
 # Global variable to store game data
 game_data = {
@@ -58,10 +60,9 @@ def get_cells():
 
 @init_game_bp.route('/get_board', methods=['GET'])
 def get_board():
-    board = Board(2, 2)
+    board = Board(5, 5)
 
-    # ice_spawn = IceSpawn(300, [(0,0),(1,0),(0,1),(1,1)], board=Board)
-    # board.add_spawn(ice_spawn.positions, ice_spawn)
+    board.create_spawn(1,1, IceSpawn)
 
     # crear celulas
     for _ in range(1):

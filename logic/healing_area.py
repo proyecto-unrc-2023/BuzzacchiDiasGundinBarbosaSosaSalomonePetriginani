@@ -1,4 +1,4 @@
-from logic.cell import Cell, Level
+from logic.cell import Cell, Level, IceCell
 
 class HealingArea:
     
@@ -6,7 +6,8 @@ class HealingArea:
         self.positions = positions
         self.duration = 100  
         self.healing_rate = 3  
-        self.affected_cell_type = affected_cell_type  
+        self.affected_cell_type = affected_cell_type
+        self.type = self.get_type()
     
     def get_positions(self):
         return self.positions
@@ -23,13 +24,13 @@ class HealingArea:
             self.duration -= 1
 
     def get_type(self):
-        if self.affected_cell_type == 'IceCell':
+        if self.affected_cell_type == IceCell:
             return 'IceHealingArea'
         else:
             return 'FireHealingArea'
         
     def __str__(self):
-        if self.affected_cell_type == 'IceCell':
+        if self.affected_cell_type == IceCell:
             return 'IH'
         else:
             return 'FH'

@@ -1,6 +1,5 @@
-from marshmallow import Schema, fields #, post_load
-from logic.cell import Level
-from marshmallow_enum import EnumField
+
+from marshmallow import Schema, fields 
 
 class SpawnSchema(Schema):
     life = fields.Int()
