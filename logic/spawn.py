@@ -27,6 +27,17 @@ class Spawn:
     def __str__(self):
         return 'SP' 
     
+    def get_adjacents_spawn(self):
+        row, col = self.pos
+        length = len(self.board)
+        adjacentList = []
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        for dr, dc in directions:
+            new_row, new_col = row + dr, col + dc
+            if 0 <= new_row < length and 0 <= new_col < length:
+                adjacentList.append((self.get_adjacents_for_move([new_row, new_col])))
+        return adjacentList
+        
     def get_adjacents_for_move(self, posXY):
         row, col = posXY
         length = len(self.board)
@@ -38,26 +49,13 @@ class Spawn:
                 adjacentList.append((new_row, new_col))
         return adjacentList
     
-    def get_adjacents(self, posXY):
-        row, col = posXY
-        length = len(self.board)
-        adjacentList = []
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
-        for dr, dc in directions:
-            new_row, new_col = row + dr, col + dc
-            if 0 <= new_row < length and 0 <= new_col < length:
-                cell = self.board.get_cells(new_row, new_col)
-                if (str(cell) == ' '):
-                    adjacentList.append(cell)
-        return adjacentList
-    
     def get_type(self):
         return 'Spawn'
 
     def generate_cells(self):
         if self.position is not None:
             tuplePos = self.position
-            positionsList = self.get_adjacents_for_move(tuplePos)
+            positionsList = self.get_adjacents_spawn()
             cantCells = random.randint(0,4)
             for i in range(cantCells):
                 position = random.choice(positionsList)
@@ -105,7 +103,7 @@ class FireSpawn(Spawn):
             positionsList = []
             tuplePos = self.positions
             for pos in tuplePos:
-                list = self.get_adjacents_for_move(pos)
+                list = self.get_adjacents_spawn()
                 if list:
                     positionsList.append(list)
                     pos = random.choice(positionsList)
@@ -133,7 +131,7 @@ class IceSpawn(Spawn):
             positionsList = []
             tuplePos = self.positions
             for pos in tuplePos:
-                list = self.get_adjacents_for_move(pos)
+                list = self.get_adjacents_spawn()
                 if list:
                     positionsList.append(list)
                     position = random.choice(positionsList)
