@@ -16,12 +16,11 @@ def test_create_spawn_error():
 
 def test_generate_cells_with_position():
     board = Board(10, 10)
-    spawn = FireSpawn(position=(5, 5))
-    spawn.set_board(board)
-    cantCells = len(spawn.generate_cells())
-    assert 0 < cantCells <= 4
-
-
+    board.create_spawn(1,1, IceSpawn)
+    spawn = board.get_box(1,1).get_spawn()
+    adjacents_spawn = spawn.get_adjacents_spawn(board.__len__())
+    list = [(3, 3), (3, 2), (3, 1), (3, 0), (2, 3), (1, 3), (0, 3)]
+    assert set(adjacents_spawn) == set(list)
 
 def test_decrease_life_with_no_damage():
     spawn = FireSpawn(life=10)
@@ -42,11 +41,4 @@ def test_create_spawn_from_valid_str():
     res = Spawn.from_string("SP")
     assert isinstance(res, Spawn)
 
-def test_create_spawn_from_valid_str_with_position():
-    board = Board(10, 10)
-    res = Spawn.from_string("SP")
-    res.set_board(board)
-    res.set_position((5, 5))
-    assert isinstance(res, Spawn)
-    assert res.position == (5, 5)
-    assert res.board == board
+    

@@ -45,7 +45,8 @@ def test_get_box(board):
 
 def test_create_spawn(board):
     board.create_spawn(1, 1, IceSpawn)
-    adjacent_positions = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)]
+    spawn = board.get_box(1,1).get_spawn().positions
+    adjacent_positions = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2), (1, 1)]
     assert board.get_box(1, 1).get_spawn() is not None
     assert isinstance(board.get_box(1,1).get_spawn(), IceSpawn)
 

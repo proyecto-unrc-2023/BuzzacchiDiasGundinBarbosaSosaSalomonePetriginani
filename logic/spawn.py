@@ -18,9 +18,9 @@ class Spawn:
     def set_position(self, pos):
         self.positions = pos
     
-    def set_board(self, board):
-        self.board = board
-        
+ #   def set_board(self, board):
+ #       self.board = board
+ #       
     def get_positions(self):
         return self.positions
 
@@ -35,15 +35,14 @@ class Spawn:
     def __str__(self):
         return 'SP' 
     
-    def get_adjacents_spawn(self):
-        row, col = self.positions
-        length = len(self.board)
+    def get_adjacents_spawn(self, length):
+        row, col = self.positions[4]
         adjacentList = []
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
+        directions = [(-1, -2), (-2, -2), (-2, -1), (-2, 0), (-2, -1), (-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0), (2, -1), (2, -2), (1, -2), (0, -2)]
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                adjacentList.append((self.get_adjacents_for_move([new_row, new_col])))
+                adjacentList.append((new_row, new_col))
         return adjacentList
         
     def get_adjacents_for_move(self, posXY):
