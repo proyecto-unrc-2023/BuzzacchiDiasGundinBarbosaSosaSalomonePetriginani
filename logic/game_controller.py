@@ -93,5 +93,5 @@ class GameController:
         return matching_cells
 
     
-    def generate_cell(self):
-        self.game_state.generate_cell()
+    def generate_cells(self):
+        self.game_state.generate_cells()

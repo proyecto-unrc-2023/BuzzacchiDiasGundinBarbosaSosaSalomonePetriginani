@@ -257,20 +257,6 @@ class GameState:
             for column in range(self.board.columns):
                 pos = (row, column)
                 self.fusion(pos)
-    
-    def generate_cell(self):
-        for row in range(self.board.rows):
-            for column in range(self.board.columns):
-                list = self.get_cells(row, column)
-                if list is not None:
-                    for cell in list:
-                        if isinstance(cell, Spawn):
-                            spawn = cell
-        num = random.randint(1,4)
-        for j in range(num):
-            cell = spawn.generate_cell()
-            r, c = cell.get_position()
-            self.get_board().add_cell(r, c, cell)
 
     def check_simulation(self):
         if self.ice_spawn is not None and self.fire_spawn is not None: 
@@ -287,3 +273,17 @@ class GameState:
             self.fire_spawn = self.board.create_spawn(inverse_row, inverse_column, FireSpawn)
         else:
             self.ice_spawn = self.board.create_spawn(inverse_row, inverse_column, IceSpawn)
+
+    def generate_cells(self):
+        adj_ice = self.ice_spawn.get_adjacents_spawn(self.board.__len__())
+        adj_fire = self.fire_spawn.get_adjacents_spawn(self.board.__len__())
+        num_ice = random.randint(0,4)
+        num_fire = random.randint(0,4)
+        for i in range(num_ice + 1):
+            r,c = random.choice(adj_ice)
+            self.create_cell(r, c, IceCell, 1, 20)
+        
+        for j in range(num_fire + 1):
+            r,c = random.choice(adj_fire)
+            self.create_cell(r, c, FireCell, 1, 20)
+
