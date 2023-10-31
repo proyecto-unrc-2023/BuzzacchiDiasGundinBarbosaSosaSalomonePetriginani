@@ -16,14 +16,12 @@ def test_create_spawn_error():
 
 def test_generate_cells_with_position():
     board = Board(10, 10)
-    spawn = FireSpawn(position=(5, 5), board=board)
-    spawn.generate_cells()
-    cantCells = 0
-    for i in range(10):
-        for j in range(10):
-            if(board.get_cells(i, j).__str__() == 'F'):
-                cantCells += 1
-    assert 0 <= cantCells <= 4
+    spawn = FireSpawn(position=(5, 5))
+    spawn.set_board(board)
+    cantCells = len(spawn.generate_cells())
+    assert 0 < cantCells <= 4
+
+
 
 def test_decrease_life_with_no_damage():
     spawn = FireSpawn(life=10)

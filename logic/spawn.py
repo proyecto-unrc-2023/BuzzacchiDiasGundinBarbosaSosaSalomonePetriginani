@@ -1,12 +1,12 @@
-import random
+import random 
 from abc import ABC, abstractmethod
 from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=300, positions=None):
+    def __init__(self, life=300, position=None):
         self.life = life
-        self.positions = positions
+        self.position = position
         self.type = self.get_type()
         
     def set_life(self, life):
@@ -15,20 +15,28 @@ class Spawn:
     def set_board(self, board):
         self.board = board
         
+    def set_position(self, pos):
+        self.position = pos
+    
+    def set_board(self, board):
+        self.board = board
+        
     def get_positions(self):
-        return self.positions
+        return self.position
 
     def get_life(self):
         return self.life
         
     def decrease_life(self, damage):
-        life -= damage
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
     
     def __str__(self):
         return 'SP' 
     
     def get_adjacents_spawn(self):
-        row, col = self.pos
+        row, col = self.position
         length = len(self.board)
         adjacentList = []
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
@@ -53,14 +61,17 @@ class Spawn:
         return 'Spawn'
 
     def generate_cells(self):
-        if self.position is not None:
-            tuplePos = self.position
+        if self.position is None:
+            raise ValueError("Posición inválida")
+        else:
             positionsList = self.get_adjacents_spawn()
-            cantCells = random.randint(0,4)
-            for i in range(cantCells):
+            cantCells = random.randint(1,4)
+            retListCells = []
+            for i in range(cantCells + 1):
                 position = random.choice(positionsList)
                 positionsList.remove(position)
-                cellN = Cell.__init__(1, 20, position, self.board)
+                retListCells.append(position)
+            return retListCells
 
     def fight(self, cell):
         new_life = self.get_life() - cell.get_life()
@@ -71,7 +82,9 @@ class Spawn:
     
     @staticmethod
     def from_string(spawn_str):
-        if spawn_str == IceSpawn().__str__():
+        if spawn_str == Spawn().__str__():
+            return Spawn()
+        elif spawn_str == IceSpawn().__str__():
             return IceSpawn()
         elif spawn_str == FireSpawn().__str__():
             return FireSpawn()
@@ -87,7 +100,9 @@ class FireSpawn(Spawn):
         self.board = board
         
     def decrease_life(self, damage):
-        life -= damage
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
     
     def __str__(self):
         return 'FS'
@@ -99,9 +114,9 @@ class FireSpawn(Spawn):
         return isinstance(other, FireSpawn)    
     
     def generate_cell(self):
-        if self.positions is not None:
+        if self.position is not None:
             positionsList = []
-            tuplePos = self.positions
+            tuplePos = self.position
             for pos in tuplePos:
                 list = self.get_adjacents_spawn()
                 if list:
@@ -124,12 +139,14 @@ class IceSpawn(Spawn):
         self.board = board
         
     def decrease_life(self, damage):
-        life -= damage
-        
+        self.life -= damage
+        if(self.life < 0):
+            self.life = 0
+    
     def generate_cell(self):
-        if self.positions is not None:
+        if self.position is not None:
             positionsList = []
-            tuplePos = self.positions
+            tuplePos = self.position
             for pos in tuplePos:
                 list = self.get_adjacents_spawn()
                 if list:

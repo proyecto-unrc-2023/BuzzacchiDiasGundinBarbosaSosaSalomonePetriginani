@@ -1,4 +1,3 @@
-#from logic.board import Board
 from abc import ABC, abstractmethod
 
 from enum import IntEnum
@@ -74,7 +73,8 @@ class Cell:
     def set_level(self, level):
         if level is None:
             raise ValueError("Level cant be none")
-        if level not in Level:
+        values = [member.value for member in Level]
+        if level not in values:
             raise ValueError("Level must be in [1,2,3]")
         self.level = level
         
