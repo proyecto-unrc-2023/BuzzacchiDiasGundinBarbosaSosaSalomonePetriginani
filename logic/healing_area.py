@@ -10,6 +10,12 @@ class HealingArea:
     
     def get_positions(self):
         return self.positions
+    
+    def get_healing_rate(self):
+        return self.healing_rate
+    
+    def set_healing_rate(self, healing_rate):
+        self.healing_rate = healing_rate
 
     def apply_effect(self, cells):
         if self.duration > 0:

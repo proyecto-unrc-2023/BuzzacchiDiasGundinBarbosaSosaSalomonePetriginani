@@ -2,14 +2,14 @@ from behave import given, when, then
 from logic.board import Board
 from logic.cell import IceCell, FireCell, DeadCell, Cell, Level
 from logic.healing_area import HealingArea
-
+from logic.game_state import GameMode, GameState
+from logic.game_controller import GameController
 
 #########
-@given(u'there is a level 1 IceCell with 15 life points in position ({row:d},{column:d})')
-def step_impl(context, row, column):
-    context.state.board = Board(10, 10)
-    ice_cell = IceCell(level=Level.LEVEL_1, board=context.state.board, life=15, position=(row,column))
-    context.state.board.add_cell(row, column, ice_cell)
+@given(u'there is a level {level:d} {cell_type} with {life:d} life points in position ({row:d},{column:d})')
+def step_impl(context, row, column, level, cell_type, life):
+    context.GameController.new_game(10, 10)
+    context.GameController.create_cell(row, column, cell_type, level, life)
 
 @given(u'a HealingArea affecting IceCells is at positions [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]')
 def step_impl(context):
