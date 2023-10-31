@@ -279,11 +279,13 @@ class GameState:
         adj_fire = self.fire_spawn.get_adjacents_spawn(self.board.__len__())
         num_ice = random.randint(0,4)
         num_fire = random.randint(0,4)
-        for i in range(num_ice + 1):
+        i = 0
+        j = 0
+        while i < range(num_ice):
             r,c = random.choice(adj_ice)
             self.create_cell(r, c, IceCell, 1, 20)
-        
-        for j in range(num_fire + 1):
+            i += 1
+        while j < range(num_fire):
             r,c = random.choice(adj_fire)
             self.create_cell(r, c, FireCell, 1, 20)
-
+            j += 1 
