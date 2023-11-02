@@ -32,8 +32,6 @@ class GameState:
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
-        # self._add_healing_area(Team.IceTeam)
-        # self._add_healing_area(Team.FireTeam)
         self.mode = GameMode.SPAWN_PLACEMENT
         
     def set_board(self, board):
@@ -118,6 +116,8 @@ class GameState:
         else:
             self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
         self.create_inverse_spawn(row, column, spawn_team)
+        self.board.create_healing_area(Team.IceTeam)
+        self.board.create_healing_area(Team.FireTeam)
         self.check_simulation()
     
     def execute_fight_in_position(self, row, col):
