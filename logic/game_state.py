@@ -92,9 +92,9 @@ class GameState:
             
     def create_healing_area(self, row, column, affected_cell_type):
         if affected_cell_type == IceCell:
-            self.ice_healing = self.board.create_healing_area(row, column, affected_cell_type)
+            self.ice_healing = self.board.create_healing_area(row, column, IceCell)
         else:
-            self.fire_healing = self.board.create_healing_area(row, column, affected_cell_type)
+            self.fire_healing = self.board.create_healing_area(row, column, FireCell)
 
     def create_cell(self, row, column, cell_type, level, life):
         pos = row, column
