@@ -172,3 +172,25 @@ def test_fusion_in_all_board(gamestate):
     assert cells_in_pos_11[1].life == 29
     assert cells_in_pos_11[1].level == Level.LEVEL_2
 
+def test_generate_cells():
+    game = GameState()
+    game.set_team(Team.FireTeam)
+    game.new_game(40, 40)
+    game.create_spawn(1, 1, FireSpawn)
+    game.generate_cells()
+    adj_fire = game.fire_spawn.get_adjacents_spawn(40)
+    adj_ice = game.ice_spawn.get_adjacents_spawn(40)
+
+    for i in adj_fire:
+        r, c = i 
+        if (game.get_cells(r,c) != 0):
+            cells = game.get_cells(r,c)
+            for cell in cells:
+                assert isinstance(cell, FireCell)
+    
+    for j in adj_ice:
+        r, c = j 
+        if (game.get_cells(r,c) != 0):
+            cells = game.get_cells(r,c)
+            for cell in cells:
+                assert isinstance(cell, IceCell)

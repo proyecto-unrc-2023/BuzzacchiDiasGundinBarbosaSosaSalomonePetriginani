@@ -83,6 +83,9 @@ class GameController:
     def get_ice_spawn(self):
         return self.game_state.get_ice_spawn()
     
+    def get_fire_spawn(self):
+        return self.game_state.get_fire_spawn()
+    
     def get_cells_in_spawn(self, spawn):
         return self.game_state.get_cells_in_spawn(spawn)
 
