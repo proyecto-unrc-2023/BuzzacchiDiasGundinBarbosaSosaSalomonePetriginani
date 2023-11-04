@@ -3,6 +3,7 @@ from logic.cell import IceCell, FireCell
 from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
+import json
 
 class Board:
 
@@ -127,6 +128,7 @@ class Board:
         positions_healing = self._get_adjacents_pos(position)
         healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
         self.add_healing_area(self, healing_area)
+        return healing_area
 
     def add_spawn(self, spawn):
         positions_spawn = spawn.get_positions()
@@ -148,3 +150,21 @@ class Board:
             if 0 <= new_row < length and 0 <= new_col < length:
                 adjacentList.append((new_row, new_col))
         return adjacentList
+
+    @classmethod
+    def create_from_dict(cls, dict):
+        rows = dict['rows']
+        columns = dict['columns']
+        board = [[Box.create_from_dict(box_dict) for box_dict in row] for row in dict['board']]
+        return cls(rows, columns, board)
+
+    def __eq__(self, other):
+        if not isinstance(other, Board):
+            return NotImplemented
+        if self.rows != other.rows or self.columns != other.columns:
+            return False
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.board[i][j] != other.board[i][j]:
+                    return False
+        return True

@@ -4,9 +4,13 @@ from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=300, positions=None):
+    def __init__(self, life=300, positions=None, type=None):
         self.life = life
-        self.positions = positions
+        if positions is not None:
+            # Convert JSON list representations to tuples for immutable coordinates.
+            self.positions = [tuple(position) for position in positions]
+        else:
+            self.positions = []
         self.type = self.get_type()
         
     def set_life(self, life):
@@ -79,6 +83,13 @@ class Spawn:
             return FireSpawn()
         else:
             raise ValueError(f'Invalid spawn string: {spawn_str}')
+        
+    @classmethod
+    def create_from_dict(cls, dict):
+        if dict is not None:
+            return cls(dict['life'], dict['positions'], dict['type'])
+        else:
+            return None
 
 class FireSpawn(Spawn):
         
@@ -97,9 +108,6 @@ class FireSpawn(Spawn):
     def get_type(self):
         return 'FireSpawn'
     
-    def __eq__(self, other):
-        return isinstance(other, FireSpawn)    
-    
     def generate_cell(self):
         if self.positions is not None:
             positionsList = []
@@ -112,12 +120,20 @@ class FireSpawn(Spawn):
                 cell = (FireCell(position = pos, board = self.board))
             return cell  
 
+    @classmethod
+    def create_from_dict(cls, dict):
+        if dict is not None and dict['type'] == 'FireSpawn':
+            return cls(dict['life'], dict['positions'], dict['type'])
+        else:
+            return None
+        
+    def __eq__(self, other):
+        if isinstance(other, Spawn):
+            return self.life == other.life and self.positions == other.positions and self.type == other.type
+        return False
 class IceSpawn(Spawn):
     def __str__(self):
         return 'IS'
-    
-    def __eq__(self, other):
-        return isinstance(other, IceSpawn)
         
     def set_life(self, life):
         self.life = life
@@ -138,6 +154,38 @@ class IceSpawn(Spawn):
                     positionsList.append(list)
                     position = random.choice(positionsList)
                 cell = (IceCell(position = position, board = self.board))
-            return cell    
+            return cell
+            
     def get_type(self):
         return 'IceSpawn'
+    
+    @classmethod
+    def create_from_dict(cls, dict):
+        if dict is not None and dict['type'] == 'IceSpawn':
+            return cls(dict['life'], dict['positions'], dict['type'])
+        else:
+            return None
+    
+    def __eq__(self, other):
+        if isinstance(other, Spawn):
+            return self.life == other.life and self.positions == other.positions and self.type == other.type
+        return False
+
+    ######Eq para ver donde esta el error
+    # def __eq__(self, other):
+    #     if not isinstance(other, Spawn):
+    #         return NotImplemented
+
+    #     if self.life != other.life:
+    #         print(f"Life mismatch: {self.life} != {other.life}")
+    #         return False
+        
+    #     if self.positions != other.positions:
+    #         print(f"Positions mismatch: {self.positions} != {other.positions}")
+    #         return False
+        
+    #     if self.type != other.type:
+    #         print(f"Type mismatch: {self.type} != {other.type}")
+    #         return False
+
+    #     return True

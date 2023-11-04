@@ -6,7 +6,7 @@ from logic.board import Board
 from logic.box import Box
 from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.healing_area import HealingArea
-
+import json
 class GameMode(Enum):
     NOT_STARTED = "NOT_STARTED"
     SPAWN_PLACEMENT = "SPAWN_PLACEMENT"
@@ -41,7 +41,50 @@ class GameState:
         # self._add_healing_area(Team.IceTeam)
         # self._add_healing_area(Team.FireTeam)
         self.mode = GameMode.SPAWN_PLACEMENT
-        
+    
+    def __eq__(self, other):
+        if isinstance(other, GameState):
+            return (self.mode == other.mode and
+                    self.board == other.board and
+                    self.team == other.team and
+                    self.username == other.username and
+                    self.ice_spawn == other.ice_spawn and
+                    self.fire_spawn == other.fire_spawn and
+                    self.ice_healing_area == other.ice_healing_area and
+                    self.fire_healing_area == other.fire_healing_area)
+        return False
+    
+    ####Eq para ver donde esta el error
+    # def __eq__(self, other):
+    #     if isinstance(other, GameState):
+    #         if self.mode != other.mode:
+    #             print(f"Mode mismatch: {self.mode} != {other.mode}")
+    #             return False
+    #         if self.board != other.board:
+    #             print(f"Board mismatch: {self.board} != {other.board}")
+    #             return False
+    #         if self.team != other.team:
+    #             print(f"Team mismatch: {self.team} != {other.team}")
+    #             return False
+    #         if self.username != other.username:
+    #             print(f"Username mismatch: {self.username} != {other.username}")
+    #             return False
+    #         if self.ice_spawn != other.ice_spawn:
+    #             print(f"Ice spawn mismatch: {self.ice_spawn} != {other.ice_spawn}")
+    #             return False
+    #         if self.fire_spawn != other.fire_spawn:
+    #             print(f"Fire spawn mismatch: {self.fire_spawn} != {other.fire_spawn}")
+    #             return False
+    #         if self.ice_healing_area != other.ice_healing_area:
+    #             print(f"Ice healing area mismatch: {self.ice_healing_area} != {other.ice_healing_area}")
+    #             return False
+    #         if self.fire_healing_area != other.fire_healing_area:
+    #             print(f"Fire healing area mismatch: {self.fire_healing_area} != {other.fire_healing_area}")
+    #             return False
+    #         # Si todas las comprobaciones son iguales, retornamos True.
+    #         return True
+    #     return False
+    
     def set_board(self, board):
         self.board = board
 
@@ -54,6 +97,9 @@ class GameState:
     def set_mode(self, mode):
         self.mode = mode
 
+    def get_username(self):
+        return self.username
+    
     def get_board(self):
         return self.board
     
@@ -81,6 +127,12 @@ class GameState:
     def get_team(self):
         return self.team
     
+    def get_ice_healing_area(self):
+        return self.ice_healing_area
+    
+    def get_fire_healing_area(self):
+        return self.fire_healing_area
+    
     def add_cell(self, row, column, cell):
         self.board.add_cell(row, column, cell)
 
@@ -100,23 +152,25 @@ class GameState:
             
     def create_healing_area(self, row, column, affected_cell_type):
         if affected_cell_type == IceCell:
-            self.ice_healing = self.board.create_healing_area(row, column, affected_cell_type)
+            self.ice_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
         else:
-            self.fire_healing = self.board.create_healing_area(row, column, affected_cell_type)
+            self.fire_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
 
-    def create_cell(self, row, column, cell_type, level=Level.LEVEL_1, life=20):
+    def create_cell(self, row, column, cell_type, level=1, life=20):  # Asumiendo que el nivel por defecto es 1
         pos = row, column
-        if (level == 1):
-           level_enum = Level.LEVEL_1
-        if (level == 2):
+        level_enum = Level.LEVEL_1
+
+        if level == 1:
+            level_enum = Level.LEVEL_1
+        elif level == 2:
             level_enum = Level.LEVEL_2
-        if (level== 3):
+        elif level == 3:
             level_enum = Level.LEVEL_3
 
-        if (cell_type == IceCell):
-            self.add_cell(row, column, (IceCell(level=level_enum, life = life, position=pos)))
+        if cell_type == IceCell:
+            self.add_cell(row, column, IceCell(level=level_enum, life=life, position=pos))
         else:
-            self.add_cell(row, column, (FireCell(level=level_enum, life=life, position=pos)))
+            self.add_cell(row, column, FireCell(level=level_enum, life=life, position=pos))
 
     def create_spawn(self, row, column, spawn_team):
         if spawn_team == IceSpawn:
@@ -307,3 +361,17 @@ class GameState:
             self.fire_spawn = self.board.create_spawn(inverse_row, inverse_column, FireSpawn)
         else:
             self.ice_spawn = self.board.create_spawn(inverse_row, inverse_column, IceSpawn)
+
+    @classmethod
+    def create_from_dict(cls, dict):
+        mode = GameMode(dict['mode'])
+        board_dict = json.loads(dict['board']) if isinstance(dict['board'], str) else dict['board']
+        board = Board.create_from_dict(board_dict)
+        #board = Board.create_from_dict(dict['board'])
+        team = Team(dict['team'])
+        username = dict['username']
+        ice_spawn = IceSpawn.create_from_dict(dict['ice_spawn'])
+        fire_spawn = FireSpawn.create_from_dict(dict['fire_spawn'])
+        ice_healing_area = HealingArea.create_from_dict(dict['ice_healing_area'])
+        fire_healing_area = HealingArea.create_from_dict(dict['fire_healing_area'])
+        return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)

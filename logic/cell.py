@@ -30,7 +30,11 @@ class Level(IntEnum):
             cell.set_level(Level.LEVEL_2)
         elif 40 < life <= 60:
             cell.set_level(Level.LEVEL_3)
-            
+
+    def __eq__(self, other):
+        if isinstance(other, Level):
+            return self.value == other.value
+        return False
 class Cell:
 
     def __init__(self, level=Level.LEVEL_1, life=20, position=None):
@@ -49,12 +53,14 @@ class Cell:
             return DeadCell()
         else:
             raise ValueError(f'Invalid cell string: {cell_str}')
-
+        
     def __str__(self):
         raise NotImplementedError
 
     def __eq__(self, other):
-        return self is other
+        if isinstance(other, Cell):
+            return self.level == other.level and self.life == other.life and self.type == other.type #and self.position == other.position
+        return False
     
     #<
     def __lt__(self, other_cell):
@@ -72,10 +78,8 @@ class Cell:
         Level.update_level(self)
 
     def set_level(self, level):
-        if level is None:
-            raise ValueError("Level cant be none")
-        if level not in Level:
-            raise ValueError("Level must be in [1,2,3]")
+        if Level(level) not in Level:
+            raise ValueError(f"Invalid level: {level}")
         self.level = level
         
     ####  Getters  ####
@@ -148,6 +152,13 @@ class IceCell(Cell):
     
     def get_type(self):
         return 'IceCell'
+    
+    @classmethod
+    def create_from_dict(cls, dict):
+        if dict is not None:
+            return cls(dict['level'], dict['life'], dict['position'])
+        else:
+            return None
 
 class FireCell(Cell):
 
@@ -156,3 +167,10 @@ class FireCell(Cell):
 
     def get_type(self):
         return 'FireCell'
+    
+    @classmethod
+    def create_from_dict(cls, dict):
+        if dict is not None:
+            return cls(dict['level'], dict['life'], dict['position'])
+        else:
+            return None
