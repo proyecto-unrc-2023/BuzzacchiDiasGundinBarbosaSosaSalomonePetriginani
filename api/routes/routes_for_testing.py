@@ -1,25 +1,30 @@
 from flask import jsonify, request
 from flask_restful import Resource
-from api.games.board_schema import BoardSchema
-from api.games.board_model import BoardModel
-from api.games import api
+from app.schemas.board_schema import BoardSchema
+from app.models.board_model import BoardModel
+from api.routes import api
 from logic.board import Board
 from logic.spawn import IceSpawn
 from logic.cell import IceCell
+from logic.game_controller import GameController
 from api import db
 import json
-from api.games.game_state_schema import GameStateSchema
-from api.games.game_state_model import GameStateModel
+from app.schemas.game_state_schema import GameStateSchema
+from app.models.game_state_model import GameStateModel
 from logic.game_state import GameState
 
 class BoardResource(Resource):
     def get(self):
         board_schema = BoardSchema()
-        board = Board(50,50)
+        board = Board(2,2)
         board_json = board_schema.dump(board)
 
         return jsonify(board_json)
 
+    # def get(self):
+    #     board = Board(2,2)
+    #     board_json = board.serialize_board()
+    #     return board_json
     def post(self):
         data = request.json
 
@@ -136,7 +141,6 @@ class GameStateResource(Resource):
             'username': data.get('username'),
             'ice_healing_area': data.get('ice_healing_area'),
             'fire_healing_area': data.get('fire_healing_area')
-
         }
         game_state_schema = GameStateSchema()
         logic_game_state = GameState(**game_state_schema.load(game_state_data))

@@ -22,5 +22,5 @@ def create_app(config_name='development'):
     return app
 
 def register_modules(app):
-    from api.init_game import init_game_bp
-    app.register_blueprint(init_game_bp, url_prefix='/init_game')
+    from api.simulation import simulation_bp
+    app.register_blueprint(simulation_bp, url_prefix='/simulation')
