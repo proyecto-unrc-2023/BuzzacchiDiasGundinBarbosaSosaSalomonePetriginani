@@ -8,12 +8,11 @@ from logic.game_controller import GameController
 #########
 @given(u'there is a level {level:d} {cell_type} with {life:d} life points in position ({row:d},{column:d})')
 def step_impl(context, row, column, level, cell_type, life):
-    context.GameController.new_game(10, 10)
     context.GameController.create_cell(row, column, cell_type, level, life)
 
 @given(u'a HealingArea affecting {team} is at position ({row:d},{column:d}) and its adjacent')
 def step_impl(context, row, column, team):
-    context.GameController.create_healing_area(row, column, team)
+    # context.GameController.create_healing_area(row, column, team)
 
 @when(u'the IceCell HealingArea effect is applied')
 def step_impl(context):

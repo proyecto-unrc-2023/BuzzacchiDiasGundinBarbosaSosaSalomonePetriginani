@@ -54,8 +54,8 @@ class GameController:
         else:
             self.game_state.create_cell(row, column, FireCell, level, life)
 
-    def create_healing_area(self, row, column, affected_cell_type):
-        self.game_state.create_healing_area(row, column, affected_cell_type)
+    # def create_healing_area(self, row, column, affected_cell_type):
+    #     self.game_state.create_healing_area(row, column, affected_cell_type)
 
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()

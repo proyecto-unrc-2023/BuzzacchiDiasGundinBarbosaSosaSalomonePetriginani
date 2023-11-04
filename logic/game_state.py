@@ -102,20 +102,6 @@ class GameState:
         # Healing 
         self.execute_fusions_in_all_positions()
         self.execute_fights_in_all_positions()
-        
-    # def create_healing_area(self, row, column, affected_cell_type):
-    #     if affected_cell_type == IceCell:
-    #         self.ice_healing = self.board.create_healing_area(row, column, affected_cell_type)
-    #     else:
-    #         self.fire_healing = self.board.create_healing_area(row, column, affected_cell_type)
-    
-    def update_state(self):
-        self.generate_cells()
-        self.execute_movements_in_all_positions()
-        # Healing 
-        self.execute_fusions_in_all_positions()
-        self.execute_fights_in_all_positions()
-        
 
     def create_cell(self, row, column, cell_type, level, life):
         pos = row, column
