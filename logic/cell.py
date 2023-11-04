@@ -1,4 +1,3 @@
-#from logic.board import Board
 from abc import ABC, abstractmethod
 
 from enum import IntEnum

@@ -4,6 +4,7 @@ from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
 import json
+import random
 
 class Board:
 
@@ -122,7 +123,10 @@ class Board:
         self.add_spawn(spawn=spawn)
         return spawn
 
-    def create_healing_area(self, row, column, affected_cell_type):
+    def create_healing_area(self, affected_cell_type):
+        length = len(self.board)-1
+        row = random.randrange(1, length)
+        column = random.randrange(1, length)
         self._check_position(row, column)
         position = (row, column)
         positions_healing = self._get_adjacents_pos(position)

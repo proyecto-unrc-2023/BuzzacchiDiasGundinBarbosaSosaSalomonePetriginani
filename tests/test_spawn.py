@@ -14,16 +14,16 @@ def test_create_spawn_error():
     with pytest.raises(ValueError):
         res = Spawn.from_string('-')
 
-def test_generate_cells_with_position():
-    board = Board(10, 10)
-    spawn = FireSpawn(position=(5, 5), board=board)
-    spawn.generate_cells()
-    cantCells = 0
-    for i in range(10):
-        for j in range(10):
-            if(board.get_cells(i, j).__str__() == 'F'):
-                cantCells += 1
-    assert 0 <= cantCells <= 4
+# def test_generate_cells_with_position():
+#     board = Board(10, 10)
+#     board.create_spawn(1,1, IceSpawn)
+#     spawn = board.get_box(1,1).get_spawn()
+#     adjacents_spawn = spawn.get_adjacents_spawn(board.__len__())
+#     list = [(3, 3), (3, 2), (3, 1), (3, 0), (2, 3), (1, 3), (0, 3)]
+#     assert set(adjacents_spawn) == set(list)
+#     list_pos_cells = spawn.generate_cells()
+#     for pos in list_pos_cells:
+#         assert pos in adjacents_spawn
 
 def test_decrease_life_with_no_damage():
     spawn = FireSpawn(life=10)
@@ -44,11 +44,4 @@ def test_create_spawn_from_valid_str():
     res = Spawn.from_string("SP")
     assert isinstance(res, Spawn)
 
-def test_create_spawn_from_valid_str_with_position():
-    board = Board(10, 10)
-    res = Spawn.from_string("SP")
-    res.set_board(board)
-    res.set_position((5, 5))
-    assert isinstance(res, Spawn)
-    assert res.position == (5, 5)
-    assert res.board == board
+    

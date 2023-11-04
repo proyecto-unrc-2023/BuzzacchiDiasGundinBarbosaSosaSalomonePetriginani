@@ -103,11 +103,11 @@ def test_create_inverse_spawn_2():
 ## TEST Fusion of Board
 def test_fusion_board(gamestate):
     pos = (1,1)
-    gamestate.create_cell(pos[0], pos[1], team=Team.FireTeam, level=Level.LEVEL_2, life=36)
-    gamestate.create_cell(pos[0], pos[1], team=Team.FireTeam, level=Level.LEVEL_1, life=16)
-    gamestate.create_cell(pos[0], pos[1], team=Team.FireTeam, level=Level.LEVEL_1, life=7)
-    gamestate.create_cell(pos[0], pos[1], team=Team.IceTeam, level=Level.LEVEL_1, life=2)
-    gamestate.create_cell(pos[0], pos[1], team=Team.IceTeam, level=Level.LEVEL_1, life=12)
+    gamestate.create_cell(pos[0], pos[1], FireCell, level=Level.LEVEL_2, life=36)
+    gamestate.create_cell(pos[0], pos[1], FireCell, level=Level.LEVEL_1, life=16)
+    gamestate.create_cell(pos[0], pos[1], FireCell, level=Level.LEVEL_1, life=7)
+    gamestate.create_cell(pos[0], pos[1], IceCell, level=Level.LEVEL_1, life=2)
+    gamestate.create_cell(pos[0], pos[1], IceCell, level=Level.LEVEL_1, life=12)
     gamestate.fusion(pos)
     cells_in_pos = gamestate.get_cells(pos[0], pos[1])
     assert len(cells_in_pos) == 2
@@ -120,20 +120,20 @@ def test_fusion_board(gamestate):
     
 def test_fusion_in_all_board(gamestate):
     pos0 = (0,0)
-    gamestate.create_cell(pos0[0], pos0[1], Team.IceTeam, level=Level.LEVEL_2, life=36)
-    gamestate.create_cell(pos0[0], pos0[1], Team.IceTeam, level=Level.LEVEL_2, life=30,)
+    gamestate.create_cell(pos0[0], pos0[1], IceCell, level=Level.LEVEL_2, life=36)
+    gamestate.create_cell(pos0[0], pos0[1], IceCell, level=Level.LEVEL_2, life=30,)
 
     pos1 = (0,1)
-    gamestate.create_cell(pos1[0], pos1[1], Team.IceTeam, level=Level.LEVEL_1, life=15)
-    gamestate.create_cell(pos1[0], pos1[1], Team.IceTeam, level=Level.LEVEL_1, life=2)
+    gamestate.create_cell(pos1[0], pos1[1], IceCell, level=Level.LEVEL_1, life=15)
+    gamestate.create_cell(pos1[0], pos1[1], IceCell, level=Level.LEVEL_1, life=2)
 
     pos2 = (1,0)
-    gamestate.create_cell(pos2[0], pos2[1], Team.FireTeam, level=Level.LEVEL_3, life=48)
-    gamestate.create_cell(pos2[0], pos2[1], Team.IceTeam, level=Level.LEVEL_1, life=15)
+    gamestate.create_cell(pos2[0], pos2[1], FireCell, level=Level.LEVEL_3, life=48)
+    gamestate.create_cell(pos2[0], pos2[1], IceCell, level=Level.LEVEL_1, life=15)
     
     pos3 = (1,1)
-    gamestate.create_cell(pos3[0], pos3[1], Team.FireTeam, level=Level.LEVEL_3, life=50)
-    gamestate.create_cell(pos3[0], pos3[1], Team.FireTeam, level=Level.LEVEL_2, life=29)
+    gamestate.create_cell(pos3[0], pos3[1], FireCell, level=Level.LEVEL_3, life=50)
+    gamestate.create_cell(pos3[0], pos3[1], FireCell, level=Level.LEVEL_2, life=29)
 
     gamestate.execute_fusions_in_all_positions()
 
@@ -2176,3 +2176,37 @@ def test_create_from_dict(game_state_dict):
     # print_game_state_attributes(game_state)
     # print_game_state_attributes(actual_game_state)
     assert game_state == actual_game_state
+
+def test_generate_cells():
+    game = GameState()
+    game.set_team(Team.FireTeam)
+    game.new_game(40, 40)
+    game.create_spawn(1, 1, FireSpawn)
+    game.generate_cells()
+    adj_fire = game.fire_spawn.get_adjacents_spawn(40)
+    adj_ice = game.ice_spawn.get_adjacents_spawn(40)
+
+    for i in adj_fire:
+        r, c = i 
+        if (game.get_cells(r,c) != 0):
+            cells = game.get_cells(r,c)
+            for cell in cells:
+                assert isinstance(cell, FireCell)
+    
+    for j in adj_ice:
+        r, c = j 
+        if (game.get_cells(r,c) != 0):
+            cells = game.get_cells(r,c)
+            for cell in cells:
+                assert isinstance(cell, IceCell)
+                
+def test_update_state():
+    game = GameState()
+    game.new_game(8, 8)
+    game.create_spawn(1, 1, IceSpawn)
+    print(str(game.get_board()))
+    game.update_state()
+    print(str(game.get_board()))
+    assert 1 == 2
+
+    

@@ -118,9 +118,6 @@ class GameController:
         matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == Level(level)]
         return matching_cells
 
-    def generate_cell(self):
-        self.game_state.generate_cell()
-
     # def serialize_game_state(self, game_state):
     #     # serialized_board = game_state.get_board().serialize_board()
     #     # game_state_data = {
@@ -149,7 +146,11 @@ class GameController:
     #     )
     #     return serialized_game_state
     #     #return jsonify(serialized_game_state)
+    
     def serialize_game_state(self, game_state):
         game_state_schema = GameStateSchema()
         serialize_game_state = game_state_schema.dump(game_state)
         return jsonify(serialize_game_state)
+    
+    def generate_cells(self):
+        self.game_state.generate_cells()
