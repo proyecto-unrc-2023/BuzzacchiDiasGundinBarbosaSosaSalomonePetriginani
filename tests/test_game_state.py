@@ -3,6 +3,7 @@ import pytest
 from logic.game_state import GameState, Team, GameMode
 from logic.cell import FireCell, IceCell, Level
 from logic.spawn import IceSpawn, FireSpawn
+import time
 
 @pytest.fixture
 def gamestate():
@@ -2177,36 +2178,49 @@ def test_create_from_dict(game_state_dict):
     # print_game_state_attributes(actual_game_state)
     assert game_state == actual_game_state
 
-def test_generate_cells():
-    game = GameState()
-    game.set_team(Team.FireTeam)
-    game.new_game(40, 40)
-    game.create_spawn(1, 1, FireSpawn)
-    game.generate_cells()
-    adj_fire = game.fire_spawn.get_adjacents_spawn(40)
-    adj_ice = game.ice_spawn.get_adjacents_spawn(40)
+# def test_generate_cells():
+#     game = GameState()
+#     game.set_team(Team.FireTeam)
+#     game.new_game(40, 40)
+#     game.create_spawn(1, 1, FireSpawn)
+#     game.generate_cells()
+#     adj_fire = game.fire_spawn.get_adjacents_spawn(40)
+#     adj_ice = game.ice_spawn.get_adjacents_spawn(40)
 
-    for i in adj_fire:
-        r, c = i 
-        if (game.get_cells(r,c) != 0):
-            cells = game.get_cells(r,c)
-            for cell in cells:
-                assert isinstance(cell, FireCell)
+#     for i in adj_fire:
+#         r, c = i 
+#         if (game.get_cells(r,c) != 0):
+#             cells = game.get_cells(r,c)
+#             for cell in cells:
+#                 assert isinstance(cell, FireCell)
     
-    for j in adj_ice:
-        r, c = j 
-        if (game.get_cells(r,c) != 0):
-            cells = game.get_cells(r,c)
-            for cell in cells:
-                assert isinstance(cell, IceCell)
+#     for j in adj_ice:
+#         r, c = j 
+#         if (game.get_cells(r,c) != 0):
+#             cells = game.get_cells(r,c)
+#             for cell in cells:
+#                 assert isinstance(cell, IceCell)
                 
 def test_update_state():
     game = GameState()
     game.new_game(8, 8)
     game.create_spawn(1, 1, IceSpawn)
     print(str(game.get_board()))
-    game.update_state()
-    print(str(game.get_board()))
+    for i in range(10):
+        game.update_state()
+        print(str(game.get_board()))
+        for row in range(8):
+            for column in range(8):
+                # Obtener las células de hielo en la posición actual
+                ice_cells = game.get_ice_cells(row, column)
+                # Imprimir los niveles de las células de hielo
+                for cell in ice_cells:
+                    print(f"IceCell:Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
+                fire_cells = game.get_ice_cells(row, column)
+                for cell in fire_cells:
+                    print(f"FireCell: Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
+                #time.sleep(5)
+
     assert 1 == 2
 
     

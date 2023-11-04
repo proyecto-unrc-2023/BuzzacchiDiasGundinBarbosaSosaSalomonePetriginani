@@ -147,13 +147,13 @@ class GameState:
                 if isinstance(cell, FireCell) or isinstance(cell,IceCell):
                     cells_in_spawn.append(cell)
         return cells_in_spawn
-            
+    
     def create_healing_area(self, row, column, affected_cell_type):
         if affected_cell_type == IceCell:
             self.ice_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
         else:
             self.fire_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
-    
+
     def update_state(self):
         self.generate_cells()
         self.execute_movements_in_all_positions()
@@ -278,9 +278,9 @@ class GameState:
             count_fusion = 0
             remove_this_cells.clear()
             for i in range(len(cells_ice_aux)-1):
-                print("entre al for de ice")
+                # print("entre al for de ice")
                 if (cells_ice_aux[i].get_level() == cells_ice_aux[i+1].get_level()):
-                    print("Entre al if level del ice")
+                    # print("Entre al if level del ice")
                     merged = cells_ice_aux[i+1].get_level() != Level.LEVEL_3
                     if(merged):
                         if(cells_ice_aux[i+1].get_level() == Level.LEVEL_1):
@@ -289,10 +289,10 @@ class GameState:
                             cells_ice_aux[i+1].set_life(60)
                         remove_this_cells.append(cells_ice_aux[i])
                         count_fusion += 1
-                    print("merge un Ice")
+                    # print("merge un Ice")
             for cell in remove_this_cells:
-                print("se elimino .Ice")
-                print(cell)
+                # print("se elimino .Ice")
+                #print(cell)
                 self.board.remove_cell(pos[0], pos[1], cell)
         count_fusion = 1
         while(count_fusion > 0):
@@ -308,9 +308,9 @@ class GameState:
                             cells_fire_aux[i+1].set_life(60)
                         remove_this_cells.append(cells_fire_aux[i])
                         count_fusion += 1
-                    print("merge un Fire")
+                    # print("merge un Fire")
             for cell in remove_this_cells:
-                print("se elimino .Fire")
+                # print("se elimino .Fire")
                 print(cell)
                 self.board.remove_cell(pos[0], pos[1], cell)
 
@@ -336,20 +336,41 @@ class GameState:
         else:
             self.ice_spawn = self.board.create_spawn(inverse_row, inverse_column, IceSpawn)
 
+    # @classmethod
+    # def create_from_dict(cls, dict):
+    #     mode = GameMode(dict['mode'])
+    #     board_dict = json.loads(dict['board']) if isinstance(dict['board'], str) else dict['board']
+    #     board = Board.create_from_dict(board_dict)
+    #     #board = Board.create_from_dict(dict['board'])
+    #     team = Team(dict['team'])
+    #     username = dict['username']
+    #     ice_spawn = IceSpawn.create_from_dict(dict['ice_spawn'])
+    #     fire_spawn = FireSpawn.create_from_dict(dict['fire_spawn'])
+    #     ice_healing_area = HealingArea.create_from_dict(dict['ice_healing_area'])
+    #     fire_healing_area = HealingArea.create_from_dict(dict['fire_healing_area'])
+    #     return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)
+
     @classmethod
     def create_from_dict(cls, dict):
         mode = GameMode(dict['mode'])
         board_dict = json.loads(dict['board']) if isinstance(dict['board'], str) else dict['board']
         board = Board.create_from_dict(board_dict)
-        #board = Board.create_from_dict(dict['board'])
         team = Team(dict['team'])
         username = dict['username']
-        ice_spawn = IceSpawn.create_from_dict(dict['ice_spawn'])
-        fire_spawn = FireSpawn.create_from_dict(dict['fire_spawn'])
-        ice_healing_area = HealingArea.create_from_dict(dict['ice_healing_area'])
-        fire_healing_area = HealingArea.create_from_dict(dict['fire_healing_area'])
-        return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)
 
+        ice_spawn_dict = json.loads(dict['ice_spawn']) if isinstance(dict['ice_spawn'], str) else dict['ice_spawn']
+        ice_spawn = IceSpawn.create_from_dict(ice_spawn_dict)
+
+        fire_spawn_dict = json.loads(dict['fire_spawn']) if isinstance(dict['fire_spawn'], str) else dict['fire_spawn']
+        fire_spawn = FireSpawn.create_from_dict(fire_spawn_dict)
+
+        ice_healing_area_dict = json.loads(dict['ice_healing_area']) if isinstance(dict['ice_healing_area'], str) else dict['ice_healing_area']
+        ice_healing_area = HealingArea.create_from_dict(ice_healing_area_dict)
+
+        fire_healing_area_dict = json.loads(dict['fire_healing_area']) if isinstance(dict['fire_healing_area'], str) else dict['fire_healing_area']
+        fire_healing_area = HealingArea.create_from_dict(fire_healing_area_dict)
+
+        return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)
     def generate_cells(self):
         adj_ice = self.ice_spawn.get_adjacents_spawn(self.board.__len__())
         adj_fire = self.fire_spawn.get_adjacents_spawn(self.board.__len__())

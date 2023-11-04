@@ -10,32 +10,22 @@ from api import db
 import json
 from marshmallow import ValidationError
 
-class SetSpawnResource(Resource):
-
+class UpdateStateResource(Resource):
     def post(self):
         data = request.json
-        data_dict = {
-            'row': data.get('row'),
-            'column': data.get('column'),
-            'game_state_id': data.get('game_state_id')
-        }
-        game_state_model = GameStateModel.query.get(data_dict['game_state_id'])
+        game_state_id = data.get('id')
+        game_state_model = GameStateModel.query.get(game_state_id)
         if game_state_model is None:
             return {'message': 'GameState not found'}, 404
-
-        # Convert the game_state_model to a dictionary
+        
         game_state_data_model = game_state_model.to_dict()
-        # Deserialize the game_state_data_model to a GameState object 
         logic_game_state = GameState.create_from_dict(game_state_data_model)
-        # Pass the GameState object to the GameController constructor
+        print(str(logic_game_state.get_board()))
         game_controller = GameController(logic_game_state)
-
-        spawn_type = 'IceSpawn' if game_controller.get_team() == Team.IceTeam else 'FireSpawn'
-        game_controller.create_spawn(data_dict['row'], data_dict['column'], spawn_type)
+        game_controller.update_state()
 
         current_game_state = game_controller.get_game_state()
-        #print(str(current_game_state.get_board()))
-        # Schemas instances to serialize
+        current_board_str = str(game_controller.get_game_state().get_board())
         board_schema = BoardSchema()
         spawn_schema = SpawnSchema()
         try:
@@ -46,9 +36,8 @@ class SetSpawnResource(Resource):
             print(err.messages)
             return None
 
-        # Convert logic game state a model game state
         game_state_model = GameStateModel(
-            id=data.get('game_state_id'),
+            id=data.get('id'),
             username=current_game_state.username,
             team=current_game_state.team.value,  
             mode=current_game_state.mode.value,  
@@ -59,12 +48,10 @@ class SetSpawnResource(Resource):
             fire_healing_area=current_game_state.fire_healing_area 
         )
 
+        # Convert the GameStateModel instance to a dictionary to see updated game state in the response
         game_state_dict = game_state_model.to_dict()
-        #print(game_state_dict)
-        GameStateModel.query.filter(GameStateModel.id == game_state_model.id).update(game_state_dict)
+        #return {'board': current_board_str}, 200 
 
-        db.session.commit()
-        return {'message': 'Spawn set successfully', 'game_state': game_state_dict}, 200    
+        return {'updated_game_state': game_state_dict, 'board': current_board_str}, 200 
+api.add_resource(UpdateStateResource, '/update_state')
 
-    
-api.add_resource(SetSpawnResource, '/set_spawn')

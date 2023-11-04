@@ -1,7 +1,7 @@
 import random 
 from abc import ABC, abstractmethod
 from logic.cell import Cell, Level, FireCell, IceCell
-
+import json
 class Spawn:
     
     def __init__(self, life=300, positions=None, type=None):
@@ -150,7 +150,15 @@ class FireSpawn(Spawn):
             return cls(dict['life'], dict['positions'], dict['type'])
         else:
             return None
-        
+    
+    # @classmethod
+    # def create_from_dict(cls, dict):
+    #     if dict is not None:
+    #         fire_spawn_dict = json.loads(dict['fire_spawn'])
+    #         if fire_spawn_dict['type'] == 'FireSpawn':
+    #             return cls(fire_spawn_dict['life'], fire_spawn_dict['positions'], fire_spawn_dict['type'])
+    #     return None
+    
     def __eq__(self, other):
         if isinstance(other, Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
@@ -168,20 +176,20 @@ class IceSpawn(Spawn):
     def decrease_life(self, damage):
         life -= damage
         
-    def generate_cell(self):
-        if self.positions is not None:
-            positionsList = []
-            tuplePos = self.positions
-            for pos in tuplePos:
-                list = self.get_adjacents_for_move(pos)
-                if list:
-                    positionsList.append(list)
-                    position = random.choice(positionsList)
-                cell = (IceCell(position = position, board = self.board))
-            return cell
-        self.life -= damage
-        if(self.life < 0):
-            self.life = 0
+    # def generate_cell(self):
+    #     if self.positions is not None:
+    #         positionsList = []
+    #         tuplePos = self.positions
+    #         for pos in tuplePos:
+    #             list = self.get_adjacents_for_move(pos)
+    #             if list:
+    #                 positionsList.append(list)
+    #                 position = random.choice(positionsList)
+    #             cell = (IceCell(position = position, board = self.board))
+    #         return cell
+    #     self.life -= damage
+    #     if(self.life < 0):
+    #         self.life = 0
     
     # def generate_cell(self):
     #     if self.positions is not None:
@@ -204,6 +212,14 @@ class IceSpawn(Spawn):
             return cls(dict['life'], dict['positions'], dict['type'])
         else:
             return None
+    
+    # @classmethod
+    # def create_from_dict(cls, dict):
+    #     if dict is not None:
+    #         ice_spawn_dict = json.loads(dict['ice_spawn'])
+    #         if ice_spawn_dict['type'] == 'IceSpawn':
+    #             return cls(ice_spawn_dict['life'], ice_spawn_dict['positions'], ice_spawn_dict['type'])
+    #     return None
     
     def __eq__(self, other):
         if isinstance(other, Spawn):
