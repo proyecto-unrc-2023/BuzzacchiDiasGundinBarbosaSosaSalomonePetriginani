@@ -3,6 +3,7 @@ from logic.cell import IceCell, FireCell
 from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
+import json
 import random
 
 class Board:
@@ -14,6 +15,9 @@ class Board:
             self.board = board
         else:
             self.board = [[Box() for _ in range(columns)] for _ in range(rows)]
+            for i in range(rows):
+                for j in range(columns):
+                    self.board[i][j].set_pos((i, j))
 
     def __str__(self):
         rows_str = []
@@ -127,14 +131,15 @@ class Board:
         position = (row, column)
         positions_healing = self._get_adjacents_pos(position)
         healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
-        self.add_healing(self, healing_area)
+        self.add_healing_area(self, healing_area)
+        return healing_area
 
     def add_spawn(self, spawn):
         positions_spawn = spawn.get_positions()
         for position in positions_spawn:
             self.get_box(*position).set_spawn(spawn)
         
-    def add_healing(self, position, healing_area):
+    def add_healing_area(self, position, healing_area):
         positions_healing = healing_area.get_positions()
         for position in positions_healing:
             self.get_box(*position).set_healing_area(healing_area)
@@ -149,3 +154,21 @@ class Board:
             if 0 <= new_row < length and 0 <= new_col < length:
                 adjacentList.append((new_row, new_col))
         return adjacentList
+
+    @classmethod
+    def create_from_dict(cls, dict):
+        rows = dict['rows']
+        columns = dict['columns']
+        board = [[Box.create_from_dict(box_dict) for box_dict in row] for row in dict['board']]
+        return cls(rows, columns, board)
+
+    def __eq__(self, other):
+        if not isinstance(other, Board):
+            return NotImplemented
+        if self.rows != other.rows or self.columns != other.columns:
+            return False
+        for i in range(self.rows):
+            for j in range(self.columns):
+                if self.board[i][j] != other.board[i][j]:
+                    return False
+        return True

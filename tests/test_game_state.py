@@ -172,6 +172,2011 @@ def test_fusion_in_all_board(gamestate):
     assert cells_in_pos_11[1].life == 29
     assert cells_in_pos_11[1].level == Level.LEVEL_2
 
+@pytest.fixture
+def game_state_dict():
+    return {
+        "board": {
+            "board": [
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            0
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            1
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            2
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            5
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            6
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            0,
+                            7
+                        ],
+                        "spawn": None
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            0
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            1
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            2
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            5
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            6
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            1,
+                            7
+                        ],
+                        "spawn": None
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            0
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            1
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            2
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    2
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ],
+                            "type": "IceSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            5
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            6
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            2,
+                            7
+                        ],
+                        "spawn": None
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            3,
+                            0
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            3,
+                            1
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            3,
+                            2
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            3,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            3,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            3,
+                            5
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            3,
+                            6
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            3,
+                            7
+                        ],
+                        "spawn": None
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            4,
+                            0
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            4,
+                            1
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            4,
+                            2
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            4,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            4,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            4,
+                            5
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            4,
+                            6
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            4,
+                            7
+                        ],
+                        "spawn": None
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            5,
+                            0
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            5,
+                            1
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            5,
+                            2
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            5,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            5,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [
+                            {
+                                "level": 1,
+                                "life": 20,
+                                "position": [
+                                    5,
+                                    5
+                                ]
+                            }
+                        ],
+                        "ice_healing_area": {
+                            "affected_cell_type": "IceCell",
+                            "duration": 100,
+                            "healing_rate": 3,
+                            "positions": [
+                                [
+                                    3,
+                                    3
+                                ],
+                                [
+                                    3,
+                                    4
+                                ],
+                                [
+                                    3,
+                                    5
+                                ],
+                                [
+                                    4,
+                                    3
+                                ],
+                                [
+                                    4,
+                                    4
+                                ],
+                                [
+                                    4,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    3
+                                ],
+                                [
+                                    5,
+                                    4
+                                ],
+                                [
+                                    5,
+                                    5
+                                ]
+                            ]
+                        },
+                        "pos": [
+                            5,
+                            5
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            5,
+                            6
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            5,
+                            7
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            0
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            1
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            2
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            5
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            6
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            6,
+                            7
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    }
+                ],
+                [
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            0
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            1
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            2
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            3
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            4
+                        ],
+                        "spawn": None
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            5
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            6
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    },
+                    {
+                        "fire_cells": [],
+                        "fire_healing_area": None,
+                        "ice_cells": [],
+                        "ice_healing_area": None,
+                        "pos": [
+                            7,
+                            7
+                        ],
+                        "spawn": {
+                            "life": 300,
+                            "positions": [
+                                [
+                                    5,
+                                    5
+                                ],
+                                [
+                                    5,
+                                    6
+                                ],
+                                [
+                                    5,
+                                    7
+                                ],
+                                [
+                                    6,
+                                    5
+                                ],
+                                [
+                                    6,
+                                    6
+                                ],
+                                [
+                                    6,
+                                    7
+                                ],
+                                [
+                                    7,
+                                    5
+                                ],
+                                [
+                                    7,
+                                    6
+                                ],
+                                [
+                                    7,
+                                    7
+                                ]
+                            ],
+                            "type": "FireSpawn"
+                        }
+                    }
+                ]
+            ],
+            "columns": 8,
+            "rows": 8
+        },
+        "fire_healing_area": None,
+        "fire_spawn": {
+            "life": 300,
+            "positions": [
+                [
+                    5,
+                    5
+                ],
+                [
+                    5,
+                    6
+                ],
+                [
+                    5,
+                    7
+                ],
+                [
+                    6,
+                    5
+                ],
+                [
+                    6,
+                    6
+                ],
+                [
+                    6,
+                    7
+                ],
+                [
+                    7,
+                    5
+                ],
+                [
+                    7,
+                    6
+                ],
+                [
+                    7,
+                    7
+                ]
+            ],
+            "type": "FireSpawn"
+        },
+        "ice_healing_area": {
+            "affected_cell_type": "IceCell",
+            "duration": 100,
+            "healing_rate": 3,
+            "positions": [
+                [
+                    3,
+                    3
+                ],
+                [
+                    3,
+                    4
+                ],
+                [
+                    3,
+                    5
+                ],
+                [
+                    4,
+                    3
+                ],
+                [
+                    4,
+                    4
+                ],
+                [
+                    4,
+                    5
+                ],
+                [
+                    5,
+                    3
+                ],
+                [
+                    5,
+                    4
+                ],
+                [
+                    5,
+                    5
+                ]
+            ]
+        },
+        "ice_spawn": {
+            "life": 300,
+            "positions": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    1
+                ],
+                [
+                    0,
+                    2
+                ],
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    0
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "IceSpawn"
+        },
+        "mode": "SIMULATION",
+        "team": "IceTeam",
+        "username": "Genaro"
+    }
+
+def test_create_from_dict(game_state_dict):
+    game_state = GameState.create_from_dict(game_state_dict)
+    actual_game_state = GameState()
+    actual_game_state.new_game(8,8)
+    actual_game_state.set_team(Team.IceTeam)
+    actual_game_state.set_mode(GameMode.SIMULATION)
+    actual_game_state.set_username('Genaro')
+    actual_game_state.create_spawn(1,1,IceSpawn)
+    actual_game_state.create_cell(5,5,IceCell)
+    actual_game_state.create_healing_area(4,4,IceCell)
+    # def print_game_state_attributes(game_state):
+    #     for attr, value in game_state.__dict__.items():
+    #         print(f"{attr}: {value}")
+
+    # print_game_state_attributes(game_state)
+    # print_game_state_attributes(actual_game_state)
+    assert game_state == actual_game_state
+
 def test_generate_cells():
     game = GameState()
     game.set_team(Team.FireTeam)
