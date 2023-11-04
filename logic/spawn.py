@@ -112,17 +112,17 @@ class FireSpawn(Spawn):
     def __eq__(self, other):
         return isinstance(other, FireSpawn)    
     
-    def generate_cell(self):
-        if self.positions is not None:
-            positionsList = []
-            tuplePos = self.positions
-            for pos in tuplePos:
-                list = self.get_adjacents_spawn()
-                if list:
-                    positionsList.append(list)
-                    pos = random.choice(positionsList)
-                cell = (FireCell(positions = pos, board = self.board))
-            return cell  
+    # def generate_cell(self):
+    #     if self.positions is not None:
+    #         positionsList = []
+    #         tuplePos = self.positions
+    #         for pos in tuplePos:
+    #             list = self.get_adjacents_spawn()
+    #             if list:
+    #                 positionsList.append(list)
+    #                 pos = random.choice(positionsList)
+    #             cell = (FireCell(positions = pos, board = self.board))
+    #         return cell  
 
 class IceSpawn(Spawn):
     def __str__(self):
@@ -142,16 +142,16 @@ class IceSpawn(Spawn):
         if(self.life < 0):
             self.life = 0
     
-    def generate_cell(self):
-        if self.positions is not None:
-            positionsList = []
-            tuplePos = self.positions
-            for pos in tuplePos:
-                list = self.get_adjacents_spawn()
-                if list:
-                    positionsList.append(list)
-                    positions = random.choice(positionsList)
-                cell = (IceCell(positions = positions, board = self.board))
-            return cell    
+    # def generate_cell(self):
+    #     if self.positions is not None:
+    #         positionsList = []
+    #         tuplePos = self.positions
+    #         for pos in tuplePos:
+    #             list = self.get_adjacents_spawn()
+    #             if list:
+    #                 positionsList.append(list)
+    #                 positions = random.choice(positionsList)
+    #             cell = (IceCell(positions = positions, board = self.board))
+    #         return cell    
     def get_type(self):
         return 'IceSpawn'
