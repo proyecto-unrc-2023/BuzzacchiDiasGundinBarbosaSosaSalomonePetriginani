@@ -195,10 +195,13 @@ def test_generate_cells():
             for cell in cells:
                 assert isinstance(cell, IceCell)
                 
-# def test_update_state():
-#     game = GameState()
-#     game.new_game(50, 50)
-#     game.create_spawn(3, 3, IceSpawn)
-#     game.update_state()
-    
+def test_update_state():
+    game = GameState()
+    game.new_game(8, 8)
+    game.create_spawn(1, 1, IceSpawn)
+    print(str(game.get_board()))
+    game.update_state()
+    print(str(game.get_board()))
+    assert 1 == 2
+
     

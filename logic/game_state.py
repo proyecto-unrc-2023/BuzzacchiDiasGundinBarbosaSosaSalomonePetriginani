@@ -123,8 +123,8 @@ class GameState:
         else:
             self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
         self.create_inverse_spawn(row, column, spawn_team)
-        self.board.create_healing_area(Team.IceTeam)
-        self.board.create_healing_area(Team.FireTeam)
+        #self.board.create_healing_area(Team.IceTeam)
+        #self.board.create_healing_area(Team.FireTeam)
         self.check_simulation()
     
     def execute_fight_in_position(self, row, col):
@@ -202,15 +202,10 @@ class GameState:
         return adjacentList
     
     def no_spawns_in_pos(self, row, column, cell_team):
-        cells = self.board.get_cells(row, column)
-        for cell in cells:
-            if cell_team == Team.IceTeam:   
-                if (isinstance(cell, IceSpawn)):
-                    return False
-            else:
-                if (isinstance(cell, FireSpawn)):
-                    return False   
-        return True
+        if cell_team == Team.IceTeam:
+            return (row, column) not in self.ice_spawn.get_positions()
+        else:
+            return (row, column) not in self.fire_spawn.get_positions()
     
     # FUSION
     def fusion(self, pos):
