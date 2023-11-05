@@ -20,14 +20,16 @@ class UpdateStateResource(Resource):
         
         game_state_data_model = game_state_model.to_dict()
         logic_game_state = GameState.create_from_dict(game_state_data_model)
-        print(str(logic_game_state.get_board()))
+        
         game_controller = GameController(logic_game_state)
         game_controller.update_state()
 
         current_game_state = game_controller.get_game_state()
         current_board_str = str(game_controller.get_game_state().get_board())
+
         board_schema = BoardSchema()
         spawn_schema = SpawnSchema()
+
         try:
             board_dict = board_schema.dump(current_game_state.board)
             ice_spawn_dict = spawn_schema.dump(current_game_state.ice_spawn)
@@ -50,8 +52,8 @@ class UpdateStateResource(Resource):
 
         # Convert the GameStateModel instance to a dictionary to see updated game state in the response
         game_state_dict = game_state_model.to_dict()
-        #return {'board': current_board_str}, 200 
-
-        return {'updated_game_state': game_state_dict, 'board': current_board_str}, 200 
+        GameStateModel.query.filter(GameStateModel.id == game_state_model.id).update(game_state_dict)
+        db.session.commit()
+        return {'updated_game_state': game_state_dict, 'board_str': current_board_str}, 200 
 api.add_resource(UpdateStateResource, '/update_state')
 
