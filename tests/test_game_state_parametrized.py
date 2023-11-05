@@ -229,11 +229,11 @@ def test_movement_board(board_size, cells_to_add, expected_positions, expected_l
     game_state.new_game(*board_size)
     pos = cells_to_add[0].get_position()
     for cell in cells_to_add:
-        cell.board = game_state.get_board()
         cell.position = pos
         game_state.add_cell(*pos, cell)
     game_state.move_cells_in_position(*pos)
     for cell in cells_to_add:
+        print(cell.position)
         assert cell.position in expected_positions
         assert cell.life == expected_life_points
         assert cell not in game_state.get_cells(*pos)

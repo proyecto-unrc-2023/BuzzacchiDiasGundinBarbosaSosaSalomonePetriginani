@@ -22,7 +22,7 @@ def test_healing_area(board_size, cell_to_be_healed, expected_life, expected_lev
     ice_healing_area = HealingArea(positions=healing_area_positions, affected_cell_type=IceCell)
     duration = ice_healing_area.duration
     board.add_cell(*cell_to_be_healed[0].position, cell_to_be_healed[0])
-    board.add_healing((1,1),ice_healing_area)
+    board.add_healing_area((1,1),ice_healing_area)
     ice_healing_area.apply_effect(cell_to_be_healed)
     assert board.get_cells(*cell_to_be_healed[0].position)[0].get_life() == expected_life
     assert board.get_cells(*cell_to_be_healed[0].position)[0].get_level() == expected_level

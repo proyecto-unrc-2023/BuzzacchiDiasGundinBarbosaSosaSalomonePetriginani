@@ -163,6 +163,7 @@ class FireSpawn(Spawn):
         if isinstance(other, Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
         return False
+    
 class IceSpawn(Spawn):
     def __str__(self):
         return 'IS'

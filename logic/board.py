@@ -123,25 +123,20 @@ class Board:
         self.add_spawn(spawn=spawn)
         return spawn
 
-    # def create_healing_area(self, affected_cell_type):
-    #     length = len(self.board)-1
-    #     row = random.randrange(1, length)
-    #     column = random.randrange(1, length)
-    #     self._check_position(row, column)
-    #     position = (row, column)
-    #     positions_healing = self._get_adjacents_pos(position)
-    #     healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
-    #     self.add_healing_area(self, healing_area)
-    #     return healing_area
-
-    #Reemplazado por:
-    def create_healing_area_with_random_position(self, affected_cell_type):
+    def create_healing_area_with_random_position(self, affected_cell_type, ice_spawn_positions, fire_spawn_positions):
         length = len(self.board)-1
-        row = random.randrange(1, length)
-        column = random.randrange(1, length)
-        self._check_position(row, column)
+        spawn_positions = ice_spawn_positions + fire_spawn_positions
 
-        # Crear el área de curación en la posición aleatoria
+        while True:
+            row = random.randrange(1, length)
+            column = random.randrange(1, length)
+            # Obtener todas las posiciones en el cuadrado de 3x3
+            positions_in_square = self._get_adjacents_pos((row, column))
+            # Verificar si alguna de las posiciones en el cuadrado es una posición de generación
+            if not any(pos in spawn_positions for pos in positions_in_square):
+                break
+
+        self._check_position(row, column)
         return self.create_healing_area(row, column, affected_cell_type)
     
     def create_healing_area(self, row, column, affected_cell_type):
@@ -151,6 +146,7 @@ class Board:
         healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
         self.add_healing_area(self, healing_area)
         return healing_area
+    
     def add_spawn(self, spawn):
         positions_spawn = spawn.get_positions()
         for position in positions_spawn:

@@ -2,14 +2,14 @@ from logic.cell import Cell, Level, IceCell
 
 class HealingArea:
     
-    def __init__(self, positions, affected_cell_type, duration=100):
+    def __init__(self, positions, affected_cell_type, duration=100, healing_rate=3):
         if positions is not None:
             # Convert JSON list representations to tuples for immutable coordinates.
             self.positions = [tuple(position) for position in positions]
         else:
             self.positions = []
         self.duration = duration
-        self.healing_rate = 3  
+        self.healing_rate = healing_rate 
         self.affected_cell_type = affected_cell_type
         self.type = self.get_type()
     
@@ -51,7 +51,7 @@ class HealingArea:
     @classmethod
     def create_from_dict(cls, dict):
         if dict is not None:
-            return cls(dict['positions'], dict['affected_cell_type'], dict['duration'], )
+            return cls(dict['positions'], dict['affected_cell_type'], dict['duration'], dict['healing_rate'])
         else:
             return None
         

@@ -154,6 +154,10 @@ class GameState:
         else:
             self.fire_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
 
+    def create_randoms_healing_areas(self):
+        self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+        self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+
     def update_state(self):
         self.execute_movements_in_all_positions()
 
@@ -184,8 +188,7 @@ class GameState:
         else:
             self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
         self.create_inverse_spawn(row, column, spawn_team)
-        #self.board.create_healing_area(Team.IceTeam)
-        #self.board.create_healing_area(Team.FireTeam)
+        self.create_randoms_healing_areas()
         self.check_simulation()
     
     def execute_fight_in_position(self, row, col):
@@ -264,9 +267,9 @@ class GameState:
     
     def no_spawns_in_pos(self, row, column, cell_team):
         if cell_team == Team.IceTeam:
-            return (row, column) not in self.ice_spawn.get_positions()
+            return (row, column) not in self.ice_spawn.get_positions() if self.ice_spawn is not None else True
         else:
-            return (row, column) not in self.fire_spawn.get_positions()
+            return (row, column) not in self.fire_spawn.get_positions() if self.fire_spawn is not None else True
     
     # FUSION
     def fusion(self, pos):
@@ -372,6 +375,7 @@ class GameState:
         fire_healing_area = HealingArea.create_from_dict(fire_healing_area_dict)
 
         return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)
+    
     def generate_cells(self):
         adj_ice = self.ice_spawn.get_adjacents_spawn(self.board.__len__())
         adj_fire = self.fire_spawn.get_adjacents_spawn(self.board.__len__())
