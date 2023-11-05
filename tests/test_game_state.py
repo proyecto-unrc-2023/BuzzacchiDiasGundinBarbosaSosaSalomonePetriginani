@@ -2205,10 +2205,13 @@ def test_update_state():
     game = GameState()
     game.new_game(8, 8)
     game.create_spawn(1, 1, IceSpawn)
-    print(str(game.get_board()))
-    for i in range(10):
-        game.update_state()
+    for i in range(45):
+        if game.get_mode() == GameMode.FINISHED:
+            print('Simulation finished')
+            break
         print(str(game.get_board()))
+        game.update_state()
+        print(f"IceSpawnLife: {game.get_ice_spawn().get_life()} FireSpawnLife: {game.get_fire_spawn().get_life()}")
         for row in range(8):
             for column in range(8):
                 # Obtener las células de hielo en la posición actual

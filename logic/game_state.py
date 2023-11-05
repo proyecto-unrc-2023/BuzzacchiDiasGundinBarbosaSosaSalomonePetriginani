@@ -155,8 +155,9 @@ class GameState:
             self.fire_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
 
     def update_state(self):
-        self.generate_cells()
         self.execute_movements_in_all_positions()
+
+        self.generate_cells()
         # Healing 
         self.execute_fusions_in_all_positions()
         self.execute_fights_in_all_positions()
@@ -311,7 +312,7 @@ class GameState:
                     # print("merge un Fire")
             for cell in remove_this_cells:
                 # print("se elimino .Fire")
-                print(cell)
+                #print(cell)
                 self.board.remove_cell(pos[0], pos[1], cell)
 
     def execute_fusions_in_all_positions(self):
