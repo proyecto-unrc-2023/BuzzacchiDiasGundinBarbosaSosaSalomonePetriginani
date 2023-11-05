@@ -6,6 +6,7 @@ from logic.game_controller import GameController
 from app.models.game_state_model import GameStateModel
 from app.schemas.board_schema import BoardSchema
 from app.schemas.spawn_schema import SpawnSchema
+from app.schemas.healing_area_schema import HealingAreaSchema
 from api import db
 import json
 from marshmallow import ValidationError
@@ -29,11 +30,13 @@ class UpdateStateResource(Resource):
 
         board_schema = BoardSchema()
         spawn_schema = SpawnSchema()
-
+        healing_area_schema = HealingAreaSchema()
         try:
             board_dict = board_schema.dump(current_game_state.board)
             ice_spawn_dict = spawn_schema.dump(current_game_state.ice_spawn)
             fire_spawn_dict = spawn_schema.dump(current_game_state.fire_spawn)
+            fire_healing_area_dict = healing_area_schema.dump(current_game_state.fire_healing_area)
+            ice_healing_area_dict = healing_area_schema.dump(current_game_state.ice_healing_area)
         except ValidationError as err:
             print(err.messages)
             return None
@@ -46,8 +49,8 @@ class UpdateStateResource(Resource):
             board=json.dumps(board_dict),
             ice_spawn=json.dumps(ice_spawn_dict),
             fire_spawn=json.dumps(fire_spawn_dict),
-            ice_healing_area=current_game_state.ice_healing_area,  
-            fire_healing_area=current_game_state.fire_healing_area 
+            ice_healing_area=json.dumps(ice_healing_area_dict),  
+            fire_healing_area=json.dumps(fire_healing_area_dict)
         )
 
         # Convert the GameStateModel instance to a dictionary to see updated game state in the response
