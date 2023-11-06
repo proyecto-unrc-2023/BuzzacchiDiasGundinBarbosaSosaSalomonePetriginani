@@ -43,10 +43,22 @@ from logic.game_controller import GameController
 #def step_impl(context):
 #    context.state.ice_healing_area.apply_effect()
 
-@then(u'the IceCell at position ({row:d},{column:d}) should have {expected_life:d} life points and should level up to level {level:d}')
-def step_impl(context, row, column, expected_life, level):
-    assert context.GameController.get_cells(row, column)[0].get_life() == expected_life
-    assert context.GameController.get_cells(row, column)[0].get_level() == level
+#there is a level 1 IceCell with 15 life points in the same position with the healing area
+@given(u'there is a level {level:d} {team} with {life:d} life points in the same position with the healing area')
+def step_impl(context, level, team, life):
+    pos_healing = context.GameController.get_positions_healing(team)
+    pos = pos_healing[3]
+    context.GameController.create_cell(pos[0], pos[1], team, level, life)
+    
+@when(u'the IceCell HealingArea effect is applied')
+def step_impl(context):
+    context.GameController.apply_healing()
+
+@then(u'the {team} should have {life:d} life points')
+def step_impl(context, team, life):
+    pos_healing = context.GameController.get_positions_healing(team)
+    pos = pos_healing[3]
+    assert context.GameController.get_cells(pos[0], pos[1])[0].get_life() == life
 
 
 #@then(u'the IceCell should level up to level 2')
@@ -73,7 +85,7 @@ def step_impl(context, row, column, expected_life, level):
 #def step_impl(context):
 #    context.state.ice_healing_area.apply_effect()
 
-@then(u'the IceCell at position ({row:d},{column:d}) should remain at level {level:d} with {life:d} life points')
-def step_impl(context, row, column, level, life):
-    assert context.GameController.get_cells(row, column)[0].get_life() == life
-    assert context.GameController.get_cells(row, column)[0].get_level() == level
+# @then(u'the IceCell at position ({row:d},{column:d}) should remain at level {level:d} with {life:d} life points')
+# def step_impl(context, row, column, level, life):
+#     assert context.GameController.get_cells(row, column)[0].get_life() == life
+#     assert context.GameController.get_cells(row, column)[0].get_level() == level

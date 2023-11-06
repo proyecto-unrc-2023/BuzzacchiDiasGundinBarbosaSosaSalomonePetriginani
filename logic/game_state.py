@@ -157,6 +157,16 @@ class GameState:
     def create_randoms_healing_areas(self):
         self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
         self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+        
+    def apply_healing(self):
+        ice_pos = self.ice_healing_area.get_positions()
+        fire_pos = self.fire_healing_area.get_positions()
+        for pos in ice_pos:
+            cells = self.board.get_cells(*pos)
+            self.ice_healing_area.apply_effect(cells)
+        for pos in fire_pos:
+            cells = self.board.get_cells(*pos)
+            self.ice_healing_area.apply_effect(cells)
 
     def update_state(self):
         self.execute_movements_in_all_positions()

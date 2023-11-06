@@ -72,6 +72,7 @@ class GameController:
         else:
             self.game_state.create_healing_area(row, column, FireCell)
             
+            
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
         
@@ -93,6 +94,16 @@ class GameController:
     def get_adyacents_pos(self, row, column):
         pos = (row, column)
         return self.game_state.get_adjacents_pos(pos)
+    
+    #only for behave healing
+    def get_positions_healing(self, team):
+        if(team == IceCell):
+            return self.game_state.ice_healing_area.get_positions()
+        else:
+            return self.game_state.fire_healing_area.get_positions()
+    
+    def apply_healing(self):
+        self.game_state.apply_healing()
     
     def get_adjacents_for_move(self, row, column, team):
         pos = (row, column)
