@@ -198,7 +198,7 @@ def test_generate_cells():
                 
 def test_update_state():
     game = GameState()
-    game.new_game(20, 20)
+    game.new_game(15, 15)
     game.create_spawn(1, 1, IceSpawn)
     for i in range(10):
         if game.get_mode() == GameMode.FINISHED:
@@ -207,6 +207,8 @@ def test_update_state():
         print(str(game.get_board()))
         game.update_state()
         print(f"IceSpawnLife: {game.get_ice_spawn().get_life()} FireSpawnLife: {game.get_fire_spawn().get_life()}")
+        print(f"LifeIceHA: {game.get_ice_healing_area().get_duration()} LifeFireHS: {game.get_fire_healing_area().get_duration()}")
+
         for row in range(8):
             for column in range(8):
                 # Obtener las células de hielo en la posición actual

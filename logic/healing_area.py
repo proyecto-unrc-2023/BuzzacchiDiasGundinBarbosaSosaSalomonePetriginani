@@ -19,6 +19,9 @@ class HealingArea:
     def get_healing_rate(self):
         return self.healing_rate
     
+    def get_duration(self):
+        return self.duration
+    
     def set_healing_rate(self, healing_rate):
         self.healing_rate = healing_rate
 
