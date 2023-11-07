@@ -41,6 +41,7 @@ class Cell:
         self.set_life(life)        
         self.position = position
         self.type = self.get_type()
+        self.has_moved = False
 
     @staticmethod
     def from_string(cell_str):

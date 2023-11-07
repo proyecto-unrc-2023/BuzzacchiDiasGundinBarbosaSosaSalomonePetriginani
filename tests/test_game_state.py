@@ -198,27 +198,27 @@ def test_generate_cells():
                 
 def test_update_state():
     game = GameState()
-    game.new_game(15, 15)
+    game.new_game(12, 12)
     game.create_spawn(1, 1, IceSpawn)
-    for i in range(10):
+    for i in range(20):
         if game.get_mode() == GameMode.FINISHED:
             print('Simulation finished')
             break
         print(str(game.get_board()))
         game.update_state()
-        #print(f"IceSpawnLife: {game.get_ice_spawn().get_life()} FireSpawnLife: {game.get_fire_spawn().get_life()}")
-        #print(f"LifeIceHA: {game.get_ice_healing_area().get_duration()} LifeFireHS: {game.get_fire_healing_area().get_duration()}")
+        print(f"IceSpawnLife: {game.get_ice_spawn().get_life()} FireSpawnLife: {game.get_fire_spawn().get_life()}")
+        print(f"LifeIceHA: {game.get_ice_healing_area().get_duration()} LifeFireHS: {game.get_fire_healing_area().get_duration()}")
 
-        # for row in range(8):
-        #     for column in range(8):
-        #         # Obtener las células de hielo en la posición actual
-        #         ice_cells = game.get_ice_cells(row, column)
-        #         # Imprimir los niveles de las células de hielo
-        #         for cell in ice_cells:
-        #             print(f"IceCell:Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
-        #         fire_cells = game.get_ice_cells(row, column)
-        #         for cell in fire_cells:
-        #             print(f"FireCell: Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
+        for row in range(8):
+            for column in range(8):
+                # Obtener las células de hielo en la posición actual
+                ice_cells = game.get_ice_cells(row, column)
+                # Imprimir los niveles de las células de hielo
+                for cell in ice_cells:
+                    print(f"IceCell:Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
+                fire_cells = game.get_ice_cells(row, column)
+                for cell in fire_cells:
+                    print(f"FireCell: Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
         #         #time.sleep(5)
 
     assert 1 == 2

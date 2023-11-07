@@ -157,7 +157,7 @@ class GameState:
     def create_randoms_healing_areas(self):
         self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
         self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
-        
+    
     def apply_healing(self):
         ice_pos = self.ice_healing_area.get_positions()
         fire_pos = self.fire_healing_area.get_positions()
@@ -248,8 +248,17 @@ class GameState:
         for row in range(self.board.rows):
             for column in range(self.board.columns):
                 self.move_cells_in_position(row, column)
+        self.reset_movement_flags()
     
+    def reset_movement_flags(self):
+        for row in range(self.board.rows):
+            for column in range(self.board.columns):
+                for cell in self.board.get_cells(row, column):
+                    cell.has_moved = False
+
     def advance(self, cell):
+        if cell.has_moved:
+            return
         if cell.get_position() is not None and self.board is not None:
             if isinstance(cell, IceCell):    
                 cell_team = Team.IceTeam
@@ -261,6 +270,7 @@ class GameState:
                 cell.set_position(random.choice(positionsList))
                 if cell.get_life() > 0:
                     cell.set_life(cell.get_life() - 1)
+            cell.has_moved = True
 
     #Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY, cell_team):
@@ -349,20 +359,6 @@ class GameState:
             self.fire_spawn = self.board.create_spawn(inverse_row, inverse_column, FireSpawn)
         else:
             self.ice_spawn = self.board.create_spawn(inverse_row, inverse_column, IceSpawn)
-
-    # @classmethod
-    # def create_from_dict(cls, dict):
-    #     mode = GameMode(dict['mode'])
-    #     board_dict = json.loads(dict['board']) if isinstance(dict['board'], str) else dict['board']
-    #     board = Board.create_from_dict(board_dict)
-    #     #board = Board.create_from_dict(dict['board'])
-    #     team = Team(dict['team'])
-    #     username = dict['username']
-    #     ice_spawn = IceSpawn.create_from_dict(dict['ice_spawn'])
-    #     fire_spawn = FireSpawn.create_from_dict(dict['fire_spawn'])
-    #     ice_healing_area = HealingArea.create_from_dict(dict['ice_healing_area'])
-    #     fire_healing_area = HealingArea.create_from_dict(dict['fire_healing_area'])
-    #     return cls(mode, board, team, username, ice_spawn, fire_spawn, ice_healing_area, fire_healing_area)
 
     @classmethod
     def create_from_dict(cls, dict):
