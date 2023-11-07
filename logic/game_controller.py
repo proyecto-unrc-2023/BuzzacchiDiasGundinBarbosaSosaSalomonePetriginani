@@ -2,11 +2,17 @@ from logic.board import Board
 from logic.cell import Cell, Level, FireCell, IceCell
 from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.game_state import GameMode, Team, GameState
-
+from app.schemas.game_state_schema import GameStateSchema
+from app.models.game_state_model import GameStateModel
+import json
+from flask import jsonify
 class GameController:
     
-    def __init__(self):
-        self.game_state = GameState()
+    def __init__(self, game_state=None):
+        if game_state is not None:
+            self.game_state = game_state
+        else:
+            self.game_state = GameState()
         
     def set_username(self, user_name):
         self.game_state.set_username(user_name)
@@ -31,7 +37,16 @@ class GameController:
     
     def get_team(self):
         return self.game_state.get_team()
-        
+    
+    def get_spawn(self, spawn_type):
+        return self.game_state.get_spawn(spawn_type)
+    
+    def get_game_state(self):
+        return self.game_state
+    
+    def get_username(self):
+        return self.game_state.get_username()
+    
     def no_spawns_in_pos(self, row, column):
         return self.game_state.no_spawns_in_pos(row, column)
     
@@ -39,18 +54,25 @@ class GameController:
     def add_spawn(self, positions):
         self.game_state.add_spawn(positions)
         
-    def create_spawn(self, row, column, team):
-        if team == 'Ice':
-            self.game_state.create_spawn(row, column, Team.IceTeam)
+    def create_spawn(self, row, column, spawn_type):
+        if eval(spawn_type) == IceSpawn:
+            self.game_state.create_spawn(row, column, IceSpawn)
         else:
-            self.game_state.create_spawn(row, column, Team.FireTeam)
+            self.game_state.create_spawn(row, column, FireSpawn)
 
-    def create_cell(self, row, column, team, level, life):
-        if team == 'Ice':
-            self.game_state.create_cell(row, column, Team.IceTeam, level, life)
+    def create_cell(self, row, column, cell_type, level, life):
+        if eval(cell_type) == IceCell:
+            self.game_state.create_cell(row, column, IceCell, level, life)
         else:
-            self.game_state.create_cell(row, column, Team.FireTeam, level, life)
+            self.game_state.create_cell(row, column, FireCell, level, life)
 
+    def create_healing_area(self, row, column, affected_cell_type):
+        if affected_cell_type == IceCell:
+            self.game_state.create_healing_area(row, column, IceCell)
+        else:
+            self.game_state.create_healing_area(row, column, FireCell)
+            
+            
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
         
@@ -63,9 +85,25 @@ class GameController:
     def get_cells(self, row, column):
         return self.game_state.get_cells(row, column)
     
+    def get_ice_cells(self, row, column):
+        return self.game_state.get_ice_cells(row, column)
+    
+    def get_fire_cells(self, row, column):
+        return self.game_state.get_fire_cells(row, column)
+    
     def get_adyacents_pos(self, row, column):
         pos = (row, column)
         return self.game_state.get_adjacents_pos(pos)
+    
+    #only for behave healing
+    def get_positions_healing(self, team):
+        if(team == IceCell):
+            return self.game_state.ice_healing_area.get_positions()
+        else:
+            return self.game_state.fire_healing_area.get_positions()
+    
+    def apply_healing(self):
+        self.game_state.apply_healing()
     
     def get_adjacents_for_move(self, row, column, team):
         pos = (row, column)
@@ -74,23 +112,58 @@ class GameController:
     def get_ice_spawn(self):
         return self.game_state.get_ice_spawn()
     
+    def get_fire_spawn(self):
+        return self.game_state.get_fire_spawn()
+    
+    def get_ice_healing_area(self):
+        return self.game_state.get_ice_healing_area()
+    
+    def get_fire_healing_area(self):
+        return self.game_state.get_fire_healing_area()
+    
     def get_cells_in_spawn(self, spawn):
         return self.game_state.get_cells_in_spawn(spawn)
 
-    def count_cells_by_type(self, row, column):
-        count_ice, count_fire = 0, 0
-        for cell in self.get_cells(row, column):
-            if isinstance(cell, FireCell):
-                count_fire += 1
-            elif isinstance(cell, IceCell):
-                count_ice += 1
-        return count_ice, count_fire
-
     def find_matching_cells(self, position, cell_type, life_points, level):
         cells = self.get_cells(*position)
-        matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == level]
+        matching_cells = [cell for cell in cells if isinstance(cell, eval(cell_type)) and cell.get_life() == life_points and cell.get_level() == Level(level)]
         return matching_cells
 
+    def update_state(self):
+        self.game_state.update_state()
+    # def serialize_game_state(self, game_state):
+    #     # serialized_board = game_state.get_board().serialize_board()
+    #     # game_state_data = {
+    #     #     'board': serialized_board,
+    #     #     'ice_spawn': game_state.get_ice_spawn(),
+    #     #     'fire_spawn': game_state.get_fire_spawn(),
+    #     #     'team': game_state.get_team(),
+    #     #     'mode': game_state.get_mode(),
+    #     #     'username': game_state.get_username(),
+    #     #     'ice_healing_area': game_state.get_ice_healing_area(),
+    #     #     'fire_healing_area': game_state.get_fire_healing_area()
+    #     # }
+
+    #     game_state_schema = GameStateSchema()
+    #     logic_game_state = GameState(**game_state_schema.load(game_state))
+
+    #     serialized_game_state = GameStateModel(
+    #         username = logic_game_state.get_username(),
+    #         team = logic_game_state.team.to_json(),
+    #         mode = logic_game_state.mode.to_json(),
+    #         fire_spawn = json.dumps(logic_game_state.fire_spawn),
+    #         ice_spawn = json.dumps(logic_game_state.ice_spawn),
+    #         ice_healing_area = json.dumps(logic_game_state.ice_healing_area),
+    #         fire_healing_area = json.dumps(logic_game_state.fire_healing_area),
+    #         board=json.dumps(logic_game_state.board)  
+    #     )
+    #     return serialized_game_state
+    #     #return jsonify(serialized_game_state)
     
-    def generate_cell(self):
-        self.game_state.generate_cell()
+    def serialize_game_state(self, game_state):
+        game_state_schema = GameStateSchema()
+        serialize_game_state = game_state_schema.dump(game_state)
+        return jsonify(serialize_game_state)
+    
+    def generate_cells(self):
+        self.game_state.generate_cells()

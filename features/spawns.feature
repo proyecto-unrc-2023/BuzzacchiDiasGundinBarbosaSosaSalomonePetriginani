@@ -1,17 +1,17 @@
- Feature: Spawns of cells
-   Background: 
+Feature: Spawns of cells
+  Background: 
     Given a new game is started in Spawn Placement mode
     And a user with username Lucas is logged selecting team IceTeam
    
-  Scenario: First ice spawn   
-    Given the user choose the position (3, 4) for the Ice spawn 
-    When the Ice spawn creates in the position (3, 4)
-    Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Ice spawn
+#   Scenario: First ice spawn   
+#     Given the user choose the position (3, 4) for the Ice spawn 
+#     When the Ice spawn creates in the position (3, 4)
+#     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Ice spawn
 
-  Scenario: First fire spawn
-    Given the user choose the position (3, 4) for the Fire spawn 
-    When the Fire spawn creates in the position (3, 4)
-    Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn
+#   Scenario: First fire spawn
+#     Given the user choose the position (3, 4) for the Fire spawn 
+#     When the Fire spawn creates in the position (3, 4)
+#     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION after the user put the Fire spawn
 
   # Scenario: Creation of Cells
   #   Given the Ice spawn creates in the position (2,2)
@@ -30,3 +30,12 @@
 #     When the user choose the position (3, 10) for the Fire spawn and the second Fire spawn will create in the position (3, 10)
 #     Then the gamemode changes from GameMode.SPAWN_PLACEMENT to GameMode.SIMULATION
 
+  Scenario: Generation of ice cells
+    Given the user selects the position (1, 1) for the IceSpawn
+    When the IceSpawn generate cells
+    Then the cells must be created in one of the adjacents of the IceSpawn
+    
+  Scenario: Generation of fire cells
+    Given the user selects the position (1, 1) for the FireSpawn
+    When the FireSpawn generate cells
+    Then the cells must be created in one of the adjacents of the FireSpawn

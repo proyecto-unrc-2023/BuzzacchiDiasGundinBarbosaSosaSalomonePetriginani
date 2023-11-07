@@ -92,3 +92,30 @@ def step_impl(context, team, row, column):
 #@when(u'the user choose the position ({row:d}, {column:d}) for the {team} spawn and the second {team} spawn will create in the position ({row:d}, {column:d})')
 #def step_impl(context, row, column, team):
 #  context.GameController.create_spawn(row, column, team)
+
+@given(u'the user selects the position ({row:d}, {column:d}) for the {spawn}')
+def step_impl(context, row, column, spawn):
+  context.GameController.create_spawn(row, column, spawn)
+
+@when(u'the {spawn} generate cells')
+def step_impl(context, spawn):
+  context.GameController.generate_cells()
+
+@then(u'the cells must be created in one of the adjacents of the {team}')
+def step_impl(context, team):
+  spawn = context.GameController.get_spawn(team)
+  list = spawn.get_adjacents_spawn(context.GameController.get_board().__len__())
+  if team == 'IceSpawn':
+    for j in list:
+      r, c = j 
+      if (context.GameController.get_cells(r,c) != 0):
+        cells = context.GameController.get_cells(r,c)
+        for cell in cells:
+          assert isinstance(cell, IceCell)
+  else:
+    for j in list:
+      r, c = j 
+      if (context.GameController.get_cells(r,c) != 0):
+        cells = context.GameController.get_cells(r,c)
+        for cell in cells:
+          assert isinstance(cell, FireCell)

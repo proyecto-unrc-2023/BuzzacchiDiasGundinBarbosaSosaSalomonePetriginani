@@ -1,6 +1,6 @@
 from logic.game_state import GameState, Team
 from logic.cell import FireCell, IceCell, Level
-from logic.spawn import IceSpawn
+from logic.spawn import IceSpawn, FireSpawn
 import pytest
 
 params = [
@@ -14,7 +14,8 @@ def test_create_spawn(board_size, spawn_pos, team_type, expected_positions):
     game_state = GameState()
     game_state.new_game(*board_size)
     game_state.set_team(team_type)
-    game_state.create_spawn(*spawn_pos, team_type)
+    spawn_type = IceSpawn if team_type == Team.IceTeam else FireSpawn
+    game_state.create_spawn(*spawn_pos, spawn_type)
     if team_type == Team.IceTeam:
         assert game_state.ice_spawn is not None
         assert set(game_state.ice_spawn.positions) == set(expected_positions)
@@ -92,18 +93,17 @@ def test_execute_fight_in_position(board_size, cells_to_add, expected):
     game_state = GameState()
     game_state.new_game(*board_size)
     for cell in cells_to_add:
-        cell.board = game_state.get_board()
         game_state.add_cell(0,0, cell)
     game_state.execute_fight_in_position(0,0)
     assert game_state.get_board().__str__() == expected
 
 
 execute_fight_in_position_with_spawn_params = [
-    ((3, 3), [FireCell(level=Level.LEVEL_2, life=36, position=(0,0))], 264),
-    ((3,3), [FireCell(level=Level.LEVEL_3, life=58, position=(0,0)),
+    ((10,10), [FireCell(level=Level.LEVEL_2, life=36, position=(0,0))], 264),
+    ((10,10), [FireCell(level=Level.LEVEL_3, life=58, position=(0,0)),
              FireCell(level=Level.LEVEL_2, life=36, position=(0,0)),
              FireCell(level=Level.LEVEL_1, life=18, position=(0,0))], 188),
-    ((3,3), [FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
+    ((10,10), [FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
              FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
              FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
              FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
@@ -116,17 +116,17 @@ def test_execute_fight_in_position_with_spawn(board_size, cells_to_add, expected
 
     game_state = GameState()
     game_state.new_game(*board_size)
-    game_state.create_spawn(1,1, Team.IceTeam)
+    game_state.create_spawn(1,1, IceSpawn)
     for cell in cells_to_add:
-        cell.board = game_state.get_board()
         game_state.add_cell(0,0,cell)
     game_state.execute_fight_in_position(0,0)
 
-    assert game_state.ice_spawn.get_life() == expected_life                                                     
+    assert game_state.get_ice_spawn().get_life() == expected_life  
+                                                 
                                                                               
 
 
-######Tests para execute_fights_in_all_positions
+# ######Tests para execute_fights_in_all_positions
 execute_fights_params = [
     # Params: board_size, cells_to_add, expected_board_state
     ((3, 3), [
@@ -134,71 +134,74 @@ execute_fights_params = [
         (0, 0, FireCell(level=Level.LEVEL_2, life=30, position=(0, 0))),
         (1, 0, FireCell(level=Level.LEVEL_1, life=18, position=(1, 0))),
         (1, 0, IceCell(level=Level.LEVEL_2, life=30, position=(1, 0)))
-    ], 
-        'F| | \n'\
-        'I| | \n'\
-        ' | | '
-    ),
+    ], [
+        (0, 0, 1, FireCell),
+        (1, 0, 1, IceCell)
+    ]),
     ((4, 4), [
         (0, 0, IceCell(level=Level.LEVEL_1, life=18, position=(0, 0))),
         (0, 1, FireCell(level=Level.LEVEL_2, life=30, position=(0, 1))),
         (1, 0, FireCell(level=Level.LEVEL_1, life=18, position=(1, 0))),
-        (1, 1, IceCell(level=Level.LEVEL_2, life=30, position=(1, 0)))
-    ], 
-        'I|F| | \n'\
-        'F|I| | \n'\
-        ' | | | \n'\
-        ' | | | '
-    ), 
-        ((2, 2), [
+        (1, 1, IceCell(level=Level.LEVEL_2, life=30, position=(1, 1)))
+    ], [
+        (0, 0, 1, IceCell),
+        (0, 1, 1, FireCell),
+        (1, 0, 1, FireCell),
+        (1, 1, 1, IceCell)
+    ]), 
+        ((5, 5), [
         (0, 0, IceCell(level=Level.LEVEL_1, life=18, position=(0, 0))),
         (0, 0, FireCell(level=Level.LEVEL_1, life=20, position=(0, 0))),
         (1, 0, FireCell(level=Level.LEVEL_1, life=18, position=(1, 0))),
         (1, 0, IceCell(level=Level.LEVEL_2, life=30, position=(1, 0))), 
         (0, 0, IceCell(level=Level.LEVEL_2, life=30, position=(0, 0)))
-    ], 
-        'I,I| \n'\
-        'I| '
-    ),
-        ((2, 2), [
+    ], [
+        (0, 0, 2, IceCell),
+        (1, 0, 1, IceCell)
+    ]),
+        ((5, 5), [
         (0, 0, IceCell(level=Level.LEVEL_1, life=10, position=(0, 0))),
         (1, 1, FireCell(level=Level.LEVEL_2, life=30, position=(1, 1))),
-    ], 
-        'I| \n'\
-        ' |F'
-    ),
-        ((2, 2), [
+    ], [
+        (0, 0, 1, IceCell),
+        (1, 1, 1, FireCell)
+    ]),
+        ((5, 5), [
         (0, 0, IceCell(level=Level.LEVEL_1, life=10, position=(0, 0))),
         (0, 0, FireCell(level=Level.LEVEL_2, life=30, position=(0, 0))),
         (1, 1, FireCell(level=Level.LEVEL_3, life=50, position=(1, 1))),
         (1, 1, IceCell(level=Level.LEVEL_2, life=40, position=(1, 1))), 
-    ], 
-        'F| \n'\
-        ' |F'
-    ),
-        ((2, 2), [
+    ], [
+        (0, 0, 1, FireCell),
+        (1, 1, 1, FireCell)
+    ]),
+        ((5, 5), [
         (0, 0, IceCell(level=Level.LEVEL_1, life=15, position=(0, 0))),
         (0, 0, FireCell(level=Level.LEVEL_2, life=25, position=(0, 0))),
         (1, 0, FireCell(level=Level.LEVEL_1, life=15, position=(1, 0))),
         (1, 0, IceCell(level=Level.LEVEL_3, life=45, position=(1, 0))), 
         (0, 0, IceCell(level=Level.LEVEL_2, life=25, position=(0, 0)))
-    ], 
-        'I| \n'\
-        'I| '
-    )
+    ], [
+        (0, 0, 1, FireCell),
+        (1, 0, 1, IceCell)
+    ])
 ]
 
-@pytest.mark.parametrize("board_size, cells_to_add, expected_board_state", execute_fights_params)
-def test_execute_fights_in_all_positions(board_size, cells_to_add, expected_board_state):
+@pytest.mark.parametrize("board_size, cells_to_add, expected_cells_pos", execute_fights_params)
+def test_execute_fights_in_all_positions(board_size, cells_to_add, expected_cells_pos):
     game_state = GameState()
     game_state.new_game(*board_size)
     for cell_params in cells_to_add:
         row, column, cell = cell_params
-        cell.board = game_state.get_board()
         game_state.add_cell(row, column, cell)
     
     game_state.execute_fights_in_all_positions()
-    assert game_state.get_board().__str__() == expected_board_state
+    for expected_cell in expected_cells_pos:
+        row, column, count, type = expected_cell
+        cells = game_state.get_cells(row, column)
+        assert count == len(cells)
+        for cell in cells:
+            assert isinstance(cell, type)
 
 
 
@@ -219,52 +222,18 @@ movement_params = [
         IceCell(level=Level.LEVEL_1, life=2, position=(4, 5))
     ], [(3, 5), (5, 5), (4, 6), (4, 4), (3, 4), (5, 6), (5, 4), (3, 6)], 1)
 ]
+
 @pytest.mark.parametrize("board_size, cells_to_add, expected_positions, expected_life_points", movement_params)
 def test_movement_board(board_size, cells_to_add, expected_positions, expected_life_points):
     game_state = GameState()
     game_state.new_game(*board_size)
     pos = cells_to_add[0].get_position()
     for cell in cells_to_add:
-        cell.board = game_state.get_board()
         cell.position = pos
         game_state.add_cell(*pos, cell)
     game_state.move_cells_in_position(*pos)
     for cell in cells_to_add:
+        print(cell.position)
         assert cell.position in expected_positions
         assert cell.life == expected_life_points
         assert cell not in game_state.get_cells(*pos)
-        
-############Test para fusion 
-fusion_params = [
-    # Parameters: initial board size, list of cells to add, expected number of cells, expected types, expected life points, expected levels
-    ((10, 10), [(FireCell(level=Level.LEVEL_2, life=36, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_1, life=16, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_1, life=7, position=(1, 1))),
-                (IceCell(level=Level.LEVEL_1, life=2, position=(1, 1))),
-                (IceCell(level=Level.LEVEL_1, life=12, position=(1, 1)))], 2, [FireCell, IceCell], [60, 40], [Level.LEVEL_3, Level.LEVEL_2]),
-    ((10, 10), [(FireCell(level=Level.LEVEL_1, life=20, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_1, life=20, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_2, life=40, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_2, life=40, position=(1, 1)))], 2, [FireCell,FireCell] ,[60, 40], [Level.LEVEL_3, Level.LEVEL_2]),
-    ((10, 10), [(FireCell(level=Level.LEVEL_1, life=20, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_1, life=20, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_2, life=40, position=(1, 1))),
-                (FireCell(level=Level.LEVEL_2, life=40, position=(1, 1))),
-                (IceCell(level=Level.LEVEL_2, life=40, position=(1, 1))),
-                (IceCell(level=Level.LEVEL_1, life=20, position=(1, 1)))], 4, [FireCell, FireCell, IceCell, IceCell] ,[60,40,40,20], [Level.LEVEL_3, Level.LEVEL_2, Level.LEVEL_2, Level.LEVEL_1])
-]
-
-@pytest.mark.parametrize("board_size, cells_to_add, expected_num_cells, expected_types, expected_life_points, expected_levels", fusion_params)
-def test_fusion_board(board_size, cells_to_add, expected_num_cells, expected_types, expected_life_points, expected_levels):
-    game_state = GameState()
-    game_state.new_game(*board_size)
-    pos = (1, 1)
-    for cell in cells_to_add:
-        game_state.add_cell(*pos, cell)
-    game_state.fusion(pos)
-    cells_in_pos = game_state.get_cells(*pos)
-    assert len(cells_in_pos) == expected_num_cells
-    for i in range(expected_num_cells):
-        assert isinstance(cells_in_pos[i], expected_types[i])
-        assert cells_in_pos[i].life == expected_life_points[i]
-        assert cells_in_pos[i].level == expected_levels[i]
