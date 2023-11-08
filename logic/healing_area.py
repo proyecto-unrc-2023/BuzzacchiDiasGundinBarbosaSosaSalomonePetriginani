@@ -25,6 +25,8 @@ class HealingArea:
     def set_healing_rate(self, healing_rate):
         self.healing_rate = healing_rate
 
+    def decrease_duration(self):
+        self.duration -= 1
     def apply_effect(self, cells):
         if self.duration > 0:
             for cell in cells:
@@ -34,7 +36,7 @@ class HealingArea:
                         cell.set_life(60)
                         continue
                     cell.set_life(new_life)
-            self.duration -= 1
+            #self.duration = self.duration - 1
 
     def get_type(self):
         if self.affected_cell_type == 'IceCell' or self.affected_cell_type == IceCell:

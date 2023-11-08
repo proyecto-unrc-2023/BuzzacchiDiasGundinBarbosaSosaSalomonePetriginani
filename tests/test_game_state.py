@@ -195,12 +195,25 @@ def test_generate_cells():
             cells = game.get_cells(r,c)
             for cell in cells:
                 assert isinstance(cell, IceCell)
-                
+
+# def test_apply_healing():
+#     game = GameState()
+#     game.new_game(15,15)
+#     game.create_spawn(1,1,IceSpawn)
+#     ice_ha_duration = game.get_ice_healing_area().get_duration()
+#     ice_cell = IceCell()
+#     ice_pos = game.get_ice_healing_area().get_positions()
+#     game.add_cell(*ice_pos[0], ice_cell)
+#     cell_life = ice_cell.get_life()
+#     game.apply_healing()
+#     assert cell_life + 3 == ice_cell.get_life()
+#     assert ice_ha_duration - 1 == game.get_ice_healing_area().get_duration()
+
 def test_update_state():
     game = GameState()
-    game.new_game(12, 12)
+    game.new_game(15, 15)
     game.create_spawn(1, 1, IceSpawn)
-    for i in range(20):
+    for i in range(1500):
         if game.get_mode() == GameMode.FINISHED:
             print('Simulation finished')
             break

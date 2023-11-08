@@ -147,6 +147,9 @@ class Board:
         self.add_healing_area(self, healing_area)
         return healing_area
     
+    def delete_healings_area(self, row, column):
+        self.get_box(row, column).remove_healings_area(row, column)
+
     def add_spawn(self, spawn):
         positions_spawn = spawn.get_positions()
         for position in positions_spawn:

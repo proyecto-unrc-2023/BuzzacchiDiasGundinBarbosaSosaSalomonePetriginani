@@ -161,6 +161,9 @@ class GameState:
     def apply_healing(self):
         ice_pos = self.ice_healing_area.get_positions()
         fire_pos = self.fire_healing_area.get_positions()
+        self.ice_healing_area.decrease_duration()
+        self.fire_healing_area.decrease_duration()
+        self.check_delete_healings_area()
         for pos in ice_pos:
             cells = self.board.get_cells(*pos)
             self.ice_healing_area.apply_effect(cells)
@@ -168,11 +171,21 @@ class GameState:
             cells = self.board.get_cells(*pos)
             self.ice_healing_area.apply_effect(cells)
 
+    def check_delete_healings_area(self):
+        if self.get_ice_healing_area().get_duration() == 0:
+            self.ice_healing_area = None
+            self.fire_healing_area = None
+            positions_ice = self.get_ice_healing_area().get_positions()
+            for pos in positions_ice:
+                self.get_board().get_box(*pos).remove_ice_healing_area()
+            positions_fire = self.get_fire_healing_area().get_positions()
+            for pos in positions_fire:
+                self.get_board().get_box(*pos).remove_fire_healing_area()
+
     def update_state(self):
         self.execute_movements_in_all_positions()
-
         self.generate_cells()
-        # Healing 
+        self.apply_healing()
         self.execute_fusions_in_all_positions()
         self.execute_fights_in_all_positions()
 

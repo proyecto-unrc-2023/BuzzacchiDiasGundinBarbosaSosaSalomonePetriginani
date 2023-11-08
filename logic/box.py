@@ -92,6 +92,12 @@ class Box:
         if cell in self.fire_cells:
             self.fire_cells.remove(cell)
 
+    def remove_ice_healing_area(self):
+        self.ice_healing_area = None
+
+    def remove_fire_healing_area(self):
+        self.fire_healing_area = None
+        
     def __str__(self):
         elements = []
         if self.spawn:
