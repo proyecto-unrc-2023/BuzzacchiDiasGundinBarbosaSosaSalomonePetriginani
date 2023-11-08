@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 
 from enum import IntEnum
-#from api.games.game import CellSchema
+# from api.games.game import CellSchema
 
 LIFE_LOSS_PER_FIGHT = 4
 CELL_DEAD = 0
+
 
 class Level(IntEnum):
     LEVEL_1 = 1
@@ -34,6 +35,8 @@ class Level(IntEnum):
         if isinstance(other, Level):
             return self.value == other.value
         return False
+
+
 class Cell:
 
     def __init__(self, level=Level.LEVEL_1, life=20, position=None):
@@ -61,15 +64,14 @@ class Cell:
         if isinstance(other, Cell):
             return self.level == other.level and self.life == other.life and self.type == other.type #and self.position == other.position
         return False
-    
-    #<
+
     def __lt__(self, other_cell):
         if self.level != other_cell.level:
             return self.level > other_cell.level
         else:
             return self.life > other_cell.life
 
-    ####  Getters  ####
+    # # # #  Getters  # # # #
     def set_position(self, position):
         self.position = position
 
@@ -82,7 +84,7 @@ class Cell:
             raise ValueError(f"Invalid level: {level}")
         self.level = level
         
-    ####  Getters  ####
+    # # # #  Getters  # # # #
     def get_level(self):
         return self.level
     
@@ -97,15 +99,6 @@ class Cell:
         
     def is_alive(self):
         return self.get_life() > 0
-    
-    #Comments should be done in another class
-    # def level_and_life_up(self):
-    #     if (self.level != 3):
-    #         self.level_up()
-    #         self.life = Level.max_life_level(self.level)
-    #         return True
-    #     else:
-    #         return False
 
     def fight(self, other_cell):
         if type(self) != type(other_cell):
@@ -144,7 +137,8 @@ class DeadCell(Cell):
 
     def get_type(self):
         return 'DeadCell'
-    
+
+
 class IceCell(Cell):
 
     def __str__(self):
@@ -159,6 +153,7 @@ class IceCell(Cell):
             return cls(dict['level'], dict['life'], dict['position'])
         else:
             return None
+
 
 class FireCell(Cell):
 

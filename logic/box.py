@@ -3,6 +3,7 @@ from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.healing_area import HealingArea
 import bisect
 
+
 class Box:
 
     def __init__(self, spawn=None, fire_cells=None, ice_cells=None, fire_healing_area=None, ice_healing_area=None, pos=None):
@@ -130,16 +131,6 @@ class Box:
         pos = tuple(dict['pos'])
         #pos = dict['pos']
         return cls(spawn, fire_cells, ice_cells, fire_healing_area, ice_healing_area, pos)
-    
-    # def __eq__(self, other):
-    #     if isinstance(other, Box):
-    #         return (self.spawn == other.spawn and
-    #                 self.fire_cells == other.fire_cells and
-    #                 self.ice_cells == other.ice_cells and
-    #                 self.fire_healing_area == other.fire_healing_area and
-    #                 self.ice_healing_area == other.ice_healing_area and
-    #                 self.pos == other.pos)
-    #     return False
 
     def __eq__(self, other):
         if not isinstance(other, Box):

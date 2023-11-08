@@ -1,7 +1,8 @@
 import random 
 from abc import ABC, abstractmethod
 from logic.cell import Cell, Level, FireCell, IceCell
-import json
+
+
 class Spawn:
     
     def __init__(self, life=150, positions=None, type=None):
@@ -21,10 +22,7 @@ class Spawn:
         
     def set_position(self, pos):
         self.positions = pos
-    
- #   def set_board(self, board):
- #       self.board = board
- #       
+
     def get_positions(self):
         return self.positions
 
@@ -101,6 +99,7 @@ class Spawn:
         else:
             return None
 
+
 class FireSpawn(Spawn):
         
     def set_life(self, life):
@@ -131,18 +130,6 @@ class FireSpawn(Spawn):
                     pos = random.choice(positionsList)
                 cell = (FireCell(position = pos, board = self.board))
             return cell    
-    
-    # def generate_cell(self):
-    #     if self.positions is not None:
-    #         positionsList = []
-    #         tuplePos = self.positions
-    #         for pos in tuplePos:
-    #             list = self.get_adjacents_spawn()
-    #             if list:
-    #                 positionsList.append(list)
-    #                 pos = random.choice(positionsList)
-    #             cell = (FireCell(positions = pos, board = self.board))
-    #         return cell  
 
     @classmethod
     def create_from_dict(cls, dict):
@@ -150,20 +137,13 @@ class FireSpawn(Spawn):
             return cls(dict['life'], dict['positions'], dict['type'])
         else:
             return None
-    
-    # @classmethod
-    # def create_from_dict(cls, dict):
-    #     if dict is not None:
-    #         fire_spawn_dict = json.loads(dict['fire_spawn'])
-    #         if fire_spawn_dict['type'] == 'FireSpawn':
-    #             return cls(fire_spawn_dict['life'], fire_spawn_dict['positions'], fire_spawn_dict['type'])
-    #     return None
-    
+
     def __eq__(self, other):
         if isinstance(other, Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
         return False
-    
+
+
 class IceSpawn(Spawn):
     def __str__(self):
         return 'IS'
@@ -176,34 +156,7 @@ class IceSpawn(Spawn):
         
     def decrease_life(self, damage):
         life -= damage
-        
-    # def generate_cell(self):
-    #     if self.positions is not None:
-    #         positionsList = []
-    #         tuplePos = self.positions
-    #         for pos in tuplePos:
-    #             list = self.get_adjacents_for_move(pos)
-    #             if list:
-    #                 positionsList.append(list)
-    #                 position = random.choice(positionsList)
-    #             cell = (IceCell(position = position, board = self.board))
-    #         return cell
-    #     self.life -= damage
-    #     if(self.life < 0):
-    #         self.life = 0
-    
-    # def generate_cell(self):
-    #     if self.positions is not None:
-    #         positionsList = []
-    #         tuplePos = self.positions
-    #         for pos in tuplePos:
-    #             list = self.get_adjacents_spawn()
-    #             if list:
-    #                 positionsList.append(list)
-    #                 positions = random.choice(positionsList)
-    #             cell = (IceCell(positions = positions, board = self.board))
-    #         return cell 
-    
+
     def get_type(self):
         return 'IceSpawn'
     
@@ -213,21 +166,13 @@ class IceSpawn(Spawn):
             return cls(dict['life'], dict['positions'], dict['type'])
         else:
             return None
-    
-    # @classmethod
-    # def create_from_dict(cls, dict):
-    #     if dict is not None:
-    #         ice_spawn_dict = json.loads(dict['ice_spawn'])
-    #         if ice_spawn_dict['type'] == 'IceSpawn':
-    #             return cls(ice_spawn_dict['life'], ice_spawn_dict['positions'], ice_spawn_dict['type'])
-    #     return None
-    
+
     def __eq__(self, other):
         if isinstance(other, Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
         return False
 
-    ######Eq para ver donde esta el error
+    # Eq para ver donde esta el error
     # def __eq__(self, other):
     #     if not isinstance(other, Spawn):
     #         return NotImplemented

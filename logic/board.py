@@ -3,8 +3,8 @@ from logic.cell import IceCell, FireCell
 from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
-import json
 import random
+
 
 class Board:
 
@@ -95,14 +95,6 @@ class Board:
 
     def get_box(self, row, column):
         return self.board[row][column]
-
-    #Innecesario?
-    # def get_pos(self, cell):
-    #     for i, row in enumerate(self.board):
-    #         for j, cell_list in enumerate(row):
-    #             if cell in cell_list:
-    #                 return (i, j)
-    #     return None
 
     def _check_position(self, row, column):
         length = len(self.board)
