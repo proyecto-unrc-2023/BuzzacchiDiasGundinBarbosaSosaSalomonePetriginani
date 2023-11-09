@@ -272,8 +272,13 @@ class GameState:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                if (self.no_spawns_in_pos(new_row, new_col, cell_team)):
+                if (self.enemy_spawns_in_pos(new_row, new_col, cell_team)):
+                    enemyList = []
+                    enemyList.append((new_row, new_col))
+                    return enemyList
+                elif (self.no_spawns_in_pos(new_row, new_col, cell_team)):
                     adjacentList.append((new_row, new_col))
+                
         return adjacentList
     
     def no_spawns_in_pos(self, row, column, cell_team):
@@ -282,6 +287,12 @@ class GameState:
         else:
             return (row, column) not in self.fire_spawn.get_positions() if self.fire_spawn is not None else True
     
+    def enemy_spawns_in_pos(self, row, column, cell_team):
+        if cell_team == Team.IceTeam:
+            return (row, column) in self.fire_spawn.get_positions() if self.fire_spawn is not None else False
+        else:
+            return (row, column) in self.ice_spawn.get_positions() if self.ice_spawn is not None else False
+        
     # FUSION
     def fusion(self, pos):
         box = self.board.get_box(pos[0], pos[1])
