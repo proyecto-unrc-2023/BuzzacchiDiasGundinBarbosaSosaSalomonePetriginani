@@ -1,4 +1,4 @@
-from logic.cell import Cell, Level, IceCell
+from logic.cell import Cell, Level, IceCell, FireCell
 
 class HealingArea:
     
@@ -27,6 +27,7 @@ class HealingArea:
 
     def decrease_duration(self):
         self.duration -= 1
+        
     def apply_effect(self, cells):
         if self.duration > 0:
             for cell in cells:
@@ -56,7 +57,7 @@ class HealingArea:
     @classmethod
     def create_from_dict(cls, dict):
         if dict is not None:
-            return cls(dict['positions'], dict['affected_cell_type'], dict['duration'], dict['healing_rate'])
+            return cls(dict['positions'], eval(dict['affected_cell_type']), dict['duration'], dict['healing_rate'])
         else:
             return None
         

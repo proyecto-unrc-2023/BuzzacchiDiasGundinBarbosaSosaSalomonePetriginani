@@ -134,8 +134,9 @@ class Board:
     def create_healing_area(self, row, column, affected_cell_type):
         self._check_position(row, column)
         position = (row, column)
+        random_healing_rate = random.randint(1, 7)
         positions_healing = self._get_adjacents_pos(position)
-        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
+        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type, healing_rate=random_healing_rate)
         self.add_healing_area(self, healing_area)
         return healing_area
     

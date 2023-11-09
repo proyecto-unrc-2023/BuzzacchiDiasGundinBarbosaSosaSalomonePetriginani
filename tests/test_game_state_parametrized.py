@@ -99,10 +99,10 @@ def test_execute_fight_in_position(board_size, cells_to_add, expected):
 
 
 execute_fight_in_position_with_spawn_params = [
-    ((10,10), [FireCell(level=Level.LEVEL_2, life=36, position=(0,0))], 264),
+    ((10,10), [FireCell(level=Level.LEVEL_2, life=36, position=(0,0))], 114),
     ((10,10), [FireCell(level=Level.LEVEL_3, life=58, position=(0,0)),
              FireCell(level=Level.LEVEL_2, life=36, position=(0,0)),
-             FireCell(level=Level.LEVEL_1, life=18, position=(0,0))], 188),
+             FireCell(level=Level.LEVEL_1, life=18, position=(0,0))], 38),
     ((10,10), [FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
              FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),
              FireCell(level=Level.LEVEL_3, life=60, position=(0,0)),

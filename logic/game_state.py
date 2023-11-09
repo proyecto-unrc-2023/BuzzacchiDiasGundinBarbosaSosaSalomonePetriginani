@@ -132,28 +132,33 @@ class GameState:
         self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
     
     def apply_healing(self):
-        ice_pos = self.ice_healing_area.get_positions()
-        fire_pos = self.fire_healing_area.get_positions()
-        self.ice_healing_area.decrease_duration()
-        self.fire_healing_area.decrease_duration()
-        self.check_delete_healings_area()
-        for pos in ice_pos:
-            cells = self.board.get_cells(*pos)
-            self.ice_healing_area.apply_effect(cells)
-        for pos in fire_pos:
-            cells = self.board.get_cells(*pos)
-            self.ice_healing_area.apply_effect(cells)
+        healing_area_deleteds = self.check_delete_healings_area()
+        if healing_area_deleteds:
+            self.create_randoms_healing_areas()
+        else:
+            ice_pos = self.ice_healing_area.get_positions()
+            fire_pos = self.fire_healing_area.get_positions()
+            self.ice_healing_area.decrease_duration()
+            self.fire_healing_area.decrease_duration()
+            for pos in ice_pos:
+                cells = self.board.get_cells(*pos)
+                self.ice_healing_area.apply_effect(cells)
+            for pos in fire_pos:
+                cells = self.board.get_cells(*pos)
+                self.ice_healing_area.apply_effect(cells)
 
     def check_delete_healings_area(self):
         if self.get_ice_healing_area().get_duration() == 0:
-            self.ice_healing_area = None
-            self.fire_healing_area = None
             positions_ice = self.get_ice_healing_area().get_positions()
             for pos in positions_ice:
                 self.get_board().get_box(*pos).remove_ice_healing_area()
             positions_fire = self.get_fire_healing_area().get_positions()
             for pos in positions_fire:
                 self.get_board().get_box(*pos).remove_fire_healing_area()
+            self.ice_healing_area = None
+            self.fire_healing_area = None
+            return True
+        return False
 
     def update_state(self):
         self.execute_movements_in_all_positions()
