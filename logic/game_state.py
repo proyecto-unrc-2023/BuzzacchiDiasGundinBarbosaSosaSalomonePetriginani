@@ -253,12 +253,21 @@ class GameState:
         if cell.get_position() is not None and self.board is not None:
             if isinstance(cell, IceCell):    
                 cell_team = Team.IceTeam
-            else:
-                cell_team = Team.FireTeam    
+                enemy_spawn = self.fire_spawn.get_positions()[4]
+            elif isinstance(cell, FireCell):
+                cell_team = Team.FireTeam
+                enemy_spawn = self.ice_spawn.get_positions()[4]
             tuplePos = cell.get_position()
             positionsList = self.get_adjacents_for_move(tuplePos, cell_team)
+            best_advance = 100
+            best_pos = (positionsList[0])
+            for r, c in positionsList:
+                value = ((enemy_spawn[0] - r) ** 2 + (enemy_spawn[1] - c) ** 2) ** 0.5
+                if(best_advance > value):
+                    best_advance = value
+                    best_pos = (r, c)
             if positionsList:
-                cell.set_position(random.choice(positionsList))
+                cell.set_position(best_pos)
                 if cell.get_life() > 0:
                     cell.set_life(cell.get_life() - 1)
             cell.has_moved = True

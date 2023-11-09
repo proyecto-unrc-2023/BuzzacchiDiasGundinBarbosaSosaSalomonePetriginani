@@ -41,6 +41,7 @@ def test_get_adjacents_for_move_edge_fire_cell(gamestate):
     
 def test_advance_method(gamestate):
     gamestate.set_team(Team.FireTeam)
+    gamestate.create_spawn(5, 3, FireSpawn)
     gamestate.create_cell(1, 1, gamestate.get_team(), Level.LEVEL_1, 20)
     oldcell = gamestate.get_cells(1, 1)
 

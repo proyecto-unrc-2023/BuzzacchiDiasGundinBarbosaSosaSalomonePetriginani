@@ -227,6 +227,7 @@ movement_params = [
 def test_movement_board(board_size, cells_to_add, expected_positions, expected_life_points):
     game_state = GameState()
     game_state.new_game(*board_size)
+    game_state.create_spawn(1, 1, IceSpawn)
     pos = cells_to_add[0].get_position()
     for cell in cells_to_add:
         cell.position = pos
