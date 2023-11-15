@@ -23,8 +23,8 @@ class NewGameResource(Resource):
         if not isinstance(row, int) or not isinstance(column, int):
             return {'message': 'Row and column must be integers'}, 400
         
-        if not 0 <= row <= 14 or not 0 <= column <= 14:
-            return {'message': 'Row and column must be integers between 0 and 14 '}, 400
+        if not 0 <= row <= 13 or not 0 <= column <= 13:
+            return {'message': 'Row and column must be integers between 0 and 14 '}, 422
 
         game_state_model = GameStateModel.query.get(id)
         if game_state_model is None:

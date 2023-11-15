@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function GameScreen() {
   const [userData, setUserData] = useState({ username: '', team: '', id: '' });
-  const [spawnCoords, setSpawnCoords] = useState({ row: 1, column: 1 }); 
+  const [spawnCoords, setSpawnCoords] = useState({ row: 1, column: 1 });
+  const [spawnSetSuccess, setSpawnSetSuccess] = useState(false);
+  const [gameState, setGameState] = useState(null);  
+
+  const navigate = useNavigate();
   const { gameId } = useParams();
 
   useEffect(() => {
@@ -30,6 +34,11 @@ function GameScreen() {
   }, []);
 
   const handleSpawnSubmit = async () => {
+    if (!(0 <= spawnCoords.row && spawnCoords.row <= 13) || !(0 <= spawnCoords.column && spawnCoords.column <= 13)) {
+      alert('Row and column must be integers between 0 and 14.');
+      return;
+    }
+
     try {
       const response = await fetch('/simulation/new_game', {
         method: 'POST',
@@ -43,16 +52,23 @@ function GameScreen() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Error creating new game');
+      if (response.status === 200) {
+        const responseData = await response.json();
+        // Almacenar el game state en el estado
+        setGameState(responseData.game_state);
+        setSpawnSetSuccess(true);
+      } else {
+        setSpawnSetSuccess(false);
       }
-
-      const responseData = await response.json();
-      console.log(responseData); 
 
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const handleStartSimulation = () => {
+    //console.log(gameState)
+    navigate(`/game/simulation`, { state: { gameState } });
   };
 
   return (
@@ -74,6 +90,12 @@ function GameScreen() {
           onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
         />
         <button onClick={handleSpawnSubmit}>Set Spawn</button>
+        {spawnSetSuccess ? (
+          <div>
+            <p>Spawn was set successfully.</p>
+            <button onClick={handleStartSimulation}>Start Simulation</button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
