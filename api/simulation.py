@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, session
 from app.schemas.cell_schema import CellSchema
 from app.schemas.board_schema import BoardSchema
 from logic.cell import Level, IceCell, FireCell
@@ -15,6 +15,15 @@ from logic.game_controller import GameController
 from api import db
 import json
 
+def get_authenticated_user():
+    username = session.get('username')
+    if username:
+        game_state = GameStateModel.query.filter_by(id=session['id']).first()
+        if game_state:
+            return game_state.to_dict()['username']
+
+    return None
+
 # Route to start the game and receive data 
 @simulation_bp.route('/start', methods=['POST'])
 def start():
@@ -22,23 +31,25 @@ def start():
         data = request.json  
 
         selected_username = data.get('username')
+        # Check username
+        if not isinstance(selected_username, str) or not selected_username.strip():
+            return {'message': 'Username must be a non-empty string'}, 400
+        
         selected_team = data.get('team')
-
+        # Check team
+        if selected_team not in ('IceTeam', 'FireTeam'):
+            return {'message': 'Team must be either "IceTeam" or "FireTeam"'}, 400
+        
         game_controller = GameController()
-        game_controller.new_game(10, 10)
         game_controller.set_username(selected_username)
         game_controller.set_team(selected_team)
-
-        board_schema = BoardSchema()
 
         #Logic to add to DB actual game state
         game_state_data = {
             'username': game_controller.get_username(),
             'team': game_controller.get_team(),
             'mode': game_controller.get_mode(),
-            'board': board_schema.dump(game_controller.get_board())
         }
-        
         # Load the game state data into the schema
         game_state_schema = GameStateSchema()
 
@@ -50,14 +61,33 @@ def start():
             mode=serialized_game_state_data['mode'].value,
             # team=Team(serialized_game_state_data['team']),
             # mode=GameMode(serialized_game_state_data['mode']),
-            board=json.dumps(serialized_game_state_data['board'])
+            #board=json.dumps(serialized_game_state_data['board'])
         )
 
         db.session.add(game_state_model_instance)
         db.session.commit()
-
+        session['username'] = selected_username
+        session['id'] = game_state_model_instance.id
         return jsonify({'game_state': game_state_model_instance.to_dict()}), 200
 
+
+@simulation_bp.route('/get_username_and_team', methods=['GET'])
+def get_username_and_team():
+    if request.method == 'GET':
+        auth_user = get_authenticated_user()
+
+        if auth_user:
+            game_state = GameStateModel.query.filter_by(id=session['id']).first()
+
+            if game_state:
+                game_state_dict = game_state.to_dict()
+                username = game_state_dict['username']
+                team = game_state_dict['team']
+                return jsonify({'username': username, 'team': team}), 200
+            else:
+                return {'message': 'Game state not found for the authenticated user'}, 404
+        else:
+            return {'message': 'Unauthenticated user'}, 401
 
 
 

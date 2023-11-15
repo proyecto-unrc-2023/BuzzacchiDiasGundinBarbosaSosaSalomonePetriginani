@@ -16,11 +16,15 @@ class UpdateStateResource(Resource):
         data = request.json
         game_state_id = data.get('id')
         game_state_model = GameStateModel.query.get(game_state_id)
+
         if game_state_model is None:
             return {'message': 'GameState not found'}, 404
         
         game_state_data_model = game_state_model.to_dict()
         logic_game_state = GameState.create_from_dict(game_state_data_model)
+        
+        if logic_game_state.get_ice_spawn() is None:
+            return {'message': 'Spawn was not setted'}, 400
         
         game_controller = GameController(logic_game_state)
         game_controller.update_state()
