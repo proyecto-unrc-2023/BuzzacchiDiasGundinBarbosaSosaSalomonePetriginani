@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, session
 from flask_restful import Resource
 from api.routes import api
 from logic.game_state import GameState, Team
@@ -11,32 +11,40 @@ from api import db
 import json
 from marshmallow import ValidationError
 
-
-class SetSpawnResource(Resource):
+class NewGameResource(Resource):
 
     def post(self):
         data = request.json
-        data_dict = {
-            'row': data.get('row'),
-            'column': data.get('column'),
-            'game_state_id': data.get('game_state_id')
-        }
-        game_state_model = GameStateModel.query.get(data_dict['game_state_id'])
+
+        row = data.get('row')
+        column = data.get('column')
+        id = data.get('game_state_id')
+        # Validate row and column
+        if not isinstance(row, int) or not isinstance(column, int):
+            return {'message': 'Row and column must be integers'}, 400
+        
+        if not 0 <= row <= 14 or not 0 <= column <= 14:
+            return {'message': 'Row and column must be integers between 0 and 14 '}, 400
+
+        game_state_model = GameStateModel.query.get(id)
         if game_state_model is None:
             return {'message': 'GameState not found'}, 404
 
         # Convert the game_state_model to a dictionary
         game_state_data_model = game_state_model.to_dict()
+
         # Deserialize the game_state_data_model to a GameState object 
         logic_game_state = GameState.create_from_dict(game_state_data_model)
+
         # Pass the GameState object to the GameController constructor
         game_controller = GameController(logic_game_state)
+        game_controller.new_game(15, 15)
 
         spawn_type = 'IceSpawn' if game_controller.get_team() == Team.IceTeam else 'FireSpawn'
-        game_controller.create_spawn(data_dict['row'], data_dict['column'], spawn_type)
+        game_controller.create_spawn(row, column, spawn_type)
 
         current_game_state = game_controller.get_game_state()
-        #print(str(current_game_state.get_board()))
+
         # Schemas instances to serialize
         board_schema = BoardSchema()
         spawn_schema = SpawnSchema()
@@ -71,5 +79,4 @@ class SetSpawnResource(Resource):
         db.session.commit()
         return {'message': 'Spawn set successfully', 'game_state': game_state_dict}, 200    
 
-    
-api.add_resource(SetSpawnResource, '/set_spawn')
+api.add_resource(NewGameResource, '/new_game')

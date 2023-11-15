@@ -8,8 +8,9 @@ api = Api(simulation_bp)
 
 # Import module routes
 from api.routes import routes_for_testing
-from api.routes import set_spawn
+from api.routes import new_game
 from api.routes import update_state
+from api.routes import google_sign_in
 from app.schemas.board_schema import BoardSchema
 from app.models.board_model import BoardModel
 from app.schemas.game_state_schema import GameStateSchema
