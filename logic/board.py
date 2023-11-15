@@ -166,6 +166,8 @@ class Board:
 
     @classmethod
     def create_from_dict(cls, dict):
+        if dict is None:
+            return None
         rows = dict['rows']
         columns = dict['columns']
         board = [[Box.create_from_dict(box_dict) for box_dict in row] for row in dict['board']]
