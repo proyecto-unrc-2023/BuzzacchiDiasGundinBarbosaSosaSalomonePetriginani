@@ -8,7 +8,7 @@ function AppRouter() {
     <Router>
       <Routes>
         <Route path="/" element={<App />} exact />
-        <Route path="/game" element={<GameScreen />} />
+        <Route path="/game/:gameId" element={<GameScreen />} />
       </Routes>
     </Router>
   );

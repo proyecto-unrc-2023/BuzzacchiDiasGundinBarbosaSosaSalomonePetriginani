@@ -1,74 +1,143 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [username, setUsername] = useState('');
-  const [team, setTeam] = useState('Water Team');
-  const navigate = useNavigate(); // Get the 'navigate' function to redirect to other pages
+  const [team, setTeam] = useState('FireTeam');
+  const navigate = useNavigate();
 
-  // Handle changes in the username field
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  // Handle changes in the team selection field
   const handleTeamChange = (event) => {
     setTeam(event.target.value);
   };
 
-  // Handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevents the default form behavior
+  // Function to handle Google sign-out
+  const handleGoogleSignOut = () => {
+    console.log(window.google.accounts.id);
+    window.google.accounts.id.disableAutoSelect();
 
-    // Object with the form data
-    const formData = {
-      username: username,
-      team: team,
+    window.google.accounts.id.revoke(localStorage.getItem('email'), (done) => {
+      localStorage.clear();
+      window.location.reload(); 
+    });
+  };
+
+  useEffect(() => {
+    // Function to initialize Google Sign-In
+    window.onGoogleScriptLoad = () => {
+      const params = {
+        client_id: "450042762936-gsjdaj4lh1ftmac3md1nvs1dufhbprgt.apps.googleusercontent.com",
+        callback: window.handleCredentialResponse,
+        auto_prompt: false,
+      };
+      window.google.accounts.id.initialize(params);
+      window.google.accounts.id.renderButton(
+        document.getElementById("my-signin2"),
+        { theme: "outline", size: "large", shape: "rectangular", text: "sign_in_with", logo_alignment: "left" }
+      );
     };
 
-    // Send to backend
-    fetch('/init_game/start', {
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = window.onGoogleScriptLoad;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    // If the username is set, send a request to start endpoint
+    if (username) {
+      const formData = {
+        username: username,
+        team: team,
+      };
+      console.log('Form Data:', formData); 
+
+      fetch('/simulation/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          const gameId = data.game_state.id;  
+          //console.log(gameId)
+          navigate(`/game/${gameId}`);
+        })
+        .catch((error) => {
+          console.error('Error sending data:', error);
+        });
+    }
+  }, [username, team, navigate]);
+
+  // Function to handle Google Sign-In response
+  window.handleCredentialResponse = (response) => {
+    console.log(response);
+
+    const body = {
+      id_token: response.credential,
+      authenticatedWithGoogle: true,
+    };
+
+    // Send a request to authenticate with Google
+    fetch('/simulation/google', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(body),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        // Backend response
-        console.log(data);
-        navigate('/game'); // Redirect
+      .then((r) => r.json())
+      .then((resp) => {
+        localStorage.setItem('email', resp.correo);
+        //console.log(resp);
+        setUsername(resp.name);
       })
-      .catch((error) => {
-        console.error('Error sending data:', error);
-      });
+      .catch(console.warn);
   };
 
   return (
     <div>
       <h1>Welcome to the Game</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={username}
-          onChange={handleUsernameChange}
-          required
-        />
-        <br />
+      <form onSubmit={(event) => event.preventDefault()}>
         <label htmlFor="team">Select Your Team:</label>
         <select id="team" name="team" value={team} onChange={handleTeamChange} required>
-          <option value="Water Team">Water Team</option>
-          <option value="Fire Team">Fire Team</option>
+          <option value="IceTeam">Ice Team</option>
+          <option value="FireTeam">Fire Team</option>
         </select>
         <br />
-        <button type="submit">Start Game</button>
+        <div id="my-signin2"></div>
+        <br />
+        <button
+          type="button" 
+          id="google_sign_out"
+          style={{
+            backgroundColor: '#ff4c4c',
+            color: '#fff',
+            marginTop: '0px',
+            fontSize: '20px',
+            width: '200px',
+            border: 'none',
+            padding: '10px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease',
+          }}
+          onClick={handleGoogleSignOut}
+        >
+          Sign Out
+        </button>
       </form>
     </div>
   );
 }
+
 
 export default App;
