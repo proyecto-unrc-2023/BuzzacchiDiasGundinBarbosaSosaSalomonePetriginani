@@ -259,18 +259,32 @@ class GameState:
                 enemy_spawn = self.ice_spawn.get_positions()[4]
             tuplePos = cell.get_position()
             positionsList = self.get_adjacents_for_move(tuplePos, cell_team)
-            best_advance = 100
-            best_pos = (positionsList[0])
-            for r, c in positionsList:
-                value = ((enemy_spawn[0] - r) ** 2 + (enemy_spawn[1] - c) ** 2) ** 0.5
-                if(best_advance > value):
-                    best_advance = value
-                    best_pos = (r, c)
+
+            # Llamada a la función de valoración
+            best_pos = self.value(positionsList, enemy_spawn)
+
             if positionsList:
                 cell.set_position(best_pos)
                 if cell.get_life() > 0:
                     cell.set_life(cell.get_life() - 1)
             cell.has_moved = True
+
+    # Evaluates the best position from a list of possible positions based on a value calculation.
+    def value(self, positionsList, enemy_spawn):
+        best_advance = 100
+        best_pos = random.choice(positionsList)  # Init with random pos
+        
+        for r, c in positionsList:
+            value = ((enemy_spawn[0] - r) ** 2 + (enemy_spawn[1] - c) ** 2) ** 0.3
+            # Get variability
+            random_factor = random.uniform(0.7, 1.3)  
+            value *= random_factor
+            
+            if best_advance > value:
+                best_advance = value
+                best_pos = (r, c)
+        
+        return best_pos
 
     # Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY, cell_team):

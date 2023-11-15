@@ -5,7 +5,7 @@ from logic.cell import Cell, Level, FireCell, IceCell
 
 class Spawn:
     
-    def __init__(self, life=150, positions=None, type=None):
+    def __init__(self, life=300, positions=None, type=None):
         self.life = life
         if positions is not None:
             # Convert JSON list representations to tuples for immutable coordinates.

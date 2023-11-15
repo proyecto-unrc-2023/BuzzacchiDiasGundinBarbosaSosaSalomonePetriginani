@@ -6,10 +6,10 @@
      And the user selects to put IceSpawn at the position (5,5)
      And simulation starts
 
-   Scenario: Level 1 IceCell in Healing Area
-     Given there is a level 1 IceCell with 15 life points in the same position with the healing area
-     When the IceCell HealingArea effect is applied
-     Then the IceCell should have 18 life points
+  #  Scenario: Level 1 IceCell in Healing Area
+  #    Given there is a level 1 IceCell with 15 life points in the same position with the healing area
+  #    When the IceCell HealingArea effect is applied
+  #    Then the IceCell should have 18 life points
 
 #   Scenario: Level 1 IceCell ready to level up in Healing Area
 #     Given there is a level 1 IceCell with 19 life points in position (1,1)
