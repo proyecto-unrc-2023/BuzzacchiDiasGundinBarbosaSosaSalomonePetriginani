@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './App.css'; 
 
 function App() {
   const [username, setUsername] = useState('');
@@ -10,19 +12,15 @@ function App() {
     setTeam(event.target.value);
   };
 
-  // Function to handle Google sign-out
   const handleGoogleSignOut = () => {
-    console.log(window.google.accounts.id);
     window.google.accounts.id.disableAutoSelect();
-
     window.google.accounts.id.revoke(localStorage.getItem('email'), (done) => {
       localStorage.clear();
-      window.location.reload(); 
+      window.location.reload();
     });
   };
 
   useEffect(() => {
-    // Function to initialize Google Sign-In
     window.onGoogleScriptLoad = () => {
       const params = {
         client_id: "450042762936-gsjdaj4lh1ftmac3md1nvs1dufhbprgt.apps.googleusercontent.com",
@@ -49,13 +47,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // If the username is set, send a request to start endpoint
     if (username) {
       const formData = {
         username: username,
         team: team,
       };
-      console.log('Form Data:', formData); 
 
       fetch('/simulation/start', {
         method: 'POST',
@@ -66,9 +62,7 @@ function App() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          const gameId = data.game_state.id;  
-          //console.log(gameId)
+          const gameId = data.game_state.id;
           navigate(`/game/${gameId}`);
         })
         .catch((error) => {
@@ -77,16 +71,12 @@ function App() {
     }
   }, [username, team, navigate]);
 
-  // Function to handle Google Sign-In response
   window.handleCredentialResponse = (response) => {
-    console.log(response);
-
     const body = {
       id_token: response.credential,
       authenticatedWithGoogle: true,
     };
 
-    // Send a request to authenticate with Google
     fetch('/simulation/google', {
       method: 'POST',
       headers: {
@@ -97,14 +87,13 @@ function App() {
       .then((r) => r.json())
       .then((resp) => {
         localStorage.setItem('email', resp.correo);
-        //console.log(resp);
         setUsername(resp.name);
       })
       .catch(console.warn);
   };
 
-  return (
-    <div>
+return (
+    <div className="container">
       <h1>Welcome to the Game</h1>
       <form onSubmit={(event) => event.preventDefault()}>
         <label htmlFor="team">Select Your Team:</label>
@@ -115,29 +104,12 @@ function App() {
         <br />
         <div id="my-signin2"></div>
         <br />
-        <button
-          type="button" 
-          id="google_sign_out"
-          style={{
-            backgroundColor: '#ff4c4c',
-            color: '#fff',
-            marginTop: '0px',
-            fontSize: '20px',
-            width: '200px',
-            border: 'none',
-            padding: '10px',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            transition: 'background-color 0.3s ease',
-          }}
-          onClick={handleGoogleSignOut}
-        >
+        <button type="button" id="google_sign_out" onClick={handleGoogleSignOut}>
           Sign Out
         </button>
       </form>
     </div>
   );
 }
-
 
 export default App;

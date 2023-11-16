@@ -1,0 +1,64 @@
+
+body {
+  /*text-align: center;
+  padding: 20px;
+  background-color: #3498db; 
+  color: white;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;*/
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../public/images/descarga.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+h1 {
+  color: #3c64e7;
+}
+
+label {
+  margin-right: 10px;
+  color: #000000;
+}
+
+select {
+  background-color: #fff;
+  color: #282c34;
+  padding: 10px;
+  border: 2px solid #f39c12;
+  border-radius: 5px;
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+#my-signin2 {
+  margin: 20px;
+}
+
+button {
+  background-color: #e62222;
+  color: #fff;
+  font-size: 20px;
+  width: 200px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
