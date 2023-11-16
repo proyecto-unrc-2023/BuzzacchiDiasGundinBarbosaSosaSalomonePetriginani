@@ -99,19 +99,13 @@ class Spawn:
         else:
             return None
 
-
 class FireSpawn(Spawn):
-        
+
     def set_life(self, life):
         self.life = life
         
     def set_board(self, board):
         self.board = board
-        
-    def decrease_life(self, damage):
-        self.life -= damage
-        if(self.life < 0):
-            self.life = 0
     
     def __str__(self):
         return 'FS'
@@ -143,8 +137,8 @@ class FireSpawn(Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
         return False
 
-
 class IceSpawn(Spawn):
+        
     def __str__(self):
         return 'IS'
         
@@ -154,8 +148,6 @@ class IceSpawn(Spawn):
     def set_board(self, board):
         self.board = board
         
-    def decrease_life(self, damage):
-        life -= damage
 
     def get_type(self):
         return 'IceSpawn'

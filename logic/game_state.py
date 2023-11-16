@@ -38,7 +38,6 @@ class GameState:
         self.fire_spawn = fire_spawn
         self.ice_healing_area = ice_healing_area
         self.fire_healing_area = fire_healing_area
-        #self.cell_id_counter = 1
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
@@ -67,6 +66,9 @@ class GameState:
    
     def set_mode(self, mode):
         self.mode = mode
+
+    def set_winner_team(self, team):
+        self.winner_team = Team
 
     def get_username(self):
         return self.username
@@ -195,9 +197,9 @@ class GameState:
     def execute_fight_in_position(self, row, col):
         ice_cells = self.board.get_ice_cells(row, col)
         fire_cells = self.board.get_fire_cells(row, col)
-        spawn = self.board.get_spawn(row, col)
-
-        if not spawn:
+        import logging
+        logging.basicConfig(level=logging.DEBUG)
+        if not self.board.get_spawn(row, col):
             while ice_cells and fire_cells:
                 index = 0
                 ice_cells[index].fight(fire_cells[index])
@@ -207,6 +209,7 @@ class GameState:
                     self.remove_cell(row, col, ice_cells[index])
                 index += 1
         else:
+            spawn = self.get_ice_spawn() if isinstance(self.board.get_spawn(row, col), IceSpawn) else self.get_fire_spawn()
             #Fight spawns
             if spawn.get_type() == 'IceSpawn':
                 for fire_cell in fire_cells.copy():
