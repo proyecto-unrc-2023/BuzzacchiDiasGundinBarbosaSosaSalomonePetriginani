@@ -11,6 +11,7 @@ from api import db
 import json
 from marshmallow import ValidationError
 
+
 class UpdateStateResource(Resource):
     def post(self):
         data = request.json
@@ -30,6 +31,7 @@ class UpdateStateResource(Resource):
         game_controller.update_state()
 
         current_game_state = game_controller.get_game_state()
+
         current_board_str = str(game_controller.get_game_state().get_board())
 
         board_schema = BoardSchema()
@@ -42,20 +44,17 @@ class UpdateStateResource(Resource):
             fire_healing_area_dict = healing_area_schema.dump(current_game_state.fire_healing_area)
             ice_healing_area_dict = healing_area_schema.dump(current_game_state.ice_healing_area)
         except ValidationError as err:
-            print(err.messages)
-            return None
+            print(f"Error during deserialization: {err.messages}")
+            return {'message': 'Error during deserialization'}, 500
 
-        game_state_model = GameStateModel(
-            id=data.get('id'),
-            username=current_game_state.username,
-            team=current_game_state.team.value,  
-            mode=current_game_state.mode.value,  
-            board=json.dumps(board_dict),
-            ice_spawn=json.dumps(ice_spawn_dict),
-            fire_spawn=json.dumps(fire_spawn_dict),
-            ice_healing_area=json.dumps(ice_healing_area_dict),  
-            fire_healing_area=json.dumps(fire_healing_area_dict)
-        )
+        # Actualizar los atributos de la instancia existente con los valores actualizados
+        game_state_model.team = current_game_state.team.value
+        game_state_model.mode = current_game_state.mode.value
+        game_state_model.board = json.dumps(board_dict)
+        game_state_model.ice_spawn = json.dumps(ice_spawn_dict)
+        game_state_model.fire_spawn = json.dumps(fire_spawn_dict)
+        game_state_model.ice_healing_area = json.dumps(ice_healing_area_dict)
+        game_state_model.fire_healing_area = json.dumps(fire_healing_area_dict)
 
         # Convert the GameStateModel instance to a dictionary to see updated game state in the response
         game_state_dict = game_state_model.to_dict()

@@ -75,7 +75,7 @@ def start():
 def get_username_and_team():
     if request.method == 'GET':
         auth_user = get_authenticated_user()
-
+        
         if auth_user:
             game_state = GameStateModel.query.filter_by(id=session['id']).first()
 
@@ -88,6 +88,24 @@ def get_username_and_team():
                 return {'message': 'Game state not found for the authenticated user'}, 404
         else:
             return {'message': 'Unauthenticated user'}, 401
+
+@simulation_bp.route('/get_winner_team', methods=['GET'])
+def get_winner_team():
+    if request.method == 'GET':
+
+        game_id = session['id']
+        game_state = GameStateModel.query.filter_by(id=game_id).first()
+        if game_state:
+            game_state_dict = game_state.to_dict()
+
+            ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
+            if ice_spawn_json:
+                ice_spawn_life = ice_spawn_json.get('life')
+                if ice_spawn_life > 0:
+                    return jsonify({'winner_team': 'IceTeam'})
+                else:
+                    return jsonify({'winner_team': 'FireTeam'})
+
 
 
 
