@@ -21,44 +21,84 @@ body {
 }
 
 .container {
-  background-color: rgba(255, 255, 255, 0.8);
+  /* Estilos generales del contenedor */
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  text-align: center;
+  transition: background-color 0.5s ease;
+}
+
+.container.fire,
+.container.ice {
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+.container.fire {
+  background-color: #e74c3c; /* Rojo para Fire Team */
+  color: #fff; /* Color del texto para Fire Team */
+  background-image: url('../public/images/fuego.gif');
+  background-size: 300px 250px; /*Ajusta el tamaño de la imagen según tus necesidades*/
+  background-position: center bottom; /*Ajusta la posición de la imagen*/
+  
+  max-width: 100%;
+  max-height: 30vh;
+}
+
+.container.ice {
+  background-color: #3498db; /* Azul para Ice Team */
+  color: #fff; /* Color del texto para Ice Team */
+  background-image: url('../public/images/agua.gif');
+  background-size: 220px 250px; /*Ajusta el tamaño de la imagen según tus necesidades*/
+  background-position: center top; /*Ajusta la posición de la imagen*/
+  max-width: 100%;
+  max-height: 30vh;
+}
+
+header {
+  background: linear-gradient(to right, #e74c3c, #3498db);
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
 }
 
 h1 {
-  color: #3c64e7;
+  margin: 0;
+}
+
+main {
+  padding: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 label {
-  margin-right: 10px;
-  color: #000000;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 select {
-  background-color: #fff;
-  color: #282c34;
-  padding: 10px;
-  border: 2px solid #f39c12;
-  border-radius: 5px;
-  font-size: 1em;
+  padding: 8px;
   margin-bottom: 20px;
 }
 
-#my-signin2 {
-  margin: 20px;
+.google-signin {
+  /* Estilos para el contenedor de Google Sign-In, puedes personalizar según la biblioteca que estés utilizando */
 }
 
-button {
-  background-color: #e62222;
+.sign-out-btn {
+  background-color: #e74c3c;
   color: #fff;
-  font-size: 20px;
-  width: 200px;
+  padding: 10px 20px;
+  font-size: 16px;
   border: none;
-  padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+.sign-out-btn:hover {
+  background-color: #c0392b;
+}
+
