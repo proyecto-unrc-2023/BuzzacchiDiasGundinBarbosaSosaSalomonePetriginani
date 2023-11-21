@@ -1,16 +1,7 @@
 from flask import request, jsonify, session
-from app.schemas.cell_schema import CellSchema
-from app.schemas.board_schema import BoardSchema
-from logic.cell import Level, IceCell, FireCell
-from logic.board import Board
 from api.routes import simulation_bp
-from random import randint, choice
-from logic.spawn import IceSpawn
 from app.schemas.game_state_schema import GameStateSchema
 from app.models.game_state_model import GameStateModel
-from logic.game_state import GameMode, Team
-# from app.schemas.spawn_schema import SpawnSchema
-# from app.schemas.healing_area_schema import HealingAreaSchema
 from logic.game_controller import GameController
 from api import db
 import json
@@ -21,90 +12,103 @@ def get_authenticated_user():
         game_state = GameStateModel.query.filter_by(id=session['id']).first()
         if game_state:
             return game_state.to_dict()['username']
-
     return None
 
-# Route to start the game and receive data 
+# This route is used to setup an username and team in a game state
+# It expects a POST request with a JSON body containing 'username' and 'team'
 @simulation_bp.route('/start', methods=['POST'])
 def start():
-    if request.method == 'POST':
-        data = request.json  
+    try:
+        validate_start_request(request.json)
 
-        selected_username = data.get('username')
-        # Check username
-        if not isinstance(selected_username, str) or not selected_username.strip():
-            return {'message': 'Username must be a non-empty string'}, 400
-        
-        selected_team = data.get('team')
-        # Check team
-        if selected_team not in ('IceTeam', 'FireTeam'):
-            return {'message': 'Team must be either "IceTeam" or "FireTeam"'}, 400
-        
-        game_controller = GameController()
-        game_controller.set_username(selected_username)
-        game_controller.set_team(selected_team)
+        selected_username = request.json.get('username')
+        selected_team = request.json.get('team')
 
-        #Logic to add to DB actual game state
-        game_state_data = {
-            'username': game_controller.get_username(),
-            'team': game_controller.get_team(),
-            'mode': game_controller.get_mode(),
-        }
-        # Load the game state data into the schema
-        game_state_schema = GameStateSchema()
+        game_controller = create_game_controller(selected_username, selected_team)
 
-        serialized_game_state_data = game_state_schema.load(game_state_data)
+        game_state_model_instance = save_game_state_to_db(game_controller)
 
-        game_state_model_instance= GameStateModel(
-            username=serialized_game_state_data['username'],
-            team=serialized_game_state_data['team'].value,
-            mode=serialized_game_state_data['mode'].value,
-            # team=Team(serialized_game_state_data['team']),
-            # mode=GameMode(serialized_game_state_data['mode']),
-            #board=json.dumps(serialized_game_state_data['board'])
-        )
-
-        db.session.add(game_state_model_instance)
-        db.session.commit()
         session['username'] = selected_username
         session['id'] = game_state_model_instance.id
+
         return jsonify({'game_state': game_state_model_instance.to_dict()}), 200
 
+    except ValueError as e:
+        return jsonify({'message': str(e)}), 400
 
+# This function validates the request data for the 'start' endpoint.
+def validate_start_request(data):
+    selected_username = data.get('username')
+    selected_team = data.get('team')
+
+    if not isinstance(selected_username, str) or not selected_username.strip():
+        raise ValueError('Username must be a non-empty string')
+
+    if selected_team not in ('IceTeam', 'FireTeam'):
+        raise ValueError('Team must be either "IceTeam" or "FireTeam"')
+
+# This function creates a new GameController with the provided username and team.
+def create_game_controller(username, team):
+    game_controller = GameController()
+    game_controller.set_username(username)
+    game_controller.set_team(team)
+    return game_controller
+
+# This function saves the current game state to the database.
+def save_game_state_to_db(game_controller):
+    game_state_data = {
+        'username': game_controller.get_username(),
+        'team': game_controller.get_team(),
+        'mode': game_controller.get_mode(),
+    }
+
+    game_state_schema = GameStateSchema()
+    serialized_game_state_data = game_state_schema.load(game_state_data)
+
+    game_state_model_instance = GameStateModel(
+        username=serialized_game_state_data['username'],
+        team=serialized_game_state_data['team'].value,
+        mode=serialized_game_state_data['mode'].value,
+    )
+
+    db.session.add(game_state_model_instance)
+    db.session.commit()
+
+    return game_state_model_instance
+
+# This endpoint retrieves and returns the username and team of the authenticated user from a game session.
 @simulation_bp.route('/get_username_and_team', methods=['GET'])
 def get_username_and_team():
-    if request.method == 'GET':
-        auth_user = get_authenticated_user()
-        
-        if auth_user:
-            game_state = GameStateModel.query.filter_by(id=session['id']).first()
-
-            if game_state:
-                game_state_dict = game_state.to_dict()
-                username = game_state_dict['username']
-                team = game_state_dict['team']
-                return jsonify({'username': username, 'team': team}), 200
-            else:
-                return {'message': 'Game state not found for the authenticated user'}, 404
-        else:
-            return {'message': 'Unauthenticated user'}, 401
-
-@simulation_bp.route('/get_winner_team', methods=['GET'])
-def get_winner_team():
-    if request.method == 'GET':
-
-        game_id = session['id']
-        game_state = GameStateModel.query.filter_by(id=game_id).first()
+    auth_user = get_authenticated_user()  
+    if auth_user:
+        game_state = GameStateModel.query.filter_by(id=session['id']).first()
         if game_state:
             game_state_dict = game_state.to_dict()
+            username = game_state_dict['username']
+            team = game_state_dict['team']
+            return jsonify({'username': username, 'team': team}), 200
+        else:
+            return {'message': 'Game state not found for the authenticated user'}, 404
+    else:
+        return {'message': 'Unauthenticated user'}, 401
 
-            ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
-            if ice_spawn_json:
-                ice_spawn_life = ice_spawn_json.get('life')
-                if ice_spawn_life > 0:
-                    return jsonify({'winner_team': 'IceTeam'})
-                else:
-                    return jsonify({'winner_team': 'FireTeam'})
+# This endpoint retrieves and returns the winner team if a spawn has died.
+@simulation_bp.route('/get_winner_team', methods=['GET'])
+def get_winner_team():
+    game_id = session.get('id')
+    game_state = GameStateModel.query.filter_by(id=game_id).first()
+    if game_state:
+        game_state_dict = game_state.to_dict()
+        # if game_state_dict.get('mode') == 'SIMULATION':
+        #     return {'message': 'Game state is not in mode "FINISHED" '}, 402
+        
+        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
+        if ice_spawn_json:
+            ice_spawn_life = ice_spawn_json.get('life')
+            if ice_spawn_life > 0:
+                return jsonify({'winner_team': 'IceTeam'})
+            else:
+                return jsonify({'winner_team': 'FireTeam'})
 
 
 
