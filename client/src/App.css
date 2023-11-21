@@ -15,9 +15,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url('../public/images/descarga.jpg');
-  background-size: cover;
-  background-position: center;
+  /* background-image: url('../public/images/descarga.jpg'); */
+  /* background-size: cover;
+  background-position: center; */
 }
 
 .container {
