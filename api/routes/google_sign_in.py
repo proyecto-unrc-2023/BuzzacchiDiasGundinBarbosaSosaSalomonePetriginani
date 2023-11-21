@@ -8,7 +8,7 @@ class GoogleSignIn(Resource):
     def post(self):
         try:
             # Verificar token id from client
-            idinfo = id_token.verify_oauth2_token(request.json['id_token'], requests.Request(), "450042762936-gsjdaj4lh1ftmac3md1nvs1dufhbprgt.apps.googleusercontent.com")
+            idinfo = id_token.verify_oauth2_token(request.json['id_token'], requests.Request(), "450042762936-gsjdaj4lh1ftmac3md1nvs1dufhbprgt.apps.googleusercontent.com", clock_skew_in_seconds=10)
 
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
                 raise ValueError('Wrong issuer.')
