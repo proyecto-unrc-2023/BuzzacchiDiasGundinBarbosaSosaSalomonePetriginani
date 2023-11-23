@@ -102,3 +102,36 @@ select {
   background-color: #c0392b;
 }
 
+.board-container {
+ display: flex;
+ flex-wrap: wrap;
+ height: 1500px;
+  width: 1500px;
+  /* grid-template-columns: repeat(15, 1fr);  */
+  gap: 4px; /* Ajusta este valor según tu preferencia para el espacio entre las celdas */
+}
+
+.board-row {
+  display: flex; /* Esto asegura que las celdas se distribuyan en una fila */
+}
+
+.board-cell {
+  border: 1px solid #ccc; /* Añade un borde para separar visualmente las celdas */
+  padding: 8px; /* Ajusta este valor según tu preferencia para el espacio interno de las celdas */
+}
+
+/* Puedes agregar estilos adicionales según tus necesidades */
+
+.cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%; /* Ajusta el ancho del contenido al 100% del div */
+  height: 50%; /* Ajusta la altura del contenido al 100% del div */
+}
+
+.cell-content img {
+  max-width: 10vh; /* La imagen no excederá el tamaño del contenedor */
+  max-height: 10vh; /* La imagen no excederá el tamaño del contenedor */
+}
+
