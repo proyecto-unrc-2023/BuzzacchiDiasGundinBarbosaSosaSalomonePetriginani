@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
 import { useNavigate, useParams } from 'react-router-dom';
+import './App.css'; 
 
 function GameScreen() {
   const [userData, setUserData] = useState({ username: '', team: '', id: '' });
@@ -71,34 +71,39 @@ function GameScreen() {
     navigate(`/game/simulation`, { state: { gameState } });
   };
 
-  return (
-    <div>
-      <h2>Welcome, {userData.username}!</h2>
-      <p>You are part of the {userData.team} team.</p>
-      <div>
-        <p>Enter Spawn Coordinates (1-13):</p>
-        <label>Row:</label>
-        <input
-          type="number"
-          value={spawnCoords.row}
-          onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
-        />
-        <label>Column:</label>
-        <input
-          type="number"
-          value={spawnCoords.column}
-          onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
-        />
-        <button onClick={handleSpawnSubmit}>Set Spawn</button>
-        {spawnSetSuccess ? (
-          <div>
-            <p>Spawn was set successfully.</p>
-            <button onClick={handleStartSimulation}>Start Simulation</button>
-          </div>
-        ) : null}
-      </div>
+// En tu componente GameScreen
+
+return (
+  <div className="game-screen-container">
+    <h2 className="game-screen-header">Welcome, {userData.username}!</h2>
+    <p className="game-screen-info">You are part of the {userData.team} team.</p>
+    <div className="spawn-coordinates-container">
+      <p>Enter Spawn Coordinates (1-13):</p>
+      <label className="spawn-coordinates-label">Row:</label>
+      <input
+        className="spawn-coordinates-input"
+        type="number"
+        value={spawnCoords.row}
+        onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
+      />
+      <label className="spawn-coordinates-label">Column:</label>
+      <input
+        className="spawn-coordinates-input"
+        type="number"
+        value={spawnCoords.column}
+        onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
+      />
+      <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
+      {spawnSetSuccess ? (
+        <div className="spawn-success-container">
+          <p className="spawn-success-message">Spawn was set successfully.</p>
+          <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
+        </div>
+      ) : null}
     </div>
-  );
+  </div>
+);
+
 }
 
 export default GameScreen;
