@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from config import config
 
 db = SQLAlchemy(session_options={"expire_on_commit": False})
@@ -16,6 +17,7 @@ def create_app(config_name='development'):
     
     #DB
     db.init_app(app)
+    Migrate(app, db)
 
     register_modules(app)
 

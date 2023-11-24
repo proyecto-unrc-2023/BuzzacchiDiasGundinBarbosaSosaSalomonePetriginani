@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, session
 from flask_restful import Resource
 from api.routes import api
 from logic.game_state import GameState, Team
@@ -9,6 +9,7 @@ from app.schemas.spawn_schema import SpawnSchema
 from app.schemas.healing_area_schema import HealingAreaSchema
 from api import db
 import json
+import uuid
 
 class NewGameResource(Resource):
 
@@ -83,9 +84,12 @@ class NewGameResource(Resource):
             'ice_spawn': json.dumps(ice_spawn_dict),
             'fire_spawn': json.dumps(fire_spawn_dict),
             'ice_healing_area': json.dumps(ice_healing_area_dict),
-            'fire_healing_area': json.dumps(fire_healing_area_dict)
+            'fire_healing_area': json.dumps(fire_healing_area_dict),
+            #'simulation_id': uuid.uuid4()
         }
-
+        
+        #save simulation id
+        session['simulation_id'] = game_state_model.simulation_id
         GameStateModel.query.filter(GameStateModel.id == game_state_model.id).update(game_state_dict)
         return GameStateModel.query.get(game_state_model.id)
     

@@ -110,7 +110,22 @@ def get_winner_team():
             else:
                 return jsonify({'winner_team': 'FireTeam'})
 
+@simulation_bp.route('/get_winner_team_by_id/<int:game_state_id>', methods=['GET'])
+def get_winner_team_by_id(game_state_id):
+    game_state = GameStateModel.query.filter_by(id=game_state_id).first()
+    # print(game_state.to_dict())
+    if game_state:
+        game_state_dict = game_state.to_dict()
+        
+        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
+        if ice_spawn_json:
+            ice_spawn_life = ice_spawn_json.get('life')
+            if ice_spawn_life > 0:
+                return jsonify({'winner_team': 'IceTeam'})
+            else:
+                return jsonify({'winner_team': 'FireTeam'})
 
+    return {'error': 'No game state found'}, 404
 
 
 
