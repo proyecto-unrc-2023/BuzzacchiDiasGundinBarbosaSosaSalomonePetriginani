@@ -1,4 +1,3 @@
-/* App.css */
 
 .game-screen-container {
   max-width: 600px;
@@ -30,18 +29,32 @@
 }
 
 
+/* Etiqueta de las coordenadas de generación */
 .spawn-coordinates-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.spawn-coordinates-input {
-  padding: 8px;
-  margin-bottom: 10px;
-  width: 50px;
-}
-
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px; /* Espaciado inferior ligeramente aumentado */
+    color: #333; /* Color del texto */
+    font-size: 16px; /* Tamaño de fuente */
+  }
+  
+  /* Entrada de las coordenadas de generación */
+  .spawn-coordinates-input {
+    padding: 10px;
+    margin-bottom: 16px; /* Espaciado inferior aumentado */
+    width: 150px;
+    border: 1px solid #ccc; /* Borde del input */
+    border-radius: 4px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    outline: none; /* Elimina el resplandor al hacer clic */
+    transition: border-color 0.3s; /* Efecto de transición para el borde */
+  
+    /* Estilo adicional al enfocar el input */
+    &:focus {
+      border-color: #3498db; /* Cambia el color del borde al enfocar */
+    }
+  }
+  
 .spawn-coordinates-button {
   background-color: #3498db;
   color: #fff;
