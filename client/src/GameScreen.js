@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function GameScreen() {
@@ -7,6 +7,7 @@ function GameScreen() {
   const [spawnCoords, setSpawnCoords] = useState({ row: 1, column: 1 });
   const [spawnSetSuccess, setSpawnSetSuccess] = useState(false);
   const [gameState, setGameState] = useState(null);  
+  const [simulationHistory, setSimulationHistory] = useState([]);
 
   const navigate = useNavigate();
   const { gameId } = useParams();
@@ -66,9 +67,36 @@ function GameScreen() {
     }
   };
 
+  const fetchSimulationHistory = async () => {
+    try {
+      const response = await fetch('/simulation/simulation_history', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: userData.username,
+        }),
+        credentials: 'include',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error loading data');
+      }
+  
+      const data = await response.json();
+      setSimulationHistory(data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const handleStartSimulation = () => {
-    //console.log(gameState)
     navigate(`/game/simulation`, { state: { gameState } });
+  };
+
+  const handleRepeatSimulation = (simulationId) => {
+    navigate(`/game/repeat_simulation`, { state: { simulationId } });
   };
 
   return (
@@ -97,6 +125,18 @@ function GameScreen() {
           </div>
         ) : null}
       </div>
+      <p>Would you like to see a replay of a previous simulation?</p>
+      <button onClick={fetchSimulationHistory}>See simulation history</button>
+      {simulationHistory.length > 0 && (
+        <ul>
+          {simulationHistory.map((simulation) => (
+            <li key={simulation.simulation_id}>
+              Simulation ID: {simulation.simulation_id}, Start Time: {new Date(simulation.start_time).toLocaleString()}, Team: {simulation.team}
+              <button onClick={() => handleRepeatSimulation(simulation.simulation_id)}>Repeat Simulation</button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
