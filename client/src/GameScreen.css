@@ -1,0 +1,82 @@
+/* App.css */
+
+.game-screen-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con 80% de opacidad */
+
+}
+
+.game-screen-header {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.game-screen-info {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.spawn-coordinates-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.spawn-coordinates-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.spawn-coordinates-input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 50px;
+}
+
+.spawn-coordinates-button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.spawn-coordinates-button:hover {
+  background-color: #2980b9;
+}
+
+.spawn-success-container {
+  margin-top: 20px;
+}
+
+.spawn-success-message {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.start-simulation-button {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.start-simulation-button:hover {
+  background-color: #27ae60;
+}
