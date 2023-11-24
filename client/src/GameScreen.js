@@ -96,47 +96,54 @@ function GameScreen() {
     navigate(`/game/simulation`, { state: { gameState } });
   };
 
-return (
-  <div className="game-screen-container">
-    <h2 className="game-screen-header">Welcome, {userData.username}!</h2>
-    <p className="game-screen-info">You are part of the {userData.team} team.</p>
-    <div className="spawn-coordinates-container">
-      <p>Enter Spawn Coordinates (1-13):</p>
-      <label className="spawn-coordinates-label">Row:</label>
-      <input
-        className="spawn-coordinates-input"
-        type="number"
-        value={spawnCoords.row}
-        onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
-      />
-      <label className="spawn-coordinates-label">Column:</label>
-      <input
-        className="spawn-coordinates-input"
-        type="number"
-        value={spawnCoords.column}
-        onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
-      />
-      <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
-      {spawnSetSuccess ? (
-        <div className="spawn-success-container">
-          <p className="spawn-success-message">Spawn was set successfully.</p>
-          <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
-        </div>
-      ) : null}
-    </div>
-    <p>Would you like to see a replay of a previous simulation?</p>
-      <button onClick={fetchSimulationHistory}>See simulation history</button>
+  const handleRepeatSimulation = (simulationId) => {
+    navigate(`/game/repeat_simulation`, { state: { simulationId } });
+  };
+
+  return (
+    <div className="game-screen-container">
+      <h2 className="game-screen-header">Welcome, {userData.username}!</h2>
+      <p className="game-screen-info">You are part of the {userData.team} team.</p>
+      <div className="spawn-coordinates-container">
+        <p>Enter Spawn Coordinates (1-13):</p>
+        <label className="spawn-coordinates-label">Row:</label>
+        <input
+          className="spawn-coordinates-input"
+          type="number"
+          value={spawnCoords.row}
+          onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
+        />
+        <label className="spawn-coordinates-label">Column:</label>
+        <input
+          className="spawn-coordinates-input"
+          type="number"
+          value={spawnCoords.column}
+          onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
+        />
+        <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
+        {spawnSetSuccess ? (
+          <div className="spawn-success-container">
+            <p className="spawn-success-message">Spawn was set successfully.</p>
+            <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
+          </div>
+        ) : null}
+      </div>
+      <p>Would you like to see a replay of a previous simulation?</p>
+      <button className="spawn-coordinates-button" onClick={fetchSimulationHistory}>See simulation history</button>
       {simulationHistory.length > 0 && (
         <ul>
           {simulationHistory.map((simulation) => (
             <li key={simulation.simulation_id}>
               Simulation ID: {simulation.simulation_id}, Start Time: {new Date(simulation.start_time).toLocaleString()}, Team: {simulation.team}
-              <button onClick={() => handleRepeatSimulation(simulation.simulation_id)}>Repeat Simulation</button>
+              <button className="spawn-coordinates-button" onClick={() => handleRepeatSimulation(simulation.simulation_id)}>Repeat Simulation</button>
             </li>
           ))}
         </ul>
-  </div>
-);
+      )}
+    </div>
+  );
+  
+
 
 }
 
