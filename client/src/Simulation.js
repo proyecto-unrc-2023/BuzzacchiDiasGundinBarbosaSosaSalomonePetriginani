@@ -29,7 +29,6 @@ function Simulation() {
           
           if (response.status === 200) {
             const responseData = await response.json();
-            console.log(responseData)
             setGameState(responseData.updated_game_state);
           }
         }
@@ -44,6 +43,7 @@ function Simulation() {
     // Limpiar el intervalo cuando el componente se desmonta o gameState cambia
     return () => clearInterval(intervalId);
   }, [gameState?.id, gameState?.mode]);
+  console.log(gameState.board)
 
   return (
     <div className="simulation-container">
@@ -54,6 +54,9 @@ function Simulation() {
 }
 
 const Board = ({ boardData }) => {
+
+  const columns = boardData.columns;
+
   const getCellClass = (cell) => {
     // Lógica para determinar la clase de la celda según su contenido
     if (cell.spawn) {
@@ -67,39 +70,50 @@ const Board = ({ boardData }) => {
     }
   };
 
+  const renderCellContent = (cell) => {
+    // Crear un array para almacenar las imágenes
+    const images = [];
+  
+    // Renderizar el contenido de cada celda según su tipo
+    if (cell.spawn) {
+      // Representar el spawn con una imagen
+      images.push(<img key="spawn" src={`/images/${cell.spawn.type}_spawn.jpg`} alt="Spawn" />);
+    } else if (cell.fire_cells.length > 0) {
+      // Representar las células de fuego con imágenes
+      cell.fire_cells.forEach((fireCell, index) => {
+        images.push(
+          <img
+            key={`fire_cell_${index}`}
+            src={`/images/fire_cell_level_${fireCell.level}.png`}
+            alt={`Fire Cell Level ${fireCell.level}`}
+          />
+        );
+      });
+    } else if (cell.ice_cells.length > 0) {
+      // Representar las células de hielo con imágenes
+      cell.ice_cells.forEach((iceCell, index) => {
+        images.push(
+          <img
+            key={`ice_cell_${index}`}
+            src={`/images/ice_cell_level_${iceCell.level}.png`}
+            alt={`Ice Cell Level ${iceCell.level}`}
+          />
+        );
+      });
+    }
+  
+    // Devolver un solo div que contiene todas las imágenes
+    return <div className="cell-content">{images}</div>;
+  };
+
   return (
-    <div className="board-container">
+    <div className="board-container" style={{ gridTemplateColumns: 'repeat(15, 1fr)' }}>
       {boardData.board.map((row, rowIndex) => (
         <div key={rowIndex} className="board-row">
           {row.map((cell, columnIndex) => (
             <div key={columnIndex} className={`board-cell ${getCellClass(cell)}`}>
-              {/* Puedes personalizar el contenido de cada celda según tus necesidades */}
-              <span>Row: {rowIndex}, Col: {columnIndex}</span>
-              {cell.spawn && (
-                <div>
-                  Spawn: Life {cell.spawn.life}, Type {cell.spawn.type}
-                </div>
-              )}
-              {cell.fire_cells.length > 0 && (
-                <div>
-                  Fire Cells: {JSON.stringify(cell.fire_cells)}
-                </div>
-              )}
-              {cell.ice_cells.length > 0 && (
-                <div>
-                  Ice Cells: {JSON.stringify(cell.ice_cells)}
-                </div>
-              )}
-              {cell.fire_healing_area && (
-                <div>
-                  Fire Healing Area: {JSON.stringify(cell.fire_healing_area)}
-                </div>
-              )}
-              {cell.ice_healing_area && (
-                <div>
-                  Ice Healing Area: {JSON.stringify(cell.ice_healing_area)}
-                </div>
-              )}
+              {/* <span>Row: {rowIndex}, Col: {columnIndex}</span> */}
+              {renderCellContent(cell)}
             </div>
           ))}
         </div>
