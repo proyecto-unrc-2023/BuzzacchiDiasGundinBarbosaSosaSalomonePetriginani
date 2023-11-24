@@ -16,22 +16,19 @@ function Simulation() {
           const winnerResponse = await fetch(`/simulation/get_winner_team`);
           if (winnerResponse.status === 200) {
             const winnerTeam = await winnerResponse.text();
+            console.log(winnerTeam)
             setWinnerTeam(winnerTeam);
           }
         } else {
           const response = await fetch(`/simulation/update_state`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              id: gameState?.id,
-            }),
           });
           
           if (response.status === 200) {
             const responseData = await response.json();
-            
             setGameState(responseData.updated_game_state);
           }
         }

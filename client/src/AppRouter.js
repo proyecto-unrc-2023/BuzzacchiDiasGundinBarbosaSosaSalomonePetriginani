@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import App from './App';
 import GameScreen from './GameScreen';
 import Simulation from './Simulation'
+import RepeatSimulation from './RepeatSimulation'
 
 function AppRouter() {
 
@@ -14,6 +15,10 @@ function AppRouter() {
         <Route
           path="/game/simulation"
           element={<Simulation />}  
+        />
+        <Route
+          path="/game/repeat_simulation"
+          element={<RepeatSimulation />}  
         />
       </Routes>
     </Router>
