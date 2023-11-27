@@ -146,7 +146,7 @@ function GameScreen() {
       </button>
       {showSimulationHistory && simulationHistory.length > 0 && (
         <>
-          <ul>
+          <ul style={{ maxHeight: '300px', overflowY: 'scroll' }}>
             {simulationHistory.map((simulation) => (
               <li key={simulation.simulation_id} className="simulation-list-item">
                 <div 
