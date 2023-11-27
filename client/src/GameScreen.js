@@ -110,6 +110,7 @@ function GameScreen() {
     navigate(`/game/repeat_simulation`, { state: { simulationId } });
   };
 
+  
   return (
     <div className="game-screen-container">
       <h2 className="game-screen-header">Welcome, {userData.username}!</h2>
@@ -165,9 +166,11 @@ function GameScreen() {
                     <strong>ID:</strong> {simulation.simulation_id.split('-')[0]}
                     <br />
                     <strong>Start of the simulation:</strong>{' '}
-                    {new Date(simulation.start_time).toLocaleString()}
+                      {new Date(new Date(simulation.start_time).getTime() + 3*60*60*1000).toLocaleString()}
                     <br />
                     <strong>Team:</strong> {simulation.team}
+                    <br />
+                    <strong>Status: <span style={{color: simulation.status === 'Finished' ? 'green' : 'red'}}>{simulation.status}</span> </strong>
                   </div>
                 </div>
                 <hr />

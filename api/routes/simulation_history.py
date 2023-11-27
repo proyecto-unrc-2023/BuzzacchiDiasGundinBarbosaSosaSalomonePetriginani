@@ -4,8 +4,11 @@ from api.routes import api
 from sqlalchemy import func
 from app.models.game_state_model import GameStateModel
 from api import db
+from pytz import timezone
+from datetime import datetime
 
 class SimulationHistoryResource(Resource):
+
     def post(self):
         username = request.json['username']
 
@@ -15,12 +18,29 @@ class SimulationHistoryResource(Resource):
             GameStateModel.team
         ).filter_by(
             username=username,
-                mode='SIMULATION'  
+            mode='SIMULATION'  
         ).group_by(
             GameStateModel.simulation_id,
         ).all()
 
-        result = [{"simulation_id": sim_id, "start_time": start_time.isoformat() if start_time else None, "team": team} for sim_id, start_time, team in simulations]
+        finished_simulations = db.session.query(
+            GameStateModel.simulation_id
+        ).filter_by(
+            username=username,
+            mode='FINISHED'
+        ).all()
+        
+        finished_simulations_ids = [sim_id for sim_id, in finished_simulations]
+
+        result = []
+        for sim_id, start_time, team in simulations:
+            # Convert start_time to the client's timezone
+            start_time = start_time.replace(tzinfo=timezone('UTC'))
+            start_time = start_time.astimezone(timezone('America/Argentina/Buenos_Aires'))
+
+            status = "Finished" if sim_id in finished_simulations_ids else "Not Finished"
+            result.append({"simulation_id": sim_id, "start_time": start_time.isoformat(), "team": team, "status": status})
+
         return result
 
 

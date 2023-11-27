@@ -99,8 +99,6 @@ def get_winner_team():
     game_state = GameStateModel.query.filter_by(id=game_id).first()
     if game_state:
         game_state_dict = game_state.to_dict()
-        # if game_state_dict.get('mode') == 'SIMULATION':
-        #     return {'message': 'Game state is not in mode "FINISHED" '}, 402
         
         ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
         if ice_spawn_json:
@@ -113,7 +111,6 @@ def get_winner_team():
 @simulation_bp.route('/get_winner_team_by_id/<int:game_state_id>', methods=['GET'])
 def get_winner_team_by_id(game_state_id):
     game_state = GameStateModel.query.filter_by(id=game_state_id).first()
-    # print(game_state.to_dict())
     if game_state:
         game_state_dict = game_state.to_dict()
         
@@ -126,7 +123,6 @@ def get_winner_team_by_id(game_state_id):
                 return jsonify({'winner_team': 'FireTeam'})
 
     return {'error': 'No game state found'}, 404
-
 
 
 

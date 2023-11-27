@@ -10,7 +10,8 @@ from app.schemas.healing_area_schema import HealingAreaSchema
 from api import db
 import json
 import uuid
-
+from datetime import datetime
+from zoneinfo import ZoneInfo
 class NewGameResource(Resource):
 
     # Handles the POST request to set a spawn in the game state.
@@ -75,6 +76,8 @@ class NewGameResource(Resource):
         fire_healing_area_dict = healing_area_schema.dump(current_game_state.fire_healing_area)
         ice_healing_area_dict = healing_area_schema.dump(current_game_state.ice_healing_area)
 
+        now_local = datetime.now(ZoneInfo('America/Argentina/Buenos_Aires'))
+
         game_state_dict = {
             'id': game_state_model.id,
             'username': current_game_state.username,
@@ -85,6 +88,7 @@ class NewGameResource(Resource):
             'fire_spawn': json.dumps(fire_spawn_dict),
             'ice_healing_area': json.dumps(ice_healing_area_dict),
             'fire_healing_area': json.dumps(fire_healing_area_dict),
+            'timestamp': now_local
             #'simulation_id': uuid.uuid4()
         }
         

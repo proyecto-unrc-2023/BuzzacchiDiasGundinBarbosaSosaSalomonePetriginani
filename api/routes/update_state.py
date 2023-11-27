@@ -16,9 +16,6 @@ from sqlalchemy import desc
 
 class UpdateStateResource(Resource):
     def get(self):
-        # data = request.json
-        # game_state_id = data.get('id')
-        #game_state_model = GameStateModel.query.get(game_state_id)
         game_state_model = GameStateModel.query.filter_by(simulation_id=session['simulation_id']).order_by(desc(GameStateModel.timestamp)).first()
         if game_state_model is None:
             return {'message': 'GameState not found'}, 404
@@ -51,7 +48,6 @@ class UpdateStateResource(Resource):
 
         # Crear una nueva instancia de GameStateModel con los valores actualizados
         new_game_state_model = GameStateModel(
-            # id=game_state_id,
             username=current_game_state.username,
             team=current_game_state.team.value,
             mode=current_game_state.mode.value,
