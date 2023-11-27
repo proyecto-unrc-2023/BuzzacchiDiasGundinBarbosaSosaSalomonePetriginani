@@ -9,6 +9,8 @@ function GameScreen() {
   const [spawnSetSuccess, setSpawnSetSuccess] = useState(false);
   const [gameState, setGameState] = useState(null);  
   const [simulationHistory, setSimulationHistory] = useState([]);
+  const [selectedSimulationId, setSelectedSimulationId] = useState(null);
+  const [showSimulationHistory, setShowSimulationHistory] = useState(false);
 
   const navigate = useNavigate();
   const { gameId } = useParams();
@@ -68,6 +70,14 @@ function GameScreen() {
     }
   };
 
+  const toggleSimulationHistory = async () => {
+    setShowSimulationHistory(!showSimulationHistory);
+    
+    if (!showSimulationHistory) {
+      await fetchSimulationHistory();
+    }
+  };
+
   const fetchSimulationHistory = async () => {
     try {
       const response = await fetch('/simulation/simulation_history', {
@@ -104,47 +114,76 @@ function GameScreen() {
     <div className="game-screen-container">
       <h2 className="game-screen-header">Welcome, {userData.username}!</h2>
       <p className="game-screen-info">You are part of the {userData.team} team.</p>
-      <div className="spawn-coordinates-container">
-        <p>Enter Spawn Coordinates (1-13):</p>
-        <label className="spawn-coordinates-label">Row:</label>
-        <input
-          className="spawn-coordinates-input"
-          type="number"
-          value={spawnCoords.row}
-          onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
-        />
-        <label className="spawn-coordinates-label">Column:</label>
-        <input
-          className="spawn-coordinates-input"
-          type="number"
-          value={spawnCoords.column}
-          onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
-        />
-        <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
-        {spawnSetSuccess ? (
-          <div className="spawn-success-container">
-            <p className="spawn-success-message">Spawn was set successfully.</p>
-            <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
-          </div>
-        ) : null}
-      </div>
+      {!spawnSetSuccess && (
+        <div className="spawn-coordinates-container">
+          <p>Enter Spawn Coordinates (1-13):</p>
+          <label className="spawn-coordinates-label">Row:</label>
+          <input
+            className="spawn-coordinates-input"
+            type="number"
+            value={spawnCoords.row}
+            onChange={(e) => setSpawnCoords({ ...spawnCoords, row: parseInt(e.target.value) || 1 })}
+          />
+          <label className="spawn-coordinates-label">Column:</label>
+          <input
+            className="spawn-coordinates-input"
+            type="number"
+            value={spawnCoords.column}
+            onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
+          />
+          <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
+        </div>
+      )}
+      {spawnSetSuccess && (
+        <div className="spawn-success-container">
+          <p className="spawn-success-message">Spawn was set successfully.</p>
+          <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
+        </div>
+      )}
       <p>Would you like to see a replay of a previous simulation?</p>
-      <button className="spawn-coordinates-button" onClick={fetchSimulationHistory}>See simulation history</button>
-      {simulationHistory.length > 0 && (
-        <ul>
-          {simulationHistory.map((simulation) => (
-            <li key={simulation.simulation_id}>
-              Simulation ID: {simulation.simulation_id}, Start Time: {new Date(simulation.start_time).toLocaleString()}, Team: {simulation.team}
-              <button className="spawn-coordinates-button" onClick={() => handleRepeatSimulation(simulation.simulation_id)}>Repeat Simulation</button>
-            </li>
-          ))}
-        </ul>
+      <button className="spawn-coordinates-button" onClick={toggleSimulationHistory}>
+        {showSimulationHistory ? 'Hide Simulation History' : 'See Simulation History'}
+      </button>
+      {showSimulationHistory && simulationHistory.length > 0 && (
+        <>
+          <ul>
+            {simulationHistory.map((simulation) => (
+              <li key={simulation.simulation_id} className="simulation-list-item">
+                <div 
+                  style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} 
+                  onClick={() => setSelectedSimulationId(simulation.simulation_id)}
+                >
+                  <input
+                    type="radio"
+                    id={simulation.simulation_id}
+                    name="simulation"
+                    value={simulation.simulation_id}
+                    checked={selectedSimulationId === simulation.simulation_id}
+                    readOnly
+                  />
+                  <div>
+                    <strong>ID:</strong> {simulation.simulation_id.split('-')[0]}
+                    <br />
+                    <strong>Start of the simulation:</strong>{' '}
+                    {new Date(simulation.start_time).toLocaleString()}
+                    <br />
+                    <strong>Team:</strong> {simulation.team}
+                  </div>
+                </div>
+                <hr />
+              </li>
+            ))}
+          </ul>
+          <button
+            className="spawn-coordinates-button"
+            onClick={() => handleRepeatSimulation(selectedSimulationId)}
+          >
+            Repeat Simulation
+          </button>
+        </>
       )}
     </div>
   );
-  
-
-
 }
 
 export default GameScreen;

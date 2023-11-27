@@ -93,3 +93,7 @@
 .start-simulation-button:hover {
   background-color: #27ae60;
 }
+
+.simulation-list-item:hover {
+  background-color: #99d6ff;
+}
