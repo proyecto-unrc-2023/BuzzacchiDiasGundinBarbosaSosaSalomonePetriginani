@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+
 function Simulation() {
   const location = useLocation();
   const [gameState, setGameState] = useState(location.state && location.state.gameState);

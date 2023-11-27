@@ -1,13 +1,5 @@
 
 body {
-  /*text-align: center;
-  padding: 20px;
-  background-color: #3498db; 
-  color: white;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;*/
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -57,7 +49,9 @@ header {
   color: #fff;
   padding: 10px;
   border-radius: 10px 10px 0 0;
+  margin: 0; /* Ajusta o elimina el margen superior del encabezado */
 }
+
 
 h1 {
   margin: 0;
@@ -140,4 +134,9 @@ select {
 .board-row {
   display: flex; /* This ensures that the cells are distributed in a row */
   gap: 0px; /* This will add space between the columns */
+}
+
+.simulation-container {
+  height: 50vh;
+  margin-top: 0; /* Ajusta o elimina el margen superior del contenedor principal */
 }
