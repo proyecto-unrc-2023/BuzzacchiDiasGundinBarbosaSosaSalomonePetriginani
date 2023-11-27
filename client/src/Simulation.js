@@ -77,7 +77,7 @@ const Board = ({ boardData }) => {
     // Renderizar el contenido de cada celda según su tipo
     if (cell.spawn) {
       // Representar el spawn con una imagen
-      images.push(<img key="spawn" src={`/images/${cell.spawn.type}_spawn.jpg`} alt="Spawn" />);
+      images.push(<img key="spawn" src={`/images/${cell.spawn.type}_spawn.png`} alt="Spawn" />);
     } else if (cell.fire_cells.length > 0) {
       // Representar las células de fuego con imágenes
       cell.fire_cells.forEach((fireCell, index) => {

@@ -107,15 +107,15 @@ select {
   flex-wrap: wrap;
   height: 200px; /* Adjust the height as per your requirement */
   width: 200px;  /* Adjust the width as per your requirement */
-  gap: 4px; 
+  gap: 0px; 
   margin: 0 auto; /* This will center the board horizontally */
   justify-content: center; /* This will center the cells within the board */
 }
 
 .board-cell {
-  background-color: green;
-  border: 1px solid green;
-  padding: 5px; /* Adjust the padding as per your requirement */
+  background-image: url('../public/images/mapa.jpg');
+  border: 0px solid;
+  padding: 1px; /* Adjust the padding as per your requirement */
   width: 50px; /* Set a fixed width */
   height: 50px; /* Set a fixed height */
   display: flex;
@@ -139,5 +139,5 @@ select {
 
 .board-row {
   display: flex; /* This ensures that the cells are distributed in a row */
-  gap: 4px; /* This will add space between the columns */
+  gap: 0px; /* This will add space between the columns */
 }
