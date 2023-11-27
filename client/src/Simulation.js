@@ -79,28 +79,28 @@ const Board = ({ boardData }) => {
     if (cell.spawn) {
       // Representar el spawn con una imagen
       images.push(<img key="spawn" src={`/images/${cell.spawn.type}_spawn.png`} alt="Spawn" />);
+    } else if (cell.ice_healing_area) {
+      images.push(<img key="healing" src={`/images/ice_healing_area.png`} alt="healing"/>);  
+    } else if (cell.fire_healing_area) {
+      images.push(<img key="healing" src={`/images/fire_healing_area.png`} alt="healing"/>);  
     } else if (cell.fire_cells.length > 0) {
       // Representar las células de fuego con imágenes
-      cell.fire_cells.forEach((fireCell, index) => {
         images.push(
           <img
-            key={`fire_cell_${index}`}
-            src={`/images/fire_cell_level_${fireCell.level}.png`}
-            alt={`Fire Cell Level ${fireCell.level}`}
+            key={`fire_cell`}
+            src={`/images/fire_cell_level_${ cell.fire_cells[0].level}.png`}
+            alt={`Fire Cell Level ${ cell.fire_cells[0].level}`}
           />
         );
-      });
     } else if (cell.ice_cells.length > 0) {
       // Representar las células de hielo con imágenes
-      cell.ice_cells.forEach((iceCell, index) => {
         images.push(
           <img
-            key={`ice_cell_${index}`}
-            src={`/images/ice_cell_level_${iceCell.level}.png`}
-            alt={`Ice Cell Level ${iceCell.level}`}
+            key={`ice_cell`}
+            src={`/images/ice_cell_level_${cell.ice_cells[0].level}.png`}
+            alt={`Ice Cell Level ${cell.ice_cells[0].level}`}
           />
         );
-      });
     }
   
     // Devolver un solo div que contiene todas las imágenes
