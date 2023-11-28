@@ -91,38 +91,38 @@ const Board = ({ boardData }) => {
   };
   
   const renderCellContent = (cell) => {
-    // Crear un array para almacenar las imágenes
     const images = [];
-
-    // Renderizar el contenido de cada celda según su tipo
+  
     if (cell.spawn) {
-      // Representar el spawn con una imagen
       images.push(<img key="spawn" src={`/images/${cell.spawn.type}_spawn.png`} alt="Spawn" />);
-    } else if (cell.ice_healing_area) {
-      images.push(<img key="healing" src={`/images/ice_healing_area.png`} alt="healing"/>);  
-    } else if (cell.fire_healing_area) {
-      images.push(<img key="healing" src={`/images/fire_healing_area.png`} alt="healing"/>);  
     } else if (cell.fire_cells.length > 0) {
-      // Representar las células de fuego con imágenes
-        images.push(
-          <img
-            key={`fire_cell`}
-            src={`/images/fire_cell_level_${ cell.fire_cells[0].level}.png`}
-            alt={`Fire Cell Level ${ cell.fire_cells[0].level}`}
-          />
-        );
+      images.push(
+        <img
+          key={`fire_cell`}
+          src={`/images/fire_cell_level_${ cell.fire_cells[0].level}.png`}
+          alt={`Fire Cell Level ${ cell.fire_cells[0].level}`}
+        />
+      );
     } else if (cell.ice_cells.length > 0) {
-      // Representar las células de hielo con imágenes
-        images.push(
-          <img
-            key={`ice_cell`}
-            src={`/images/ice_cell_level_${cell.ice_cells[0].level}.png`}
-            alt={`Ice Cell Level ${cell.ice_cells[0].level}`}
-          />
-        );
+      images.push(
+        <img
+          key={`ice_cell`}
+          src={`/images/ice_cell_level_${cell.ice_cells[0].level}.png`}
+          alt={`Ice Cell Level ${cell.ice_cells[0].level}`}
+        />
+      );
     }
   
-    // Devolver un solo div que contiene todas las imágenes
+    if (cell.ice_healing_area || cell.fire_healing_area) {
+
+      images.push(
+        <div key="healing" className="healing-images">
+          {cell.ice_healing_area && <img src={`/images/ice_healing_area.png`} alt="Ice Healing" />}
+          {cell.fire_healing_area && <img src={`/images/fire_healing_area.png`} alt="Fire Healing" />}
+        </div>
+      );
+    }
+  
     return <div className="cell-content">{images}</div>;
   };
 
