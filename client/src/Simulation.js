@@ -17,12 +17,12 @@ function Simulation() {
         if (gameState?.mode === 'FINISHED') {
           clearInterval(intervalId);
           const winnerResponse = await fetch(`/simulation/get_winner_team`);
-          navigate('/game/simulation/finished', { state: { gameState } });
           if (winnerResponse.status === 200) {
             const winnerTeam = await winnerResponse.text();
             console.log(winnerTeam)
             setWinnerTeam(winnerTeam);
           }        
+          navigate('/game/simulation/finished', { state: { gameState } });
         } else {
           const response = await fetch(`/simulation/update_state`, {
             method: 'GET',

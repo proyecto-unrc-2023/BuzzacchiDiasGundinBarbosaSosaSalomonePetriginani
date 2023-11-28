@@ -127,10 +127,20 @@ select {
   height: 100%; /* Ajusta la altura del contenido al 100% del div */
 }
 
+@keyframes oscilar {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
 .cell-content img {
   max-width: 100%; /* The image will not exceed the size of the container */
   max-height: 100%; /* The image will not exceed the size of the container */
   object-fit: contain; /* The image will scale to fit within the container */
+}
+
+.cell-content .non-spawn-cell {
+  animation: oscilar 2s ease infinite; /* Aplicar la animación solo a estas imágenes */
 }
 
 .board-row {

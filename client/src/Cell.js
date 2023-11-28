@@ -23,6 +23,7 @@ const Cell = ({ cell }) => {
       images.push(
         <img
           key={`fire_cell`}
+          className="non-spawn-cell"
           src={`/images/fire_cell_level_${cell.fire_cells[0].level}.png`}
           alt={`Fire Cell Level ${cell.fire_cells[0].level}`}
         />
@@ -31,6 +32,7 @@ const Cell = ({ cell }) => {
       images.push(
         <img
           key={`ice_cell`}
+          className="non-spawn-cell"
           src={`/images/ice_cell_level_${cell.ice_cells[0].level}.png`}
           alt={`Ice Cell Level ${cell.ice_cells[0].level}`}
         />
