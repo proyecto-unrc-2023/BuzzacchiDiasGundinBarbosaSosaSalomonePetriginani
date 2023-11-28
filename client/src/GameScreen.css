@@ -12,10 +12,12 @@
 
 .game-screen-header {
   font-size: 24px;
+  font-family: Arial, sans-serif;
   margin-bottom: 10px;
 }
 
 .game-screen-info {
+  font-family: Arial, sans-serif;
   font-size: 16px;
   margin-bottom: 20px;
   color: #555;
@@ -26,6 +28,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: Arial, sans-serif;
 }
 
 
@@ -33,6 +36,7 @@
 .spawn-coordinates-label {
     display: block;
     font-weight: bold;
+    font-family: Arial, sans-serif;
     margin-bottom: 8px; /* Espaciado inferior ligeramente aumentado */
     color: #333; /* Color del texto */
     font-size: 16px; /* Tamaño de fuente */
@@ -45,7 +49,8 @@
     width: 150px;
     border: 1px solid #ccc; /* Borde del input */
     border-radius: 4px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de fuente */
+    font-size: 16px;
+    font-family: Arial, sans-serif; /* Tamaño de fuente */
     outline: none; /* Elimina el resplandor al hacer clic */
     transition: border-color 0.3s; /* Efecto de transición para el borde */
   
@@ -64,6 +69,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: Arial, sans-serif;
 }
 
 .spawn-coordinates-button:hover {
@@ -77,6 +83,7 @@
 .spawn-success-message {
   color: #27ae60;
   font-weight: bold;
+  font-family: Arial, sans-serif;
 }
 
 .start-simulation-button {
@@ -96,4 +103,8 @@
 
 .simulation-list-item:hover {
   background-color: #99d6ff;
+}
+
+.repeat {
+  font-family: Arial, sans-serif;
 }

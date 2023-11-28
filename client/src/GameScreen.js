@@ -141,50 +141,52 @@ function GameScreen() {
           <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
         </div>
       )}
-      <p>Would you like to see a replay of a previous simulation?</p>
-      <button className="spawn-coordinates-button" onClick={toggleSimulationHistory}>
-        {showSimulationHistory ? 'Hide Simulation History' : 'See Simulation History'}
-      </button>
-      {showSimulationHistory && simulationHistory.length > 0 && (
-        <>
-          <ul style={{ maxHeight: '300px', overflowY: 'scroll' }}>
-            {simulationHistory.map((simulation) => (
-              <li key={simulation.simulation_id} className="simulation-list-item">
-                <div 
-                  style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} 
-                  onClick={() => setSelectedSimulationId(simulation.simulation_id)}
-                >
-                  <input
-                    type="radio"
-                    id={simulation.simulation_id}
-                    name="simulation"
-                    value={simulation.simulation_id}
-                    checked={selectedSimulationId === simulation.simulation_id}
-                    readOnly
-                  />
-                  <div>
-                    <strong>ID:</strong> {simulation.simulation_id.split('-')[0]}
-                    <br />
-                    <strong>Start of the simulation:</strong>{' '}
-                      {new Date(new Date(simulation.start_time).getTime() + 3*60*60*1000).toLocaleString()}
-                    <br />
-                    <strong>Team:</strong> {simulation.team}
-                    <br />
-                    <strong>Status: <span style={{color: simulation.status === 'Finished' ? 'green' : 'red'}}>{simulation.status}</span> </strong>
+      <div className='repeat'>
+        <p>Would you like to see a replay of a previous simulation?</p>
+        <button className="spawn-coordinates-button" onClick={toggleSimulationHistory}>
+          {showSimulationHistory ? 'Hide Simulation History' : 'See Simulation History'}
+        </button>
+        {showSimulationHistory && simulationHistory.length > 0 && (
+          <>
+            <ul style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+              {simulationHistory.map((simulation) => (
+                <li key={simulation.simulation_id} className="simulation-list-item">
+                  <div 
+                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} 
+                    onClick={() => setSelectedSimulationId(simulation.simulation_id)}
+                  >
+                    <input
+                      type="radio"
+                      id={simulation.simulation_id}
+                      name="simulation"
+                      value={simulation.simulation_id}
+                      checked={selectedSimulationId === simulation.simulation_id}
+                      readOnly
+                    />
+                    <div>
+                      <strong>ID:</strong> {simulation.simulation_id.split('-')[0]}
+                      <br />
+                      <strong>Start of the simulation:</strong>{' '}
+                        {new Date(new Date(simulation.start_time).getTime() + 3*60*60*1000).toLocaleString()}
+                      <br />
+                      <strong>Team:</strong> {simulation.team}
+                      <br />
+                      <strong>Status: <span style={{color: simulation.status === 'Finished' ? 'green' : 'red'}}>{simulation.status}</span> </strong>
+                    </div>
                   </div>
-                </div>
-                <hr />
-              </li>
-            ))}
-          </ul>
-          <button
-            className="spawn-coordinates-button"
-            onClick={() => handleRepeatSimulation(selectedSimulationId)}
-          >
-            Repeat Simulation
-          </button>
-        </>
-      )}
+                  <hr />
+                </li>
+              ))}
+            </ul>
+            <button
+              className="spawn-coordinates-button"
+              onClick={() => handleRepeatSimulation(selectedSimulationId)}
+            >
+              Repeat Simulation
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
