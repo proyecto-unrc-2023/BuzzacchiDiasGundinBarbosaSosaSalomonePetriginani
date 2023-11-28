@@ -5,96 +5,64 @@ function RepeatSimulation() {
   const location = useLocation();
   const [gameState, setGameState] = useState(null);
   const [simulationId, setSimulationId] = useState(location.state && location.state.simulationId);
-  const [status, setStatus] = useState(location.state && location.state.status);
   const [lastTimestamp, setLastTimestamp] = useState(null);  
   const [winnerTeam, setWinnerTeam] = useState(null);
 
-  
-    // if (status !== 'Finished') {
-    //   const getLastState = async () => {
-    //     try {
-    //       const response = await fetch('/simulation/update_state', {
-    //         method: 'POST',
-    //         credentials: 'include',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //           simulation_id: simulationId,
-    //         }),
-    //       });
-        
-    //       if (!response.ok) {
-    //         throw new Error('Error updating state');
-    //       }
-        
-    //       const data = await response.json();
-    //       console.log(data);
-    //     } catch (error) {
-    //       console.error('Error:', error);
-    //     }
-    //   };
-    
-    //   getLastState();
-    // } 
-  
-    const shouldContinueRef = useRef(true);
+  const shouldContinueRef = useRef(true);
 
-    useEffect(() => {
-      let intervalId;
-  
-      const fetchNextGameState = async () => {
-        try {
-          const response = await fetch(`/simulation/simulation_replay`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              simulation_id: simulationId,
-              last_timestamp: lastTimestamp,  
-            }),
-          });
-      
-          if (response.status === 200) {
-            const responseData = await response.json();
-            console.log('Returned game state:', responseData.game_state);
-            console.log('Returned last timestamp:', responseData.last_timestamp);
-            setGameState(responseData.game_state);
-            setLastTimestamp(responseData.last_timestamp);
-      
-            if (responseData.game_state.mode === 'FINISHED') {
-              const winnerResponse = await fetch(`/simulation/get_winner_team_by_id/${responseData.game_state.id}`);
-              if (winnerResponse.status === 200) {
-                const winnerTeam = await winnerResponse.text();
-                setWinnerTeam(winnerTeam);
-                console.log(winnerTeam);
-                shouldContinueRef.current = false; // Stop the simulation
-              }
+  useEffect(() => {
+    let intervalId;
+
+    const fetchNextGameState = async () => {
+      try {
+        const response = await fetch(`/simulation/simulation_replay`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            simulation_id: simulationId,
+            last_timestamp: lastTimestamp,  
+          }),
+        });
+    
+        if (response.status === 200) {
+          const responseData = await response.json();
+          console.log('Returned game state:', responseData.game_state);
+          console.log('Returned last timestamp:', responseData.last_timestamp);
+          setGameState(responseData.game_state);
+          setLastTimestamp(responseData.last_timestamp);
+    
+          if (responseData.game_state.mode === 'FINISHED') {
+            const winnerResponse = await fetch(`/simulation/get_winner_team_by_id/${responseData.game_state.id}`);
+            if (winnerResponse.status === 200) {
+              const winnerTeam = await winnerResponse.text();
+              setWinnerTeam(winnerTeam);
+              console.log(winnerTeam);
+              shouldContinueRef.current = false; // Stop the simulation
             }
-          } else {
-            clearInterval(intervalId);  
           }
-        } catch (error) {
-          console.error('Error fetching game state:', error);
-        }
-      };
-  
-      intervalId = setInterval(() => {
-        if (shouldContinueRef.current) {
-          fetchNextGameState();
         } else {
-          clearInterval(intervalId);
+          clearInterval(intervalId);  
         }
-      }, 100);
-  
-      // Cleanup function
-      return () => {
+      } catch (error) {
+        console.error('Error fetching game state:', error);
+      }
+    };
+
+    intervalId = setInterval(() => {
+      if (shouldContinueRef.current) {
+        fetchNextGameState();
+      } else {
         clearInterval(intervalId);
-      };
-    }, [simulationId, lastTimestamp]);
-  
-    // ... renderizar el estado del juego ...
-  }
+      }
+    }, 100);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [simulationId, lastTimestamp]);
+
+}
 
 export default RepeatSimulation;

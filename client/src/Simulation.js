@@ -16,12 +16,6 @@ function Simulation() {
       try {
         if (gameState?.mode === 'FINISHED') {
           clearInterval(intervalId);
-          const winnerResponse = await fetch(`/simulation/get_winner_team`);
-          if (winnerResponse.status === 200) {
-            const winnerTeam = await winnerResponse.text();
-            console.log(winnerTeam)
-            setWinnerTeam(winnerTeam);
-          }        
           navigate('/game/simulation/finished', { state: { gameState } });
         } else {
           const response = await fetch(`/simulation/update_state`, {
@@ -48,7 +42,7 @@ function Simulation() {
     // Limpiar el intervalo cuando el componente se desmonta o gameState cambia
     return () => clearInterval(intervalId);
   }, [gameState?.id, gameState?.mode]);
-  console.log(gameState)
+  // console.log(gameState)
 
   const ice_life = (spawn) => {
     const SpawnObj = JSON.parse(spawn);

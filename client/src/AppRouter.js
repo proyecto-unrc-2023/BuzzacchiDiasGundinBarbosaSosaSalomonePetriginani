@@ -4,7 +4,8 @@ import App from './App';
 import GameScreen from './GameScreen';
 import Simulation from './Simulation'
 import RepeatSimulation from './RepeatSimulation'
-import Finished from './Finished';import FinishSimulation from './FinishSimulation'
+import Finished from './Finished';
+import FinishSimulation from './FinishSimulation'
 
 function AppRouter() {
 

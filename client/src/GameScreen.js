@@ -107,11 +107,9 @@ function GameScreen() {
   };
 
   const handleRepeatSimulation = (simulationId, status) => {
-    console.log('hi')
     if (status === 'Finished') {
       navigate(`/game/repeat_simulation`, { state: { simulationId } });
     } else {
-      console.log('hi2')
       navigate(`/game/finish_simulation`, { state: { simulationId } });
     }
   };
