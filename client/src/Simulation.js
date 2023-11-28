@@ -44,18 +44,37 @@ function Simulation() {
     // Limpiar el intervalo cuando el componente se desmonta o gameState cambia
     return () => clearInterval(intervalId);
   }, [gameState?.id, gameState?.mode]);
-  console.log(gameState.board)
+  console.log(gameState)
+
+  const ice_life = (spawn) => {
+    const SpawnObj = JSON.parse(spawn);
+    const ice_spawn = SpawnObj.life;
+    console.log(ice_spawn)
+    return ice_spawn;
+  };
+
+  const fire_life = (spawn) => {
+    const SpawnObj = JSON.parse(spawn);
+    const fire_spawn = SpawnObj.life;
+    console.log(fire_spawn)
+    return fire_spawn;
+  };
 
   return (
     <div className="simulation-container">
       {/* Renderizar el componente Board y pasarle el JSON del tablero */}
+      {gameState && gameState.ice_spawn && (
+      <h1>IceSpawn life: {ice_life(gameState.ice_spawn)}</h1>
+    )}
+    {gameState && gameState.fire_spawn && (
+      <h1>FireSpawn life: {fire_life(gameState.fire_spawn)}</h1>
+    )}
       {gameState && <Board boardData={JSON.parse(gameState.board)} />}
     </div>
   );
 }
 
 const Board = ({ boardData }) => {
-
   const columns = boardData.columns;
 
   const getCellClass = (cell) => {
@@ -70,11 +89,11 @@ const Board = ({ boardData }) => {
       return 'empty-cell';
     }
   };
-
+  
   const renderCellContent = (cell) => {
     // Crear un array para almacenar las imágenes
     const images = [];
-  
+
     // Renderizar el contenido de cada celda según su tipo
     if (cell.spawn) {
       // Representar el spawn con una imagen
