@@ -153,37 +153,39 @@ select {
   margin-top: 0; /* Ajusta o elimina el margen superior del contenedor principal */
 }
 
-.fire-team {
+.Fire-Team {
   background-color: red;
+  background-image: url('../public/images/fuego.gif');
   text-align: center;
   margin: 50px;
   border-radius: 10px;
   padding: 10px 20px;
 }
 
-.ice-team {
+.Ice-Team {
   background-color: skyblue;
+  background-image: url('../public/images/agua.gif');
   text-align: center;
   margin: 50px;
   border-radius: 10px;
   padding: 10px 20px;
 }
 
-.fire-team h1 {
+.Fire-Team h1 {
   color: white; /* o cualquier color que desees */
 }
 
-.ice-team h1 {
+.Ice-Team h1 {
   color: white; /* o cualquier color que desees */
 }
 
-.fire-team p {
+.Fire-Team p {
   font-family: Arial, sans-serif;
   font-style: italic;
   color: white; /* color de texto oscuro */
 }
 
-.ice-team p {
+.Ice-Team p {
   font-family: Arial, sans-serif;
   font-style: italic;
   color: white; /* color de texto oscuro */
