@@ -4,7 +4,8 @@ import App from './App';
 import GameScreen from './GameScreen';
 import Simulation from './Simulation'
 import RepeatSimulation from './RepeatSimulation'
-import Finished from './Finished';
+import Finished from './Finished';import FinishSimulation from './FinishSimulation'
+
 function AppRouter() {
 
   return (
@@ -19,6 +20,10 @@ function AppRouter() {
         <Route
           path="/game/repeat_simulation"
           element={<RepeatSimulation />}  
+        />
+        <Route
+          path="/game/finish_simulation"
+          element={<FinishSimulation />}  
         />
         <Route 
           path="/game/simulation/finished"

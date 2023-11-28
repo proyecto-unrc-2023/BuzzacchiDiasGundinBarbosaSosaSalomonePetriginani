@@ -106,10 +106,15 @@ function GameScreen() {
     navigate(`/game/simulation`, { state: { gameState } });
   };
 
-  const handleRepeatSimulation = (simulationId) => {
-    navigate(`/game/repeat_simulation`, { state: { simulationId } });
+  const handleRepeatSimulation = (simulationId, status) => {
+    console.log('hi')
+    if (status === 'Finished') {
+      navigate(`/game/repeat_simulation`, { state: { simulationId } });
+    } else {
+      console.log('hi2')
+      navigate(`/game/finish_simulation`, { state: { simulationId } });
+    }
   };
-
   
   return (
     <div className="game-screen-container">
@@ -180,9 +185,9 @@ function GameScreen() {
             </ul>
             <button
               className="spawn-coordinates-button"
-              onClick={() => handleRepeatSimulation(selectedSimulationId)}
+              onClick={() => handleRepeatSimulation(selectedSimulationId, simulationHistory.find(sim => sim.simulation_id === selectedSimulationId)?.status)}
             >
-              Repeat Simulation
+            {selectedSimulationId && simulationHistory.find(sim => sim.simulation_id === selectedSimulationId)?.status === 'Finished' ? 'Repeat Simulation' : 'Finish Simulation'}
             </button>
           </>
         )}
