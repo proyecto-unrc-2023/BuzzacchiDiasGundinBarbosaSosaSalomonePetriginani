@@ -31,7 +31,7 @@ function Finished()  {
   };
 
   return (
-    <div className="winner-team">
+    <div className={winnerTeam.toLowerCase()}>
       <h1>The winner is: {winnerTeam} !</h1>
       <p>Return to the Log in</p>
       <button className="go-login" onClick={handleGoLogIn}>
