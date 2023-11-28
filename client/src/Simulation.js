@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Board from './Board';
 
 
@@ -7,6 +7,7 @@ function Simulation() {
   const location = useLocation();
   const [gameState, setGameState] = useState(location.state && location.state.gameState);
   const [winnerTeam, setWinnerTeam] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let intervalId;
@@ -16,11 +17,12 @@ function Simulation() {
         if (gameState?.mode === 'FINISHED') {
           clearInterval(intervalId);
           const winnerResponse = await fetch(`/simulation/get_winner_team`);
+          navigate('/game/simulation/finished', { state: { gameState } });
           if (winnerResponse.status === 200) {
             const winnerTeam = await winnerResponse.text();
             console.log(winnerTeam)
             setWinnerTeam(winnerTeam);
-          }
+          }        
         } else {
           const response = await fetch(`/simulation/update_state`, {
             method: 'GET',
@@ -34,6 +36,7 @@ function Simulation() {
             setGameState(responseData.updated_game_state);
           }
         }
+
       } catch (error) {
         console.error('Error updating game state:', error);
       }
