@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Board from './Board';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import './Simulation.css'; 
 
 
 function Simulation() {
@@ -57,17 +60,60 @@ function Simulation() {
     console.log(fire_spawn)
     return fire_spawn;
   };
-
+  
   return (
     <div className="simulation-container">
-      {/* Renderizar el componente Board y pasarle el JSON del tablero */}
-      {gameState && gameState.ice_spawn && (
-      <h1>IceSpawn life: {ice_life(gameState.ice_spawn)}</h1>
-    )}
-    {gameState && gameState.fire_spawn && (
-      <h1>FireSpawn life: {fire_life(gameState.fire_spawn)}</h1>
-    )}
-      {gameState && <Board boardData={JSON.parse(gameState.board)} />}
+      <div className="progress-container">
+        {gameState && gameState.ice_spawn && (
+          <div className="progress-bar">
+            <p className="progress-text">
+              IceSpawn Life 
+            </p>
+            <div className="progress-background">
+              <CircularProgressbar
+                value={ice_life(gameState.ice_spawn)}
+                text={`${ice_life(gameState.ice_spawn)}`}
+                maxValue={300}
+                styles={buildStyles({
+                  pathColor: "#000080",
+                  textColor: "#000",
+                  trailColor: "#f3f3f3",
+                  backgroundColor: 'transparent',
+                  textSize: '25px'
+                })}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+  
+      <div className="board-container">
+        {gameState && <Board boardData={JSON.parse(gameState.board)} />}
+      </div>
+  
+      <div className="progress-container">
+        {gameState && gameState.fire_spawn && (
+          <div className="progress-bar">
+            <p className="progress-text">
+              FireSpawn Life
+            </p>
+            <div className="progress-background">
+              <CircularProgressbar
+                value={fire_life(gameState.fire_spawn)}
+                text={`${fire_life(gameState.fire_spawn)}`}
+                maxValue={300}
+                styles={buildStyles({
+                  pathColor: "#8B0000",
+                  textColor: "#000",
+                  trailColor: "#f3f3f3",
+                  backgroundColor: 'transparent',
+                  textSize: '25px'
+                })}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

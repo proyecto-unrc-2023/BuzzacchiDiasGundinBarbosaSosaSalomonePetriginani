@@ -43,7 +43,7 @@ const Cell = ({ cell }) => {
       images.push(
         <div key="healing" className="healing-images">
           {cell.ice_healing_area && <img src={`/images/ice_healing_area.png`} alt="Ice Healing" />}
-          {cell.fire_healing_area && <img src={`/images/fire_healing_area.png`} alt="Fire Healing" />}
+          {cell.fire_healing_area && <img src={`/images/fire_healing_area_3.png`} alt="Fire Healing" />}
         </div>
       );
     }
