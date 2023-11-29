@@ -1,9 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './GameScreen.css'; 
 
 function GameScreen() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState({ username: '', team: '', id: '' });
   const [spawnCoords, setSpawnCoords] = useState({ row: 1, column: 1 });
   const [spawnSetSuccess, setSpawnSetSuccess] = useState(false);
@@ -11,8 +14,9 @@ function GameScreen() {
   const [simulationHistory, setSimulationHistory] = useState([]);
   const [selectedSimulationId, setSelectedSimulationId] = useState(null);
   const [showSimulationHistory, setShowSimulationHistory] = useState(false);
+  const [size] = useState(location.state.size);
 
-  const navigate = useNavigate();
+  console.log(size)
   const { gameId } = useParams();
 
   useEffect(() => {
@@ -37,12 +41,28 @@ function GameScreen() {
     fetchData();
   }, []);
 
+  const getMaxRange = (size) => {
+    switch(parseInt(size)) {
+      case 15:
+        return 13;
+      case 20:
+        return 18;
+      case 25:
+        return 23;
+      default:
+        return 13;
+    }
+  }
+  
   const handleSpawnSubmit = async () => {
-    if (!(0 <= spawnCoords.row && spawnCoords.row <= 13) || !(0 <= spawnCoords.column && spawnCoords.column <= 13)) {
-      alert('Row and column must be integers between 0 and 14.');
+    const maxRange = getMaxRange(size);
+    
+    if (!(0 <= spawnCoords.row && spawnCoords.row <= maxRange) || 
+        !(0 <= spawnCoords.column && spawnCoords.column <= maxRange)) {
+      alert(`Row and column must be integers between 0 and ${maxRange}.`);
       return;
     }
-
+  
     try {
       const response = await fetch('/simulation/new_game', {
         method: 'POST',
@@ -53,6 +73,7 @@ function GameScreen() {
           row: spawnCoords.row,
           column: spawnCoords.column,
           game_state_id: gameId,
+          size: size, 
         }),
       });
 
@@ -120,7 +141,7 @@ function GameScreen() {
       <p className="game-screen-info">You are part of the {userData.team} team.</p>
       {!spawnSetSuccess && (
         <div className="spawn-coordinates-container">
-          <p>Enter Spawn Coordinates (1-13):</p>
+          <p>Enter Spawn Coordinates (1-{getMaxRange(size)}):</p>
           <label className="spawn-coordinates-label">Row:</label>
           <input
             className="spawn-coordinates-input"

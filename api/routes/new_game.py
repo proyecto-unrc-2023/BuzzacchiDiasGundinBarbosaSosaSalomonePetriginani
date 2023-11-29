@@ -23,7 +23,7 @@ class NewGameResource(Resource):
             row, column, game_state_id = data['row'], data['column'], data['game_state_id']
             game_state_model = self.get_game_state_model(game_state_id)
 
-            game_controller = self.initialize_game_controller(game_state_model)
+            game_controller = self.initialize_game_controller(game_state_model, int(data.get('size')))
             if self.is_spawn_set(game_controller):
                 raise Exception('Spawn already set for this game state')
             
@@ -42,8 +42,10 @@ class NewGameResource(Resource):
     # Validates the input data for the spawn request.
     def validate_input(self, data):
         row, column = data.get('row'), data.get('column')
-        if not isinstance(row, int) or not isinstance(column, int) or not 1 <= row <= 13 or not 1 <= column <= 13:
-            raise Exception('Row and column must be integers between 1 and 13')
+        size = data.get('size')
+        max_limit = 13 if size == 15 else 18 if size == 20 else 23
+        if not isinstance(row, int) or not isinstance(column, int) or not 1 <= row <= max_limit or not 1 <= column <= max_limit:
+            raise Exception(f'Row and column must be integers between 1 and {max_limit}')
 
     # Retrieves the game state model based on the provided ID.
     def get_game_state_model(self, game_state_id):
@@ -53,11 +55,11 @@ class NewGameResource(Resource):
         return game_state_model
 
     # Initializes the game controller with the game state from the model.
-    def initialize_game_controller(self, game_state_model):
+    def initialize_game_controller(self, game_state_model, size):
         game_state_data_model = game_state_model.to_dict()
         logic_game_state = GameState.create_from_dict(game_state_data_model)
         game_controller = GameController(logic_game_state)
-        game_controller.new_game(15, 15)
+        game_controller.new_game(size, size)
         return game_controller
 
     # Checks if a spawn is already set in the game controller.
