@@ -18,8 +18,10 @@ function Finished()  {
         return 'Fire-Team';
       } else if (fire_life === 0 || fire_life < 0) {
         return 'Ice-Team';
+      } else if (fire_life > ice_life ) {
+        return 'Fire-Team';
       } else {
-        return 'Draw';
+        return 'Ice-Team';
       }
     };
 
