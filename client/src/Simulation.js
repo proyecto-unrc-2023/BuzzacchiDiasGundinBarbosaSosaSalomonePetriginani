@@ -4,14 +4,34 @@ import Board from './Board';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './Simulation.css'; 
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 
 function Simulation() {
   const location = useLocation();
   const [gameState, setGameState] = useState(location.state && location.state.gameState);
-  const [winnerTeam, setWinnerTeam] = useState(null);
   const navigate = useNavigate();
 
+  const size = JSON.parse(gameState.board).rows
+  let bottomIce, bottomFire;
+  switch (size) {
+    case 25:
+      bottomIce = '-600px';
+      bottomFire = '-750px';
+      break;
+    case 20:
+      bottomIce = '-400px';
+      bottomFire = '-550px';
+      break;
+    case 15:
+      bottomIce = '-50px';
+      bottomFire = '-200px';
+      break;
+    default:
+      bottomIce = '0px';
+      bottomFire = '-200px';
+  }
+    
   useEffect(() => {
     let intervalId;
 
@@ -61,8 +81,37 @@ function Simulation() {
     return fire_spawn;
   };
   
+  const HealingAreaInfo = ({ healingArea }) => {
+    healingArea = JSON.parse(healingArea)
+    return ( 
+      <TableContainer component={Paper} style={{
+        color: '#333',
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '14px', 
+        backgroundColor: '#fff', 
+      }}>
+        <Table style={{ borderCollapse: 'collapse' }}>
+          <TableHead>
+            <TableRow style={{ borderBottom: '1px solid #333' }}>
+              <TableCell style={{ padding: '10px', margin: '0' }}>Positions</TableCell>
+              <TableCell style={{ padding: '10px', margin: '0' }}>Duration</TableCell>
+              <TableCell style={{ padding: '10px', margin: '0' }}>Healing Rate</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell style={{ padding: '10px', margin: '0' }}>{healingArea.positions.map((pos) => `(${pos[0]}, ${pos[1]})`).join(', ')}</TableCell>
+              <TableCell style={{ padding: '10px', margin: '0' }}>{healingArea.duration}</TableCell>
+              <TableCell style={{ padding: '10px', margin: '0' }}>{healingArea.healing_rate}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
+
   return (
-    <div className="simulation-container">
+    <div className="simulation-container" style={{ position: 'relative' }}>
       <div className="progress-container">
         {gameState && gameState.ice_spawn && (
           <div className="progress-bar">
@@ -90,7 +139,20 @@ function Simulation() {
       <div className="board-container">
         {gameState && <Board boardData={JSON.parse(gameState.board)} />}
       </div>
-  
+      
+      <div style={{ position: 'absolute', bottom: bottomIce, width: '50%', left: '25%' }}>
+        <h2 className="h2-minimalist">Ice Healing Area Info:</h2>
+        <HealingAreaInfo
+          healingArea={gameState.ice_healing_area}
+        />
+      </div>
+
+      <div style={{ position: 'absolute', bottom: bottomFire, width: '50%', left: '25%' }}>
+        <h2 className="h2-minimalist">Fire Healing Area Info:</h2>
+        <HealingAreaInfo
+          healingArea={gameState.fire_healing_area}
+        />
+      </div>
       <div className="progress-container">
         {gameState && gameState.fire_spawn && (
           <div className="progress-bar">

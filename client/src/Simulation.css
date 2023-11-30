@@ -49,3 +49,13 @@
   justify-content: center;
   align-items: center;
 }
+
+.h2-minimalist {
+  color: #00334e;
+  font-family: 'Comic Sans MS', sans-serif;
+  font-size: 25px;
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  font-style: italic; 
+}
