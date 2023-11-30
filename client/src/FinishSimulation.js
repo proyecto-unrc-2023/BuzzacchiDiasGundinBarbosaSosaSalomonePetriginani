@@ -5,9 +5,7 @@ function FinishSimulation() {
   console.log('Componente montado');
 
   const location = useLocation();
-  const [gameState, setGameState] = useState(null);
-  const [simulationId, setSimulationId] = useState(location.state && location.state.simulationId);
-
+  const [simulationId] = useState(location.state && location.state.simulationId);
   // Usar useRef como un flag
   const hasEffectRun = useRef(false);
   const navigate = useNavigate();
@@ -30,11 +28,12 @@ function FinishSimulation() {
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       // Actualizar el estado si es necesario
-      setGameState(data.updated_game_state); // Por ejemplo, asumiendo que la respuesta contiene el nuevo estado
-      navigate(`/game/simulation`, { state: { gameState } });
+      // setGameState(data.updated_game_state); // Por ejemplo, asumiendo que la respuesta contiene el nuevo estado
+      console.log(data.updated_game_state)
+      navigate(`/game/simulation`, { state: { gameState: data.updated_game_state } });
     } catch (error) {
       console.error('Error:', error);
     }

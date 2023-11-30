@@ -10,9 +10,14 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 function Simulation() {
   const location = useLocation();
   const [gameState, setGameState] = useState(location.state && location.state.gameState);
+  const [simulationId] = useState(gameState.simulation_id)
   const navigate = useNavigate();
 
-  const size = JSON.parse(gameState.board).rows
+  console.log('simulation game staste', gameState)
+  let size = 15; // Valor predeterminado
+  if (gameState && gameState.board) {
+    size = JSON.parse(gameState.board).rows;
+  }
   let bottomIce, bottomFire;
   switch (size) {
     case 25:
@@ -41,12 +46,16 @@ function Simulation() {
           clearInterval(intervalId);
           navigate('/game/simulation/finished', { state: { gameState } });
         } else {
-          const response = await fetch(`/simulation/update_state`, {
-            method: 'GET',
+          const response = await fetch('/simulation/update_state', {
+            method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
-          });
+            body: JSON.stringify({
+              simulation_id: simulationId,
+            }),
+          })
           
           if (response.status === 200) {
             const responseData = await response.json();
