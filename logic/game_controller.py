@@ -4,8 +4,9 @@ from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.game_state import GameMode, Team, GameState
 from app.schemas.game_state_schema import GameStateSchema
 from app.models.game_state_model import GameStateModel
-import json
 from flask import jsonify
+
+
 class GameController:
     
     def __init__(self, game_state=None):
@@ -50,7 +51,6 @@ class GameController:
     def no_spawns_in_pos(self, row, column):
         return self.game_state.no_spawns_in_pos(row, column)
     
-    #Corregir
     def add_spawn(self, positions):
         self.game_state.add_spawn(positions)
         
@@ -71,8 +71,7 @@ class GameController:
             self.game_state.create_healing_area(row, column, IceCell)
         else:
             self.game_state.create_healing_area(row, column, FireCell)
-            
-            
+
     def execute_fights(self):
         self.game_state.execute_fights_in_all_positions()
         
@@ -95,7 +94,7 @@ class GameController:
         pos = (row, column)
         return self.game_state.get_adjacents_pos(pos)
     
-    #only for behave healing
+    # only for behave healing
     def get_positions_healing(self, team):
         if(team == IceCell):
             return self.game_state.ice_healing_area.get_positions()
@@ -131,35 +130,7 @@ class GameController:
 
     def update_state(self):
         self.game_state.update_state()
-    # def serialize_game_state(self, game_state):
-    #     # serialized_board = game_state.get_board().serialize_board()
-    #     # game_state_data = {
-    #     #     'board': serialized_board,
-    #     #     'ice_spawn': game_state.get_ice_spawn(),
-    #     #     'fire_spawn': game_state.get_fire_spawn(),
-    #     #     'team': game_state.get_team(),
-    #     #     'mode': game_state.get_mode(),
-    #     #     'username': game_state.get_username(),
-    #     #     'ice_healing_area': game_state.get_ice_healing_area(),
-    #     #     'fire_healing_area': game_state.get_fire_healing_area()
-    #     # }
 
-    #     game_state_schema = GameStateSchema()
-    #     logic_game_state = GameState(**game_state_schema.load(game_state))
-
-    #     serialized_game_state = GameStateModel(
-    #         username = logic_game_state.get_username(),
-    #         team = logic_game_state.team.to_json(),
-    #         mode = logic_game_state.mode.to_json(),
-    #         fire_spawn = json.dumps(logic_game_state.fire_spawn),
-    #         ice_spawn = json.dumps(logic_game_state.ice_spawn),
-    #         ice_healing_area = json.dumps(logic_game_state.ice_healing_area),
-    #         fire_healing_area = json.dumps(logic_game_state.fire_healing_area),
-    #         board=json.dumps(logic_game_state.board)  
-    #     )
-    #     return serialized_game_state
-    #     #return jsonify(serialized_game_state)
-    
     def serialize_game_state(self, game_state):
         game_state_schema = GameStateSchema()
         serialize_game_state = game_state_schema.dump(game_state)

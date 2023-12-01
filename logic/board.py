@@ -3,8 +3,8 @@ from logic.cell import IceCell, FireCell
 from logic.spawn import IceSpawn, FireSpawn
 from logic.box import Box
 from logic.healing_area import HealingArea
-import json
 import random
+
 
 class Board:
 
@@ -96,14 +96,6 @@ class Board:
     def get_box(self, row, column):
         return self.board[row][column]
 
-    #Innecesario?
-    # def get_pos(self, cell):
-    #     for i, row in enumerate(self.board):
-    #         for j, cell_list in enumerate(row):
-    #             if cell in cell_list:
-    #                 return (i, j)
-    #     return None
-
     def _check_position(self, row, column):
         length = len(self.board)
         if row == 0 or row == length - 1 or column == 0 or column == length - 1:
@@ -142,11 +134,15 @@ class Board:
     def create_healing_area(self, row, column, affected_cell_type):
         self._check_position(row, column)
         position = (row, column)
+        random_healing_rate = random.randint(1, 4)
         positions_healing = self._get_adjacents_pos(position)
-        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type)
+        healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type, healing_rate=random_healing_rate)
         self.add_healing_area(self, healing_area)
         return healing_area
     
+    def delete_healings_area(self, row, column):
+        self.get_box(row, column).remove_healings_area(row, column)
+
     def add_spawn(self, spawn):
         positions_spawn = spawn.get_positions()
         for position in positions_spawn:
@@ -170,6 +166,8 @@ class Board:
 
     @classmethod
     def create_from_dict(cls, dict):
+        if dict is None:
+            return None
         rows = dict['rows']
         columns = dict['columns']
         board = [[Box.create_from_dict(box_dict) for box_dict in row] for row in dict['board']]

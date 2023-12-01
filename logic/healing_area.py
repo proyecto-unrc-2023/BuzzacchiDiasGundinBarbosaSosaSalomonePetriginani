@@ -1,4 +1,4 @@
-from logic.cell import Cell, Level, IceCell
+from logic.cell import Cell, Level, IceCell, FireCell
 
 class HealingArea:
     
@@ -25,6 +25,9 @@ class HealingArea:
     def set_healing_rate(self, healing_rate):
         self.healing_rate = healing_rate
 
+    def decrease_duration(self):
+        self.duration -= 1
+        
     def apply_effect(self, cells):
         if self.duration > 0:
             for cell in cells:
@@ -34,7 +37,7 @@ class HealingArea:
                         cell.set_life(60)
                         continue
                     cell.set_life(new_life)
-            self.duration -= 1
+            #self.duration = self.duration - 1
 
     def get_type(self):
         if self.affected_cell_type == 'IceCell' or self.affected_cell_type == IceCell:
@@ -54,7 +57,7 @@ class HealingArea:
     @classmethod
     def create_from_dict(cls, dict):
         if dict is not None:
-            return cls(dict['positions'], dict['affected_cell_type'], dict['duration'], dict['healing_rate'])
+            return cls(dict['positions'], eval(dict['affected_cell_type']), dict['duration'], dict['healing_rate'])
         else:
             return None
         
@@ -65,26 +68,3 @@ class HealingArea:
                     self.healing_rate == other.healing_rate and 
                     (self.affected_cell_type == other.affected_cell_type or eval(self.affected_cell_type) == other.affected_cell_type))
         return False
-
-    #####Eq para ver donde esta el error
-    # def __eq__(self, other):
-    #     if not isinstance(other, HealingArea):
-    #         return False
-
-    #     if self.positions != other.positions:
-    #         print(f"Position mismatch: {self.positions} != {other.positions}")
-    #         return False
-
-    #     if self.duration != other.duration:
-    #         print(f"Duration mismatch: {self.duration} != {other.duration}")
-    #         return False
-
-    #     if self.healing_rate != other.healing_rate:
-    #         print(f"Healing rate mismatch: {self.healing_rate} != {other.healing_rate}")
-    #         return False
-
-    #     if self.affected_cell_type != other.affected_cell_type:
-    #         print(f"Affected cell type mismatch: {self.affected_cell_type} != {other.affected_cell_type}")
-    #         return False
-
-    #     return True

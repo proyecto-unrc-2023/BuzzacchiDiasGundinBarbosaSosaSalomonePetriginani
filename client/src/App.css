@@ -1,0 +1,210 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../public/images/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.container {
+  /* Estilos generales del contenedor */
+  padding: 20px;
+  transition: background-color 0.5s ease;
+}
+
+.container.fire,
+.container.ice {
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+.container.fire {
+  background-color: #e74c3c; /* Rojo para Fire Team */
+  color: #fff; /* Color del texto para Fire Team */
+  background-image: url('../public/images/fuego.gif');
+  background-size: 300px 250px; /*Ajusta el tamaño de la imagen según tus necesidades*/
+  background-position: center bottom; /*Ajusta la posición de la imagen*/
+  
+  max-width: 100%;
+  max-height: 30vh;
+}
+
+.container.ice {
+  background-color: #3498db; /* Azul para Ice Team */
+  color: #fff; /* Color del texto para Ice Team */
+  background-image: url('../public/images/agua.gif');
+  background-size: 220px 250px; /*Ajusta el tamaño de la imagen según tus necesidades*/
+  background-position: center top; /*Ajusta la posición de la imagen*/
+  max-width: 100%;
+  max-height: 30vh;
+}
+
+header {
+  background: linear-gradient(to right, #e74c3c, #3498db);
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  margin: 0; /* Ajusta o elimina el margen superior del encabezado */
+}
+
+
+h1 {
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+main {
+  padding: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+select {
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+.google-signin {
+  /* Estilos para el contenedor de Google Sign-In, puedes personalizar según la biblioteca que estés utilizando */
+}
+
+.sign-out-btn {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sign-out-btn:hover {
+  background-color: #c0392b;
+}
+
+.board-container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 200px; /* Adjust the height as per your requirement */
+  width: 200px;  /* Adjust the width as per your requirement */
+  gap: 0px; 
+  margin: 0 auto; /* This will center the board horizontally */
+  justify-content: center; /* This will center the cells within the board */
+}
+
+.board-cell {
+  background-image: url('../public/images/mapa.jpg');
+  border: 0px solid;
+  padding: 1px; /* Adjust the padding as per your requirement */
+  width: 50px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ajusta el ancho del contenido al 100% del div */
+  height: 100%; /* Ajusta la altura del contenido al 100% del div */
+}
+
+@keyframes oscilar {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+.cell-content img {
+  max-width: 100%; /* The image will not exceed the size of the container */
+  max-height: 100%; /* The image will not exceed the size of the container */
+  object-fit: contain; /* The image will scale to fit within the container */
+}
+
+.cell-content .non-spawn-cell {
+  animation: oscilar 2s ease infinite; /* Aplicar la animación solo a estas imágenes */
+}
+
+.board-row {
+  display: flex; /* This ensures that the cells are distributed in a row */
+  gap: 0px; /* This will add space between the columns */
+}
+
+.simulation-container {
+  height: 50vh;
+  margin-top: 0; /* Ajusta o elimina el margen superior del contenedor principal */
+}
+
+.Fire-Team {
+  background-color: red;
+  background-image: url('../public/images/fuego.gif');
+  text-align: center;
+  margin: 50px;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.Ice-Team {
+  background-color: skyblue;
+  background-image: url('../public/images/agua.gif');
+  text-align: center;
+  margin: 50px;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.Fire-Team h1 {
+  color: white; /* o cualquier color que desees */
+}
+
+.Ice-Team h1 {
+  color: white; /* o cualquier color que desees */
+}
+
+.Fire-Team p {
+  font-family: Arial, sans-serif;
+  font-style: italic;
+  color: white; /* color de texto oscuro */
+}
+
+.Ice-Team p {
+  font-family: Arial, sans-serif;
+  font-style: italic;
+  color: white; /* color de texto oscuro */
+}
+
+.go-login {
+  background-color: #4CAF50; 
+  color: white; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  cursor: pointer;
+  border: none;
+  border-radius: 10px; 
+}
+
+.go-login:hover {
+  background-color: #45a049; 
+}
+
+/* .simulation-container {
+  margin-top: 50px;
+} */

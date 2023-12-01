@@ -41,6 +41,7 @@ def test_get_adjacents_for_move_edge_fire_cell(gamestate):
     
 def test_advance_method(gamestate):
     gamestate.set_team(Team.FireTeam)
+    gamestate.create_spawn(5, 3, FireSpawn)
     gamestate.create_cell(1, 1, gamestate.get_team(), Level.LEVEL_1, 20)
     oldcell = gamestate.get_cells(1, 1)
 
@@ -195,31 +196,41 @@ def test_generate_cells():
             cells = game.get_cells(r,c)
             for cell in cells:
                 assert isinstance(cell, IceCell)
-                
+
+def test_apply_healing():
+    game = GameState()
+    game.new_game(15,15)
+    game.create_spawn(1,1,IceSpawn)
+    ice_ha_duration = game.get_ice_healing_area().get_duration()
+    ice_cell = IceCell()
+    ice_pos = game.get_ice_healing_area().get_positions()
+    game.add_cell(*ice_pos[0], ice_cell)
+    cell_life = ice_cell.get_life()
+    game.apply_healing()
+    assert cell_life + game.get_ice_healing_area().get_healing_rate() == ice_cell.get_life()
+    assert ice_ha_duration - 1 == game.get_ice_healing_area().get_duration()
+
 def test_update_state():
     game = GameState()
-    game.new_game(12, 12)
+    game.new_game(15, 15)
     game.create_spawn(1, 1, IceSpawn)
-    for i in range(20):
+    for i in range(50):
         if game.get_mode() == GameMode.FINISHED:
             print('Simulation finished')
             break
         print(str(game.get_board()))
         game.update_state()
         print(f"IceSpawnLife: {game.get_ice_spawn().get_life()} FireSpawnLife: {game.get_fire_spawn().get_life()}")
-        print(f"LifeIceHA: {game.get_ice_healing_area().get_duration()} LifeFireHS: {game.get_fire_healing_area().get_duration()}")
-
-        for row in range(8):
-            for column in range(8):
-                # Obtener las células de hielo en la posición actual
+        print(f"LifeIceHA: {game.get_ice_healing_area().get_duration()} HealRteIHA: {game.get_ice_healing_area().get_healing_rate()} ")
+        print(f"LifeFireHA: {game.get_fire_healing_area().get_duration()} HealRteFHA: {game.get_fire_healing_area().get_healing_rate()}")
+        for row in range(game.get_board().__len__()):
+            for column in range(game.get_board().get_columns()):
                 ice_cells = game.get_ice_cells(row, column)
-                # Imprimir los niveles de las células de hielo
                 for cell in ice_cells:
                     print(f"IceCell:Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
                 fire_cells = game.get_ice_cells(row, column)
                 for cell in fire_cells:
                     print(f"FireCell: Life: {cell.get_life()}, Level: {cell.get_level()}, Position: {cell.get_position()}")
-        #         #time.sleep(5)
 
     assert 1 == 2
 

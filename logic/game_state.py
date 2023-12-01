@@ -7,6 +7,8 @@ from logic.box import Box
 from logic.spawn import Spawn, IceSpawn, FireSpawn
 from logic.healing_area import HealingArea
 import json
+
+
 class GameMode(Enum):
     NOT_STARTED = "NOT_STARTED"
     SPAWN_PLACEMENT = "SPAWN_PLACEMENT"
@@ -16,12 +18,14 @@ class GameMode(Enum):
     def to_json(self):
         return self.value
 
+
 class Team(Enum):
     IceTeam = "IceTeam"
     FireTeam = "FireTeam"
 
     def to_json(self):
         return self.value
+
 
 class GameState:
 
@@ -34,7 +38,6 @@ class GameState:
         self.fire_spawn = fire_spawn
         self.ice_healing_area = ice_healing_area
         self.fire_healing_area = fire_healing_area
-        #self.cell_id_counter = 1
 
     def new_game(self, rows, columns):
         self.board = Board(rows, columns)
@@ -52,37 +55,6 @@ class GameState:
                     self.fire_healing_area == other.fire_healing_area)
         return False
     
-    ####Eq para ver donde esta el error
-    # def __eq__(self, other):
-    #     if isinstance(other, GameState):
-    #         if self.mode != other.mode:
-    #             print(f"Mode mismatch: {self.mode} != {other.mode}")
-    #             return False
-    #         if self.board != other.board:
-    #             print(f"Board mismatch: {self.board} != {other.board}")
-    #             return False
-    #         if self.team != other.team:
-    #             print(f"Team mismatch: {self.team} != {other.team}")
-    #             return False
-    #         if self.username != other.username:
-    #             print(f"Username mismatch: {self.username} != {other.username}")
-    #             return False
-    #         if self.ice_spawn != other.ice_spawn:
-    #             print(f"Ice spawn mismatch: {self.ice_spawn} != {other.ice_spawn}")
-    #             return False
-    #         if self.fire_spawn != other.fire_spawn:
-    #             print(f"Fire spawn mismatch: {self.fire_spawn} != {other.fire_spawn}")
-    #             return False
-    #         if self.ice_healing_area != other.ice_healing_area:
-    #             print(f"Ice healing area mismatch: {self.ice_healing_area} != {other.ice_healing_area}")
-    #             return False
-    #         if self.fire_healing_area != other.fire_healing_area:
-    #             print(f"Fire healing area mismatch: {self.fire_healing_area} != {other.fire_healing_area}")
-    #             return False
-    #         # Si todas las comprobaciones son iguales, retornamos True.
-    #         return True
-    #     return False
-    
     def set_board(self, board):
         self.board = board
 
@@ -94,6 +66,9 @@ class GameState:
    
     def set_mode(self, mode):
         self.mode = mode
+
+    def set_winner_team(self, team):
+        self.winner_team = Team
 
     def get_username(self):
         return self.username
@@ -159,20 +134,38 @@ class GameState:
         self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
     
     def apply_healing(self):
-        ice_pos = self.ice_healing_area.get_positions()
-        fire_pos = self.fire_healing_area.get_positions()
-        for pos in ice_pos:
-            cells = self.board.get_cells(*pos)
-            self.ice_healing_area.apply_effect(cells)
-        for pos in fire_pos:
-            cells = self.board.get_cells(*pos)
-            self.ice_healing_area.apply_effect(cells)
+        healing_area_deleteds = self.check_delete_healings_area()
+        if healing_area_deleteds:
+            self.create_randoms_healing_areas()
+        else:
+            ice_pos = self.ice_healing_area.get_positions()
+            fire_pos = self.fire_healing_area.get_positions()
+            self.ice_healing_area.decrease_duration()
+            self.fire_healing_area.decrease_duration()
+            for pos in ice_pos:
+                cells = self.board.get_cells(*pos)
+                self.ice_healing_area.apply_effect(cells)
+            for pos in fire_pos:
+                cells = self.board.get_cells(*pos)
+                self.ice_healing_area.apply_effect(cells)
+
+    def check_delete_healings_area(self):
+        if self.get_ice_healing_area().get_duration() == 0:
+            positions_ice = self.get_ice_healing_area().get_positions()
+            for pos in positions_ice:
+                self.get_board().get_box(*pos).remove_ice_healing_area()
+            positions_fire = self.get_fire_healing_area().get_positions()
+            for pos in positions_fire:
+                self.get_board().get_box(*pos).remove_fire_healing_area()
+            self.ice_healing_area = None
+            self.fire_healing_area = None
+            return True
+        return False
 
     def update_state(self):
         self.execute_movements_in_all_positions()
-
         self.generate_cells()
-        # Healing 
+        self.apply_healing()
         self.execute_fusions_in_all_positions()
         self.execute_fights_in_all_positions()
 
@@ -204,9 +197,9 @@ class GameState:
     def execute_fight_in_position(self, row, col):
         ice_cells = self.board.get_ice_cells(row, col)
         fire_cells = self.board.get_fire_cells(row, col)
-        spawn = self.board.get_spawn(row, col)
-
-        if not spawn:
+        import logging
+        logging.basicConfig(level=logging.DEBUG)
+        if not self.board.get_spawn(row, col):
             while ice_cells and fire_cells:
                 index = 0
                 ice_cells[index].fight(fire_cells[index])
@@ -216,6 +209,7 @@ class GameState:
                     self.remove_cell(row, col, ice_cells[index])
                 index += 1
         else:
+            spawn = self.get_ice_spawn() if isinstance(self.board.get_spawn(row, col), IceSpawn) else self.get_fire_spawn()
             #Fight spawns
             if spawn.get_type() == 'IceSpawn':
                 for fire_cell in fire_cells.copy():
@@ -262,17 +256,40 @@ class GameState:
         if cell.get_position() is not None and self.board is not None:
             if isinstance(cell, IceCell):    
                 cell_team = Team.IceTeam
-            else:
-                cell_team = Team.FireTeam    
+                enemy_spawn = self.fire_spawn.get_positions()[4]
+            elif isinstance(cell, FireCell):
+                cell_team = Team.FireTeam
+                enemy_spawn = self.ice_spawn.get_positions()[4]
             tuplePos = cell.get_position()
             positionsList = self.get_adjacents_for_move(tuplePos, cell_team)
+
+            # Llamada a la función de valoración
+            best_pos = self.value(positionsList, enemy_spawn)
+
             if positionsList:
-                cell.set_position(random.choice(positionsList))
+                cell.set_position(best_pos)
                 if cell.get_life() > 0:
                     cell.set_life(cell.get_life() - 1)
             cell.has_moved = True
 
-    #Get a list of adjacent cells to the cell's current position.
+    # Evaluates the best position from a list of possible positions based on a value calculation.
+    def value(self, positionsList, enemy_spawn):
+        best_advance = 100
+        best_pos = random.choice(positionsList)  # Init with random pos
+        
+        for r, c in positionsList:
+            value = ((enemy_spawn[0] - r) ** 2 + (enemy_spawn[1] - c) ** 2) ** 0.3
+            # Get variability
+            random_factor = random.uniform(0.7, 1.3)  
+            value *= random_factor
+            
+            if best_advance > value:
+                best_advance = value
+                best_pos = (r, c)
+        
+        return best_pos
+
+    # Get a list of adjacent cells to the cell's current position.
     def get_adjacents_for_move(self, posXY, cell_team):
         row, col = posXY
         length = len(self.board)
@@ -281,8 +298,13 @@ class GameState:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if 0 <= new_row < length and 0 <= new_col < length:
-                if (self.no_spawns_in_pos(new_row, new_col, cell_team)):
+                if (self.enemy_spawns_in_pos(new_row, new_col, cell_team)):
+                    enemyList = []
+                    enemyList.append((new_row, new_col))
+                    return enemyList
+                elif (self.no_spawns_in_pos(new_row, new_col, cell_team)):
                     adjacentList.append((new_row, new_col))
+                
         return adjacentList
     
     def no_spawns_in_pos(self, row, column, cell_team):
@@ -291,6 +313,12 @@ class GameState:
         else:
             return (row, column) not in self.fire_spawn.get_positions() if self.fire_spawn is not None else True
     
+    def enemy_spawns_in_pos(self, row, column, cell_team):
+        if cell_team == Team.IceTeam:
+            return (row, column) in self.fire_spawn.get_positions() if self.fire_spawn is not None else False
+        else:
+            return (row, column) in self.ice_spawn.get_positions() if self.ice_spawn is not None else False
+        
     # FUSION
     def fusion(self, pos):
         box = self.board.get_box(pos[0], pos[1])

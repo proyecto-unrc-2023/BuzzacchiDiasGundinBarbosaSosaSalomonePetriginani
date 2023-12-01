@@ -1,14 +1,11 @@
 
 from api import db
-from sqlalchemy import Enum
-from logic.game_state import Team, GameMode
-
+from datetime import datetime
+import uuid
 class GameStateModel(db.Model):
     __tablename__ = 'game_states'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String)
-    # team = db.Column(Enum(Team.IceTeam, Team.FireTeam))
-    # mode = db.Column(Enum(GameMode.NOT_STARTED, GameMode.SPAWN_PLACEMENT, GameMode.SIMULATION, GameMode.FINISHED), nullable=False)
     team = db.Column(db.String)
     mode = db.Column(db.String)
     board = db.Column(db.Text)
@@ -16,6 +13,8 @@ class GameStateModel(db.Model):
     fire_spawn = db.Column(db.Text)
     ice_healing_area = db.Column(db.Text)
     fire_healing_area = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow())
+    simulation_id = db.Column(db.String(36), default=lambda: str(uuid.uuid4()), nullable=False)
 
     def to_dict(self):
         return {
@@ -27,5 +26,7 @@ class GameStateModel(db.Model):
             'ice_spawn': self.ice_spawn,
             'ice_healing_area': self.ice_healing_area,
             'fire_healing_area': self.fire_healing_area,
-            'board': self.board
+            'board': self.board,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None,
+            'simulation_id': self.simulation_id  
         }

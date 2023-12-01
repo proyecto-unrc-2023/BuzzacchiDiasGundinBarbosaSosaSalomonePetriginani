@@ -43,13 +43,3 @@ Feature: Fight of Cells
     When the fight starts
     Then the number of IceCells should be reduced by 2
     And the FireCell should win with 22 life points and level 2
-
-  #Este escenario debe ser un escenario de una feature mas general.
-  # Scenario: two IceCell in same position with same level against a same one FireCell level
-  #   Given there are two level 1 cells, one IceCell with 4 life points and one FireCell 9 life points in position (0,0)
-  #   And there is a FireCell level 1 with 8 life points in the same position
-  #   When the fight is going to start, then the fusion between IceCell cells starts first
-  #   And a level 2 IceCell is created with 40 life points
-  #   And level 2 IceCell fights against level one FireCell
-  #   And level 2 IceCells wins with 36 life points and FireCell dies
-
