@@ -1,14 +1,12 @@
-from flask import jsonify, request, session
+from flask import request
 from flask_restful import Resource
 from api.routes import api
 from sqlalchemy import func
 from app.models.game_state_model import GameStateModel
 from api import db
 from pytz import timezone
-from datetime import datetime
 
 class SimulationHistoryResource(Resource):
-
     def post(self):
         username = request.json['username']
 

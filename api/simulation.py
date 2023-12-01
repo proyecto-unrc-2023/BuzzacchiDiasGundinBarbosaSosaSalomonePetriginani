@@ -27,10 +27,6 @@ def start():
         game_controller = create_game_controller(selected_username, selected_team)
 
         game_state_model_instance = save_game_state_to_db(game_controller)
-
-        session['username'] = selected_username
-        session['id'] = game_state_model_instance.id
-
         return jsonify({'game_state': game_state_model_instance.to_dict()}), 200
 
     except ValueError as e:
