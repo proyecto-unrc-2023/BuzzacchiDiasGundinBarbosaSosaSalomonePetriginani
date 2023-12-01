@@ -163,22 +163,3 @@ class IceSpawn(Spawn):
         if isinstance(other, Spawn):
             return self.life == other.life and self.positions == other.positions and self.type == other.type
         return False
-
-    # Eq para ver donde esta el error
-    # def __eq__(self, other):
-    #     if not isinstance(other, Spawn):
-    #         return NotImplemented
-
-    #     if self.life != other.life:
-    #         print(f"Life mismatch: {self.life} != {other.life}")
-    #         return False
-        
-    #     if self.positions != other.positions:
-    #         print(f"Positions mismatch: {self.positions} != {other.positions}")
-    #         return False
-        
-    #     if self.type != other.type:
-    #         print(f"Type mismatch: {self.type} != {other.type}")
-    #         return False
-
-    #     return True

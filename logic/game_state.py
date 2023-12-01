@@ -425,33 +425,3 @@ class GameState:
             r,c = random.choice(adj_fire)
             self.create_cell(r, c, FireCell, 1, 20)
             j += 1 
-
-    # Eq para ver donde esta el error
-    # def __eq__(self, other):
-    #     if isinstance(other, GameState):
-    #         if self.mode != other.mode:
-    #             print(f"Mode mismatch: {self.mode} != {other.mode}")
-    #             return False
-    #         if self.board != other.board:
-    #             print(f"Board mismatch: {self.board} != {other.board}")
-    #             return False
-    #         if self.team != other.team:
-    #             print(f"Team mismatch: {self.team} != {other.team}")
-    #             return False
-    #         if self.username != other.username:
-    #             print(f"Username mismatch: {self.username} != {other.username}")
-    #             return False
-    #         if self.ice_spawn != other.ice_spawn:
-    #             print(f"Ice spawn mismatch: {self.ice_spawn} != {other.ice_spawn}")
-    #             return False
-    #         if self.fire_spawn != other.fire_spawn:
-    #             print(f"Fire spawn mismatch: {self.fire_spawn} != {other.fire_spawn}")
-    #             return False
-    #         if self.ice_healing_area != other.ice_healing_area:
-    #             print(f"Ice healing area mismatch: {self.ice_healing_area} != {other.ice_healing_area}")
-    #             return False
-    #         if self.fire_healing_area != other.fire_healing_area:
-    #             print(f"Fire healing area mismatch: {self.fire_healing_area} != {other.fire_healing_area}")
-    #             return False
-    #         # Si todas las comprobaciones son iguales, retornamos True.
-    #         return True

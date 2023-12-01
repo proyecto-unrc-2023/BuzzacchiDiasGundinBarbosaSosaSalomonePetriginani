@@ -28,7 +28,6 @@ function FinishSimulation() {
       }
 
       const data = await response.json();
-      // console.log(data);
 
       // Actualizar el estado si es necesario
       // setGameState(data.updated_game_state); // Por ejemplo, asumiendo que la respuesta contiene el nuevo estado

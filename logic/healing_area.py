@@ -68,26 +68,3 @@ class HealingArea:
                     self.healing_rate == other.healing_rate and 
                     (self.affected_cell_type == other.affected_cell_type or eval(self.affected_cell_type) == other.affected_cell_type))
         return False
-
-    #####Eq para ver donde esta el error
-    # def __eq__(self, other):
-    #     if not isinstance(other, HealingArea):
-    #         return False
-
-    #     if self.positions != other.positions:
-    #         print(f"Position mismatch: {self.positions} != {other.positions}")
-    #         return False
-
-    #     if self.duration != other.duration:
-    #         print(f"Duration mismatch: {self.duration} != {other.duration}")
-    #         return False
-
-    #     if self.healing_rate != other.healing_rate:
-    #         print(f"Healing rate mismatch: {self.healing_rate} != {other.healing_rate}")
-    #         return False
-
-    #     if self.affected_cell_type != other.affected_cell_type:
-    #         print(f"Affected cell type mismatch: {self.affected_cell_type} != {other.affected_cell_type}")
-    #         return False
-
-    #     return True
