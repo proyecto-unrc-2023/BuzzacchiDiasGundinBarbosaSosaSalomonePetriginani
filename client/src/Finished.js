@@ -35,7 +35,7 @@ function Finished()  {
     if (winner === user_team) {
       return 'YOU WON';
     } else {
-      return 'YOU LOSE';
+      return 'YOU LOST';
     }
   };
 
