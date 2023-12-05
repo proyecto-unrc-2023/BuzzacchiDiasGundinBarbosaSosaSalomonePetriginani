@@ -71,18 +71,10 @@ function RepeatSimulation() {
 
   
     
-  const ice_life = (spawn) => {
+  const spawn_life = (spawn) => {
     const SpawnObj = JSON.parse(spawn);
-    const ice_spawn = SpawnObj.life;
-    console.log(ice_spawn)
-    return ice_spawn;
-  };
-
-  const fire_life = (spawn) => {
-    const SpawnObj = JSON.parse(spawn);
-    const fire_spawn = SpawnObj.life;
-    console.log(fire_spawn)
-    return fire_spawn;
+    const spawn_life = SpawnObj.life;
+    return spawn_life;
   };
 
   return (
@@ -95,8 +87,8 @@ function RepeatSimulation() {
             </p>
             <div className="progress-background">
               <CircularProgressbar
-                value={ice_life(gameState.ice_spawn)}
-                text={`${ice_life(gameState.ice_spawn)}`}
+                value={spawn_life(gameState.ice_spawn)}
+                text={`${spawn_life(gameState.ice_spawn)}`}
                 maxValue={300}
                 styles={buildStyles({
                   pathColor: "#000080",
@@ -123,8 +115,8 @@ function RepeatSimulation() {
             </p>
             <div className="progress-background">
               <CircularProgressbar
-                value={fire_life(gameState.fire_spawn)}
-                text={`${fire_life(gameState.fire_spawn)}`}
+                value={spawn_life(gameState.fire_spawn)}
+                text={`${spawn_life(gameState.fire_spawn)}`}
                 maxValue={300}
                 styles={buildStyles({
                   pathColor: "#8B0000",
