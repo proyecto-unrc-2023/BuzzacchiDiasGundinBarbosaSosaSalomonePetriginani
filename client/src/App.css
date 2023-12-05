@@ -153,7 +153,7 @@ select {
   margin-top: 0; /* Ajusta o elimina el margen superior del contenedor principal */
 }
 
-.Fire-Team {
+.FireTeam {
   background-color: red;
   background-image: url('../public/images/fuego.gif');
   text-align: center;
@@ -162,7 +162,7 @@ select {
   padding: 10px 20px;
 }
 
-.Ice-Team {
+.IceTeam {
   background-color: skyblue;
   background-image: url('../public/images/agua.gif');
   text-align: center;
@@ -171,21 +171,21 @@ select {
   padding: 10px 20px;
 }
 
-.Fire-Team h1 {
+.FireTeam h1 {
   color: white; /* o cualquier color que desees */
 }
 
-.Ice-Team h1 {
+.IceTeam h1 {
   color: white; /* o cualquier color que desees */
 }
 
-.Fire-Team p {
+.FireTeam p {
   font-family: Arial, sans-serif;
   font-style: italic;
   color: white; /* color de texto oscuro */
 }
 
-.Ice-Team p {
+.IceTeam p {
   font-family: Arial, sans-serif;
   font-style: italic;
   color: white; /* color de texto oscuro */

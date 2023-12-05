@@ -8,6 +8,7 @@ function Finished()  {
   const navigate = useNavigate();
   const gameState = location.state?.gameState;
   useEffect(() => {
+
     const winnerTeam = () => {
       const fire_spawn = JSON.parse(gameState.fire_spawn);
       const ice_spawn = JSON.parse(gameState.ice_spawn);
@@ -15,18 +16,28 @@ function Finished()  {
       const fire_life = fire_spawn.life;
       
       if (ice_life === 0 || ice_life < 0) {
-        return 'Fire-Team';
+        return "FireTeam";
       } else if (fire_life === 0 || fire_life < 0) {
-        return 'Ice-Team';
+        return "IceTeam";
       } else if (fire_life > ice_life ) {
-        return 'Fire-Team';
+        return "FireTeam";
       } else {
-        return 'Ice-Team';
+        return "IceTeam";
       }
     };
-
+    
     setWinnerTeam(winnerTeam());
   }, [gameState]);
+
+  
+  const theUserWin = (winner) => {
+    const user_team = gameState.team;
+    if (winner === user_team) {
+      return 'YOU WON';
+    } else {
+      return 'YOU LOSE';
+    }
+  };
 
   const handleGoLogIn = () => {
     navigate(`/`);
@@ -34,7 +45,8 @@ function Finished()  {
 
   return (
     <div className={winnerTeam}>
-      <h1>The winner is: {winnerTeam} !</h1>
+      <h1>{theUserWin(winnerTeam)}!</h1>
+      <h1>The winner is: {winnerTeam}!</h1>
       <p>Return to the Log in</p>
       <button className="go-login" onClick={handleGoLogIn}>
         Go to log in
