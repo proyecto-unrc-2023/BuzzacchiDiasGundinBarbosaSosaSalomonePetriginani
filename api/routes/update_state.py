@@ -18,10 +18,13 @@ class UpdateStateResource(Resource):
     def post(self):
         data = request.json
         game_state_model = self.get_game_state_model(data['simulation_id'])
+
         if game_state_model is None:
             return {'message': 'GameState not found'}, 404
 
         game_state_data_model = game_state_model.to_dict()
+        session['id'] = game_state_data_model.get('id')
+
         logic_game_state = GameState.create_from_dict(game_state_data_model)
 
         if logic_game_state.get_ice_spawn() is None:

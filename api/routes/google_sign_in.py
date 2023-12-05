@@ -19,10 +19,12 @@ class GoogleSignIn(Resource):
                 raise ValueError('Wrong issuer.')
 
             # ID token is valid. Get the user's Google Account ID from the decoded token.
+            email = idinfo['email']
             name = idinfo['name']
             session['username'] = name
 
             return jsonify({
+                'correo': email,
                 'success': True,
                 'name': name
             })
