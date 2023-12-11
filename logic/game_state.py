@@ -123,15 +123,31 @@ class GameState:
                     cells_in_spawn.append(cell)
         return cells_in_spawn
     
+    def create_spawn(self, row, column, spawn_team):
+        if spawn_team == IceSpawn:
+            self.ice_spawn = self.board.create_spawn(row, column, spawn_team)
+        else:
+            self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
+        self.create_inverse_spawn(row, column, spawn_team)
+        #self.create_randoms_healing_areas()
+        self.check_simulation()
+
     def create_healing_area(self, row, column, affected_cell_type):
         if affected_cell_type == IceCell:
-            self.ice_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
+            self.ice_healing_area = self.board.create_healing_area(row, column, IceCell)
         else:
-            self.fire_healing_area = self.board.create_healing_area(row, column, affected_cell_type)
+            self.fire_healing_area = self.board.create_healing_area(row, column, FireCell)
+        self.create_randoms_healing_areas()
+        
 
     def create_randoms_healing_areas(self):
-        self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
-        self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+        if not(self.ice_healing_area):
+            self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+        elif not(self.fire_healing_area):
+            self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+        elif not(self.ice_healing_area and self.fire_healing_area):
+            self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
+            self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions())
     
     def apply_healing(self):
         healing_area_deleteds = self.check_delete_healings_area()
@@ -185,14 +201,7 @@ class GameState:
         else:
             self.add_cell(row, column, FireCell(level=level_enum, life=life, position=pos))
 
-    def create_spawn(self, row, column, spawn_team):
-        if spawn_team == IceSpawn:
-            self.ice_spawn = self.board.create_spawn(row, column, spawn_team)
-        else:
-            self.fire_spawn = self.board.create_spawn(row, column, spawn_team)
-        self.create_inverse_spawn(row, column, spawn_team)
-        self.create_randoms_healing_areas()
-        self.check_simulation()
+
     
     def execute_fight_in_position(self, row, col):
         ice_cells = self.board.get_ice_cells(row, col)

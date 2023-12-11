@@ -67,7 +67,7 @@ class GameController:
             self.game_state.create_cell(row, column, FireCell, level, life)
 
     def create_healing_area(self, row, column, affected_cell_type):
-        if affected_cell_type == IceCell:
+        if eval(affected_cell_type) == IceCell:
             self.game_state.create_healing_area(row, column, IceCell)
         else:
             self.game_state.create_healing_area(row, column, FireCell)
