@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "react-scripts": "^5.0.1"
+  },
+  "dependencies": {
+    "react-circular-progressbar": "^2.1.0"
   }
 }

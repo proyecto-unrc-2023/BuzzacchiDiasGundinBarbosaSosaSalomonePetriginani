@@ -20,7 +20,7 @@ class NewGameResource(Resource):
             data = request.json
             self.validate_input(data)
 
-            row, column, game_state_id = data['row'], data['column'], data['game_state_id']
+            row, column, row_healing_area, column_healing_area, game_state_id = data['row'], data['column'], data['row_healing_area'], data['column_healing_area'], data['game_state_id']
             game_state_model = self.get_game_state_model(game_state_id)
 
             game_controller = self.initialize_game_controller(game_state_model, int(data.get('size')))
@@ -29,6 +29,7 @@ class NewGameResource(Resource):
             
             spawn_type = 'IceSpawn' if game_controller.get_team() == Team.IceTeam else 'FireSpawn'
             game_controller.create_spawn(row, column, spawn_type)
+            game_controller.create_healing_area(row_healing_area, column_healing_area, spawn_type)
 
             updated_game_state_model = self.update_game_state_model(game_state_model, game_controller.get_game_state())
             db.session.commit()

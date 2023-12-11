@@ -9,6 +9,9 @@ function GameScreen() {
 
   const [userData, setUserData] = useState({ username: '', team: '', id: '' });
   const [spawnCoords, setSpawnCoords] = useState({ row: 1, column: 1 });
+
+  const [healingCoords, setHealingCoords] = useState({ row: 1, column: 1});
+
   const [spawnSetSuccess, setSpawnSetSuccess] = useState(false);
   const [gameState, setGameState] = useState(null);  
   const [simulationHistory, setSimulationHistory] = useState([]);
@@ -58,7 +61,9 @@ function GameScreen() {
     const maxRange = getMaxRange(size);
     
     if (!(0 <= spawnCoords.row && spawnCoords.row <= maxRange) || 
-        !(0 <= spawnCoords.column && spawnCoords.column <= maxRange)) {
+        !(0 <= spawnCoords.column && spawnCoords.column <= maxRange) || 
+        !(0 <= healingCoords.row && healingCoords.row <= maxRange) || 
+        !(0 <= healingCoords.column && healingCoords.column <= maxRange)) {
       alert(`Row and column must be integers between 0 and ${maxRange}.`);
       return;
     }
@@ -72,6 +77,8 @@ function GameScreen() {
         body: JSON.stringify({
           row: spawnCoords.row,
           column: spawnCoords.column,
+          row_healing_area: healingCoords.row,
+          column_healing_area: healingCoords.column,
           game_state_id: gameId,
           size: size, 
         }),
@@ -156,12 +163,31 @@ function GameScreen() {
             value={spawnCoords.column}
             onChange={(e) => setSpawnCoords({ ...spawnCoords, column: parseInt(e.target.value) || 1 })}
           />
-          <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn</button>
+          
+
+        <p>Enter Healing Area Coordinates (1-{getMaxRange(size)}):</p>
+          <label className="spawn-coordinates-label">Row:</label>
+          <input
+            className="spawn-coordinates-input"
+            type="number"
+            value={healingCoords.row}
+            onChange={(e) => setHealingCoords({ ...healingCoords, row: parseInt(e.target.value) || 1 })}
+          />
+          <label className="spawn-coordinates-label">Column:</label>
+          <input
+            className="spawn-coordinates-input"
+            type="number"
+            value={healingCoords.column}
+            onChange={(e) => setHealingCoords({ ...healingCoords, column: parseInt(e.target.value) || 1 })}
+          />
+
+          <button className="spawn-coordinates-button" onClick={handleSpawnSubmit}>Set Spawn & Healing Area</button>
         </div>
       )}
+      
       {spawnSetSuccess && (
         <div className="spawn-success-container">
-          <p className="spawn-success-message">Spawn was set successfully.</p>
+          <p className="spawn-success-message">Spawn & Healing Area was set successfully.</p>
           <button className="start-simulation-button" onClick={handleStartSimulation}>Start Simulation</button>
         </div>
       )}

@@ -13,6 +13,9 @@ class HealingArea:
         self.affected_cell_type = affected_cell_type
         self.type = self.get_type()
     
+    def set_position(self, pos):
+        self.positions = pos
+
     def get_positions(self):
         return self.positions
     
