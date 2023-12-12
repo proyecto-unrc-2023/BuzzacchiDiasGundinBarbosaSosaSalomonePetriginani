@@ -33,10 +33,22 @@ class HealingArea:
             for cell in cells:
                 if isinstance(cell, self.affected_cell_type):
                     new_life = cell.get_life() + self.healing_rate
-                    if cell.get_level() == Level.LEVEL_3 and new_life > 60:
-                        cell.set_life(60)
-                        continue
+                    level = cell.get_level()
+                    if new_life > 60:
+                        new_life = 60
                     cell.set_life(new_life)
+                    level.update_level(cell)
+
+                    #if new_life > (cell.get_level).max_life_level(cell.get_level):
+                    #    if cell.get_level() == Level.LEVEL_1:
+                    #        cell.set_level(Level.LEVEL_2)
+                    #    elif cell.get_level() == Level.LEVEL_2:
+                    #        cell.set_level(Level.LEVEL_3)
+                    #    elif cell.get_level() == Level.LEVEL_3:# and new_life > 60:
+                    #        new_life = 60
+                            #cell.set_life(60)
+                            #continue
+                    #cell.set_life(new_life)
             #self.duration = self.duration - 1
 
     def get_type(self):
