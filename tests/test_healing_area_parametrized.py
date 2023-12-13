@@ -43,3 +43,17 @@ def test_firecell_not_healed_by_ice_healing_area(healing_area_positions):
 
 ############
 
+healing_params = [
+    ((10,10), [IceCell(level=Level.LEVEL_1, life=19, position=(1,1))], Level.LEVEL_2),
+    ((10,10), [IceCell(level=Level.LEVEL_2, life=39, position=(1,1))], Level.LEVEL_3),
+    ((10,10), [IceCell(level=Level.LEVEL_3, life=59, position=(1,1))], Level.LEVEL_3)
+]
+@pytest.mark.parametrize("board_size, cell_to_add, expected_level", healing_params)
+def test_cell_healed_and_leveled_up_by_a_healing_area(board_size, cell_to_add, expected_level, healing_area_positions):
+    board = Board(*board_size)
+    ice_healing = HealingArea(positions=healing_area_positions,
+                                   affected_cell_type=IceCell)
+    ice_cell = cell_to_add
+    board.add_cell(ice_cell[0].position[0],ice_cell[0].position[1], ice_cell[0])
+    ice_healing.apply_effect(ice_cell)
+    assert board.get_cells(ice_cell[0].position[0], ice_cell[0].position[1])[0].get_level() == expected_level
