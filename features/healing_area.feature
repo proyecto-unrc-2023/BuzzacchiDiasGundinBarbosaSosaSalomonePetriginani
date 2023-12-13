@@ -30,11 +30,11 @@
     When the IceCell HealingArea effect is applied
     Then the FireCell at position (1,1) should remain at level 1 with 20 life points
 
-  Scenario: Level 3 FireCell in Fire Healing Area
-    Given there is a level 3 FireCell with 60 life points in position (1,1)
-    And a HealingArea affecting FireCell is at position (1,1) and its adjacent
-    When the FireCell HealingArea effect is applied
-    Then the FireCell at position (1,1) should remain at level 3 with 60 life points
+  Scenario: Level 3 IceCell in Fire Healing Area
+    Given there is a level 3 IceCell with 59 life points in position (1,1)
+    And a HealingArea affecting IceCell is at position (1,1) and its adjacent
+    When the IceCell HealingArea effect is applied
+    Then the IceCell at position (1,1) should remain at level 3 with 60 life points
 
 
 #   Scenario: Level 1 IceCell ready to level up in Healing Area

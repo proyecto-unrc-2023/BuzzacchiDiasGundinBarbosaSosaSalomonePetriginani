@@ -45,13 +45,21 @@ def step_impl(context, level, row, column):
 
 @then(u'the FireCell at position ({row:d},{column:d}) should remain at level {level:d} with {life:d} life points')
 def step_impl(context, level, row, column, life):
-    assert context.GameController.get_cells(row, column)[0].get_level() == Level(level)
-    assert context.GameController.get_cells(row, column)[0].get_life() == life
-    #current_level = context.GameController.get_cells(row, column)[0].get_level()
-    #current_life = context.GameController.get_cells(row, column)[0].get_life()
-    #print(f"Current Level: {current_level}, Current Life: {current_life}")
-    #assert current_level == Level(level) and current_life == life
+    #assert context.GameController.get_cells(row, column)[0].get_level() == Level(level)
+    #assert context.GameController.get_cells(row, column)[0].get_life() == life
+    current_level = context.GameController.get_cells(row, column)[0].get_level()
+    current_life = context.GameController.get_cells(row, column)[0].get_life()
+    print(f"Current Level: {current_level}, Current Life: {current_life}")
+    assert current_level == Level(level) and current_life == life
 
+@then(u'the IceCell at position ({row:d},{column:d}) should remain at level {level:d} with {life:d} life points')
+def step_impl(context, level, row, column, life):
+    #assert context.GameController.get_cells(row, column)[0].get_level() == Level(level)
+    #assert context.GameController.get_cells(row, column)[0].get_life() == life
+    current_level = context.GameController.get_cells(row, column)[0].get_level()
+    current_life = context.GameController.get_cells(row, column)[0].get_life()
+    print(f"Current Level: {current_level}, Current Life: {current_life}")
+    assert current_level == Level(level) and current_life == life
 
 
 ##########
