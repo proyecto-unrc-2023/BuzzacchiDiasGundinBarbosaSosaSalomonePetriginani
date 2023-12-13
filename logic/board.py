@@ -115,9 +115,9 @@ class Board:
         self.add_spawn(spawn=spawn)
         return spawn
 
-    def create_healing_area_with_random_position(self, affected_cell_type, ice_spawn_positions, fire_spawn_positions):
+    def create_healing_area_with_random_position(self, affected_cell_type, ice_spawn_positions, fire_spawn_positions, healing_area_positions_opposite):
         length = len(self.board)-1
-        spawn_positions = ice_spawn_positions + fire_spawn_positions
+        spawn_positions = ice_spawn_positions + fire_spawn_positions + healing_area_positions_opposite
 
         while True:
             row = random.randrange(1, length)

@@ -3,6 +3,7 @@ import pytest
 from logic.game_state import GameState, Team, GameMode
 from logic.cell import FireCell, IceCell, Level
 from logic.spawn import IceSpawn, FireSpawn
+from logic.healing_area import HealingArea
 import time
 
 @pytest.fixture
@@ -201,13 +202,15 @@ def test_apply_healing():
     game = GameState()
     game.new_game(15,15)
     game.create_spawn(1,1,IceSpawn)
+    game.ice_healing_area = HealingArea(affected_cell_type=IceCell, positions=[(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)])
+    game.fire_healing_area = HealingArea(affected_cell_type=FireCell, positions = [(3,3), (3,4), (3,5), (4,3), (4,4), (4,5), (5,3), (5,4), (5,5)], healing_rate=1)
     ice_ha_duration = game.get_ice_healing_area().get_duration()
     ice_cell = IceCell()
     ice_pos = game.get_ice_healing_area().get_positions()
     game.add_cell(*ice_pos[0], ice_cell)
     cell_life = ice_cell.get_life()
     game.apply_healing()
-    assert cell_life + game.get_ice_healing_area().get_healing_rate() == ice_cell.get_life()
+    assert cell_life + game.get_ice_healing_area().get_healing_rate() == game.get_cells(0,0)[0].get_life()# - game.get_ice_healing_area().get_healing_rate()
     assert ice_ha_duration - 1 == game.get_ice_healing_area().get_duration()
 
 

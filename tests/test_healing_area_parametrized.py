@@ -40,3 +40,6 @@ def test_firecell_not_healed_by_ice_healing_area(healing_area_positions):
     ice_healing_area.apply_effect(fire_cell)
     assert board.get_cells(*fire_cell[0].position)[0].get_life() == 15
     assert board.get_cells(*fire_cell[0].position)[0].get_level() == Level.LEVEL_1
+
+############
+
