@@ -141,7 +141,7 @@ class GameState:
         
 
     def create_randoms_healing_areas(self):
-        if not(self.ice_healing_area and self.fire_healing_area):
+        if not(self.ice_healing_area) and not(self.fire_healing_area):
             self.ice_healing_area = self.board.create_healing_area_with_random_position(IceCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions(), [])
             self.fire_healing_area = self.board.create_healing_area_with_random_position(FireCell, self.ice_spawn.get_positions(), self.fire_spawn.get_positions(), self.ice_healing_area.get_positions())
         elif not(self.ice_healing_area):
