@@ -11,7 +11,8 @@ class Level(IntEnum):
     LEVEL_1 = 1
     LEVEL_2 = 2
     LEVEL_3 = 3
-    
+    LEVEL_4 = 4
+
     @staticmethod
     def max_life_level(level):
         if (level == Level.LEVEL_1):
@@ -20,7 +21,9 @@ class Level(IntEnum):
             return 40
         elif(level==Level.LEVEL_3):
             return 60
-        
+        elif(level==Level.LEVEL_4):
+            return 80
+
     @staticmethod
     def update_level(cell):
         life = cell.get_life()
@@ -30,6 +33,8 @@ class Level(IntEnum):
             cell.set_level(Level.LEVEL_2)
         elif 40 < life <= 60:
             cell.set_level(Level.LEVEL_3)
+        elif 60 < life <= 80:
+            cell.set_level(Level.LEVEL_4)
 
     def __eq__(self, other):
         if isinstance(other, Level):
@@ -41,7 +46,7 @@ class Cell:
 
     def __init__(self, level=Level.LEVEL_1, life=20, position=None):
         self.set_level(level)
-        self.set_life(life)        
+        self.set_life(life)
         self.position = position
         self.type = self.get_type()
         self.has_moved = False
@@ -56,7 +61,7 @@ class Cell:
             return DeadCell()
         else:
             raise ValueError(f'Invalid cell string: {cell_str}')
-        
+
     def __str__(self):
         raise NotImplementedError
 
@@ -83,20 +88,20 @@ class Cell:
         if Level(level) not in Level:
             raise ValueError(f"Invalid level: {level}")
         self.level = level
-        
+
     # # # #  Getters  # # # #
     def get_level(self):
         return self.level
-    
+
     def get_life(self):
         return self.life
-    
+
     def get_position(self):
         return self.position
-    
+
     def get_type(self):
         return 'Cell'
-        
+
     def is_alive(self):
         return self.get_life() > 0
 
@@ -129,7 +134,7 @@ class Cell:
                         self.set_life(CELL_DEAD)
                         other_cell.set_life(CELL_DEAD)
 
-                           
+
 class DeadCell(Cell):
 
     def __str__(self):
@@ -143,10 +148,10 @@ class IceCell(Cell):
 
     def __str__(self):
         return 'I'
-    
+
     def get_type(self):
         return 'IceCell'
-    
+
     @classmethod
     def create_from_dict(cls, dict):
         if dict is not None:
@@ -162,7 +167,7 @@ class FireCell(Cell):
 
     def get_type(self):
         return 'FireCell'
-    
+
     @classmethod
     def create_from_dict(cls, dict):
         if dict is not None:

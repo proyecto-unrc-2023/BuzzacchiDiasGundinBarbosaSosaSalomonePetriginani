@@ -36,7 +36,7 @@ class Board:
 
     def get_columns(self):
         return self.columns
-    
+
     @staticmethod
     def from_string(board_str):
         board_rows = [row.rstrip() for row in board_str.split('\n')]  # strip trailing spaces
@@ -51,7 +51,7 @@ class Board:
                 for box_str in box_strs:
                     box_str = box_str.strip()
                     if box_str == '':
-                        continue  
+                        continue
                     elif box_str == 'F':
                         new_box.add_fire_cell(FireCell())
                     elif box_str == 'I':
@@ -68,7 +68,7 @@ class Board:
                         raise ValueError("Unknown object type: " + box_str)
                 new_board.board[i][j] = new_box
         return new_board
-        
+
     def add_cell(self, row, column, cell):
         pos = (row, column)
         cell.set_position(pos)
@@ -80,16 +80,16 @@ class Board:
 
     def get_cells(self, row, column):
         return self.get_box(row,column).get_cells()
-    
+
     def get_ice_cells(self, row, column):
         return self.get_box(row, column).get_ice_cells()
-    
+
     def get_fire_cells(self, row, column):
         return self.get_box(row, column).get_fire_cells()
-    
+
     def get_spawn(self, row, column):
         return self.get_box(row,column).get_spawn()
-    
+
     def remove_cell(self, row, column, cell):
         self.get_box(row, column).remove_cell(cell)
 
@@ -100,7 +100,7 @@ class Board:
         length = len(self.board)
         if row == 0 or row == length - 1 or column == 0 or column == length - 1:
             raise ValueError("The position is on the edge of the board")
-        
+
     def create_spawn(self, row, column, spawn_team):
         self._check_position(row, column)
         position = (row, column)
@@ -115,9 +115,9 @@ class Board:
         self.add_spawn(spawn=spawn)
         return spawn
 
-    def create_healing_area_with_random_position(self, affected_cell_type, ice_spawn_positions, fire_spawn_positions):
+    def create_healing_area_with_random_position(self, affected_cell_type, ice_spawn_positions, fire_spawn_positions, healing_area_positions_opposite):
         length = len(self.board)-1
-        spawn_positions = ice_spawn_positions + fire_spawn_positions
+        spawn_positions = ice_spawn_positions + fire_spawn_positions + healing_area_positions_opposite
 
         while True:
             row = random.randrange(1, length)
@@ -130,7 +130,7 @@ class Board:
 
         self._check_position(row, column)
         return self.create_healing_area(row, column, affected_cell_type)
-    
+
     def create_healing_area(self, row, column, affected_cell_type):
         self._check_position(row, column)
         position = (row, column)
@@ -139,7 +139,7 @@ class Board:
         healing_area = HealingArea(positions=positions_healing, affected_cell_type=affected_cell_type, healing_rate=random_healing_rate)
         self.add_healing_area(self, healing_area)
         return healing_area
-    
+
     def delete_healings_area(self, row, column):
         self.get_box(row, column).remove_healings_area(row, column)
 
@@ -147,12 +147,12 @@ class Board:
         positions_spawn = spawn.get_positions()
         for position in positions_spawn:
             self.get_box(*position).set_spawn(spawn)
-        
+
     def add_healing_area(self, position, healing_area):
         positions_healing = healing_area.get_positions()
         for position in positions_healing:
             self.get_box(*position).set_healing_area(healing_area)
-    
+
     def _get_adjacents_pos(self, pos):
         row, col = pos
         length = len(self.board)

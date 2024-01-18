@@ -75,7 +75,7 @@ def save_game_state_to_db(game_controller):
 # This endpoint retrieves and returns the username and team of the authenticated user from a game session.
 @simulation_bp.route('/get_username_and_team', methods=['GET'])
 def get_username_and_team():
-    auth_user = get_authenticated_user()  
+    auth_user = get_authenticated_user()
     if auth_user:
         game_state = GameStateModel.query.filter_by(id=session['id']).first()
         if game_state:
@@ -95,8 +95,8 @@ def get_winner_team():
     game_state = GameStateModel.query.filter_by(id=game_id).first()
     if game_state:
         game_state_dict = game_state.to_dict()
-        
-        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
+
+        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))
         if ice_spawn_json:
             ice_spawn_life = ice_spawn_json.get('life')
             if ice_spawn_life > 0:
@@ -109,8 +109,8 @@ def get_winner_team_by_id(game_state_id):
     game_state = GameStateModel.query.filter_by(id=game_state_id).first()
     if game_state:
         game_state_dict = game_state.to_dict()
-        
-        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))  
+
+        ice_spawn_json = json.loads(game_state_dict.get('ice_spawn'))
         if ice_spawn_json:
             ice_spawn_life = ice_spawn_json.get('life')
             if ice_spawn_life > 0:
@@ -119,10 +119,6 @@ def get_winner_team_by_id(game_state_id):
                 return jsonify({'winner_team': 'FireTeam'})
 
     return {'error': 'No game state found'}, 404
-
-
-
-
 
 ######Tests routes
 # Route to start the game and receive data (POST)
@@ -163,7 +159,7 @@ def get_winner_team_by_id(game_state_id):
 #     cell = FireCell(level=Level.LEVEL_1, life=20, position=(0, 0))
 #     cell_schema = CellSchema()
 #     cell_json = cell_schema.dump(cell)
-#     return jsonify(cell_json)  
+#     return jsonify(cell_json)
 
 
 
